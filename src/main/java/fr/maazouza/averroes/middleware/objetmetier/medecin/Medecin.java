@@ -25,7 +25,7 @@ public class Medecin implements Cloneable, Serializable  {
 	private String mail;
 	
 	/** Liste de patient */
-	private List<Patient> patients;
+	//private List<Patient> patients;
 
 	public Integer getId() {
 		return id;
@@ -67,13 +67,13 @@ public class Medecin implements Cloneable, Serializable  {
 		this.mail = mail;
 	}
 
-	public List<Patient> getPatients() {
+	/*public List<Patient> getPatients() {
 		return patients;
 	}
 
 	public void setPatients(List<Patient> patients) {
 		this.patients = patients;
 	}
-	
+	*/
 	
 }
