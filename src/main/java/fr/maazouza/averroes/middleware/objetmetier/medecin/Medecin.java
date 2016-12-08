@@ -1,10 +1,16 @@
 package fr.maazouza.averroes.middleware.objetmetier.medecin;
 
 import java.io.Serializable;
-import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
-import fr.maazouza.averroes.middleware.objetmetier.patient.Patient;
 
+@Entity
+@Table(name = "T_MEDECIN")
+@XmlRootElement
 public class Medecin implements Cloneable, Serializable  {
 	
 	private static final long serialVersionUID = 1L;
@@ -26,7 +32,9 @@ public class Medecin implements Cloneable, Serializable  {
 	
 	/** Liste de patient */
 	//private List<Patient> patients;
-
+	
+	@Id
+	@Column(name = "MED_ID")
 	public Integer getId() {
 		return id;
 	}
@@ -34,7 +42,8 @@ public class Medecin implements Cloneable, Serializable  {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
+	
+	@Column(name = "MED_NOM")
 	public String getNom() {
 		return nom;
 	}
@@ -42,7 +51,8 @@ public class Medecin implements Cloneable, Serializable  {
 	public void setNom(String nom) {
 		this.nom = nom;
 	}
-
+	
+	@Column(name = "MED_PRENOM")
 	public String getPrenom() {
 		return prenom;
 	}
@@ -50,7 +60,8 @@ public class Medecin implements Cloneable, Serializable  {
 	public void setPrenom(String prenom) {
 		this.prenom = prenom;
 	}
-
+	
+	@Column(name = "MED_TELEPHONE")
 	public String getTelephone() {
 		return telephone;
 	}
@@ -58,7 +69,8 @@ public class Medecin implements Cloneable, Serializable  {
 	public void setTelephone(String telephone) {
 		this.telephone = telephone;
 	}
-
+	
+	@Column(name = "MED_MAIL")
 	public String getMail() {
 		return mail;
 	}

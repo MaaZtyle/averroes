@@ -1,6 +1,8 @@
 package fr.maazouza.averroes.middleware.services;
 
 import java.util.Collection;
+import java.util.List;
+
 import fr.maazouza.averroes.middleware.objetmetier.medecin.Medecin;
 
 public interface IMedecinService {

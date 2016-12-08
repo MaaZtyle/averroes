@@ -1,6 +1,7 @@
 package fr.maazouza.averroes.middleware.services;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -25,9 +26,10 @@ public class MedecinService implements IMedecinService {
 	
 	
 	@EJB
-	private IMedecinService bouteilleService;
+	private IMedecinService medecinService;
 	
 
+	
 	@Override
 	public void ajouterMedecin(Medecin medecin) {
 		// TODO Auto-generated method stub
@@ -44,8 +46,10 @@ public class MedecinService implements IMedecinService {
 
 	@Override
 	public Medecin obtenirMedecin(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		Medecin resultat = medecinDao.obtenir(id);
+		
+		
+		return resultat;
 	}
 
 }
