@@ -44,7 +44,7 @@ public class MedecinWebService {
 	@Path(value = "/ajouter")
 	public Response ajouterMEdecin(
 			@QueryParam("nom_med") String nom_med,
-			@QueryParam("prenom_med") String prenomMed,
+			@QueryParam("prenom_med") String prenom_Med,
 			@QueryParam("tel_mob_med") String tel_mob_med,
 			@QueryParam("tel_fixe_med") String tel_fixe_med,
 			@QueryParam("mdp_med") String mdp_med,
@@ -62,7 +62,7 @@ public class MedecinWebService {
 				Medecin medecin = new Medecin();
 				
 				medecin.setNom_med(nom_med);
-				medecin.setPrenom_med(prenomMed);
+				medecin.setPrenom_med(prenom_Med);
 				medecin.setTel_mob_med(tel_mob_med);
 				medecin.setTel_fixe_med(tel_fixe_med);
 				medecin.setMdp_med(mdp_med);
@@ -74,7 +74,7 @@ public class MedecinWebService {
 				try {
 					medecinService.ajouterMedecin(medecin);
 					return Response.status(200)
-							.entity("Le medecin  : " + nom_med + ", Prenom : " + prenomMed + " a été ajouté")
+							.entity("Le medecin  : " + nom_med + ", Prenom : " + prenom_Med + " a été ajouté")
 							.build();
 				} catch (MedecinDejaExistantException e) {
 					
@@ -109,13 +109,13 @@ public class MedecinWebService {
 		medecinService.modifierMedecin(medecin);
 		
 		return Response.status(200)
-				.entity("Le medecin  : " + nom_med + ", age : " + prenom_med + " a été modifié")
+				.entity("Le medecin  : " + nom_med + ", prenom : " + prenom_med + " a été modifié")
 				.build();
 		}
 		
 		else{
 		return Response.status(200)
-				.entity("Le medecin  : " + nom_med + ", age : " + prenom_med + " n'a pas été modifié")
+				.entity("Le medecin  : " + nom_med + ", prenom : " + prenom_med + " n'a pas été modifié")
 				.build();
 		
 		}
