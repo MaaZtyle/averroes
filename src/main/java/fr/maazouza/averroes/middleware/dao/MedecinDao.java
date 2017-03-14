@@ -6,10 +6,11 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
-
 import fr.maazouza.averroes.middleware.objetmetier.medecin.Medecin;
+import fr.maazouza.averroes.middleware.objetmetier.patient.Patient;
 
 /**
  * Classe de gestion de medecins
@@ -48,16 +49,16 @@ public class MedecinDao {
 		}
 		
 		
-		public Medecin obtenir(Integer id) {
+		public List<Medecin> obtenir(String predicat) {
 			
 			// Je récupère juste la référence de mon entité.
 			//return em.find(Medecin.class, id);
 			
 			// J'écris ma requête.
-			final String requeteSQL = "SELECT * FROM t_medecin where med_id=1"; 
+			//final String requeteSQL = "SELECT * FROM t_medecin where med_nom='"+nom+"'"; 
 			
 			// Je crée la représentation java de ma requête
-			final Query requete = em.createNativeQuery(requeteSQL);
+			//final Query requete = em.createNativeQuery(requeteSQL);
 			
 			/*
 			 * J'exécute ma requête
@@ -68,7 +69,34 @@ public class MedecinDao {
 			 */
 			//return (List<Medecin>) requete.getResultList();
 			
-			return em.find(Medecin.class, id);
+			final String requeteJPQL = "SELECT b FROM Medecin b WHERE b.nom_med = :filtre or b.prenom_med =:filtre";
+			
+			final TypedQuery<Medecin> requeteType = em.createQuery(requeteJPQL, Medecin.class)
+				.setParameter("filtre", predicat);
+			
+			return requeteType.getResultList();
+			
+			//return em.find(Medecin.class, nom);
+		}
+		
+		
+		//recupérer un seul patient pour le modifier par nom et prénom
+		public Medecin obtenirUnMedecin(String nom, String prenom) {
+			
+			
+			final String requeteJPQL = "SELECT b FROM Patient b WHERE b.nom_med = :filtre1 and b.prenom_med =:filtre2";
+			
+			
+			final TypedQuery<Medecin> requeteType = em.createQuery(requeteJPQL, Medecin.class)
+				.setParameter("filtre1", nom)
+				.setParameter("filtre2", prenom);
+		
+			
+			
+			//retourne le premier element de la liste, sinon null. il faut gerer le NPE
+			List<Medecin> elementList = requeteType.getResultList();
+			return elementList.isEmpty( ) ? null : elementList.get(0);
+				
 		}
 		
 		public void desactiver(Integer id) {

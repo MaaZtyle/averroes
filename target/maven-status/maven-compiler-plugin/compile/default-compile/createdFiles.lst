@@ -1,6 +1,13 @@
 fr\maazouza\averroes\middleware\webservices\MedecinWebService.class
-fr\maazouza\averroes\middleware\services\MedecinService.class
-fr\maazouza\averroes\middleware\dao\MedecinDao.class
+fr\maazouza\averroes\middleware\objetmetier\patient\PatientInexistantException.class
 fr\maazouza\averroes\middleware\objetmetier\medecin\Medecin.class
 fr\maazouza\averroes\middleware\services\IMedecinService.class
+fr\maazouza\averroes\middleware\objetmetier\medecin\MedecinDejaExistantException.class
+fr\maazouza\averroes\middleware\services\MedecinService.class
+fr\maazouza\averroes\middleware\services\IPatientService.class
+fr\maazouza\averroes\middleware\dao\MedecinDao.class
+fr\maazouza\averroes\middleware\objetmetier\patient\PatientDejaExistantException.class
+fr\maazouza\averroes\middleware\webservices\PatientWebService.class
+fr\maazouza\averroes\middleware\dao\PatientDao.class
 fr\maazouza\averroes\middleware\objetmetier\patient\Patient.class
+fr\maazouza\averroes\middleware\services\PatientService.class
