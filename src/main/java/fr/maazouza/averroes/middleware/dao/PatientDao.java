@@ -7,6 +7,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
@@ -38,16 +39,17 @@ public class PatientDao {
 	}
 	
 	/*
-	 * Avoir la liste des patients
+	 * Avoir la liste des patients complète
 	 * */
 	
-	public List<Patient> obtenir(String predicat) {
+	public List<Patient> obtenir() {
 		
-			final String requeteJPQL = "SELECT b FROM Patient b WHERE b.nom_pat = :filtre or b.prenom_pat =:filtre";
+			//final String requeteJPQL = "SELECT b FROM Patient b WHERE b.nomPat = :filtre or b.prenomPat =:filtre";
+		final String requeteJPQL = "SELECT b FROM Patient b ";
 		
+		final TypedQuery<Patient> requeteType = em.createQuery(requeteJPQL, Patient.class);
+			//.setParameter("filtre", predicat);
 		
-		final TypedQuery<Patient> requeteType = em.createQuery(requeteJPQL, Patient.class)
-			.setParameter("filtre", predicat);
 		
 		return requeteType.getResultList();
 		
@@ -55,15 +57,15 @@ public class PatientDao {
 	}
 	
 	//recupérer un seul patient pour le modifier par le nom et prénom
-	public Patient obtenirUnPatient(String nom, String prenom) {
+	public Patient obtenirUnPatient(Long idPat) {
 		
 		
-		final String requeteJPQL = "SELECT b FROM Patient b WHERE b.nom_pat = :filtre1 and b.prenom_pat =:filtre2";
+		final String requeteJPQL = "SELECT b FROM Patient b WHERE b.idPat = :filtre1";
 		
 		
 		final TypedQuery<Patient> requeteType = em.createQuery(requeteJPQL, Patient.class)
-			.setParameter("filtre1", nom)
-			.setParameter("filtre2", prenom);
+			//.setParameter("filtre1", nom)
+			.setParameter("filtre1", idPat);
 		
 		
 		//retourne le premier element de la liste, sinon null. il faut gerer le NPE
@@ -72,14 +74,14 @@ public class PatientDao {
 			
 	}
 	
-public Medecin obtenirMedecinDunPatient(long id_pat) {
+public Medecin obtenirMedecinDunPatient(long idPat) {
 		
 		
-		final String requeteJPQL = "SELECT b FROM Medecin b WHERE b.id_med = :filtre";
+		final String requeteJPQL = "SELECT b FROM Medecin b WHERE b.idMed = :filtre";
 		
 		
 		final TypedQuery<Medecin> requeteType = em.createQuery(requeteJPQL, Medecin.class)
-			.setParameter("filtre", id_pat);
+			.setParameter("filtre", idPat);
 		
 		
 		//retourne le premier element de la liste, sinon null. il faut gerer le NPE
@@ -98,18 +100,22 @@ public Medecin obtenirMedecinDunPatient(long id_pat) {
 		em.merge(patient);
 	}
 	
-	public void supprimer(String nomPat){
+	public void supprimer(Long idPat){
 		
-		final String requeteJPQL = "SELECT b FROM Patient b WHERE b.nom_pat = :filtre or b.prenom_pat =:filtre";
+		/*final String requeteJPQL = "SELECT b FROM Patient b WHERE b.nomPat = :filtre or b.prenomPat =:filtre";
 		
 		
 		final TypedQuery<Patient> requeteType = em.createQuery(requeteJPQL, Patient.class)
-			.setParameter("filtre", nomPat);
+			.setParameter("filtre", idPat);
 		
-		List<Patient> elementList = requeteType.getResultList();
+		List<Patient> elementList = requeteType.getResultList();*/
 		
-		em.remove(em.getReference(Patient.class, elementList.isEmpty( ) ? null : elementList.get(0).getId_pat()));
+		em.remove(em.getReference(Patient.class, idPat));
+	}
+
+	
+	
 	}
 	
 
-}
+

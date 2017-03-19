@@ -1,6 +1,7 @@
 package fr.maazouza.averroes.middleware.objetmetier.patient;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,7 +11,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import fr.maazouza.averroes.middleware.objetmetier.medecin.Medecin;
 
@@ -31,34 +38,34 @@ public class Patient implements Cloneable, Serializable  {
 	private static final long serialVersionUID = 1L;
 
 	/** Référence unique du patient */
-	private long id_pat;
+	private long idPat;
 	
 	/** Nom */
-	private String nom_pat;
+	private String nomPat;
 	
 	/** Prénom */
-	private String prenom_pat;
+	private String prenomPat;
 	
 	/** Date de naissance */
-	private Date dateNaissance_pat;
+	private Date dateNaissancePat;
 	
 	/** Téléphone mobile*/
-	private String tel_mob_pat;
+	private String telMobPat;
 	
 	/** Téléphone fixe*/
-	private String tel_fixe_pat;
+	private String telFixePat;
 		
 	/** Mot de passe **/
-	private String mdp_pat;
+	private String mdpPat;
 	
 	/** Adresse */
-	private String adresse_pat;
+	private String adressePat;
 	
 	/** Mail */
-	private String email_pat;
+	private String emailPat;
 	
 	/** Date création du patient */
-	private Date date_creation_pat;
+	private String dateCreationPat;
 	
 	/** Medecin de mon patient, utilisé par le medecin pour avoir la liste de ses patients */
 	private Medecin medecin;
@@ -79,101 +86,102 @@ public class Patient implements Cloneable, Serializable  {
 	@Id
 	@GeneratedValue//clé primaire générée automatiquement par Hibernate
 	@Column(name = "ID_PAT")
-	public long getId_pat() {
-		return id_pat;
+	public long getIdPat() {
+		return idPat;
 	}
 
-	public void setId_pat(long id_pat) {
-		this.id_pat = id_pat;
+	public void setIdPat(long idPat) {
+		this.idPat = idPat;
 	}
 	
 	@Column(name = "NOM_PAT")
-	public String getNom_pat() {
-		return nom_pat;
+	public String getNomPat() {
+		return nomPat;
 	}
 
-	public void setNom_pat(String nom_pat) {
-		this.nom_pat = nom_pat;
+	public void setNomPat(String nomPat) {
+		this.nomPat = nomPat;
 	}
 
 	@Column(name = "PRENOM_PAT")
-	public String getPrenom_pat() {
-		return prenom_pat;
+	public String getPrenomPat() {
+		return prenomPat;
 	}
 
-	public void setPrenom_pat(String prenom_pat) {
-		this.prenom_pat = prenom_pat;
+	public void setPrenomPat(String prenomPat) {
+		this.prenomPat = prenomPat;
 	}
 
 	@Column(name = "DATENAISSANCE_PAT")
-	public Date getDateNaissance_pat() {
-		return dateNaissance_pat;
+	public Date getDateNaissancePat() {
+		return dateNaissancePat;
 	}
 
-	public void setDateNaissance_pat(Date dateNaissance) {
-		this.dateNaissance_pat = dateNaissance;
+	public void setDateNaissancePat(Date dateNaissance) {
+		this.dateNaissancePat = dateNaissance;
 	}
 	
 	@Column(name = "TELMOB_PAT")
-	public String getTel_mob_pat() {
-		return tel_mob_pat;
+	public String getTelMobPat() {
+		return telMobPat;
 	}
 
-	public void setTel_mob_pat(String tel_mob_pat) {
-		this.tel_mob_pat = tel_mob_pat;
+	public void setTelMobPat(String telMobPat) {
+		this.telMobPat = telMobPat;
 	}
 
 	@Column(name = "ADRESSE_PAT")
-	public String getAdresse_pat() {
-		return adresse_pat;
+	public String getAdressePat() {
+		return adressePat;
 	}
 
-	public void setAdresse_pat(String adresse_pat) {
-		this.adresse_pat = adresse_pat;
+	public void setAdressePat(String adressePat) {
+		this.adressePat = adressePat;
 	}
 
 	@Column(name = "EMAIL_PAT")
-	public String getEmail_pat() {
-		return email_pat;
+	public String getEmailPat() {
+		return emailPat;
 	}
 
-	public void setEmail_pat(String email_pat) {
-		this.email_pat = email_pat;
+	public void setEmailPat(String emailPat) {
+		this.emailPat = emailPat;
 	}
 
 	@Column(name = "DATECREATION_PAT")
-	public Date getDate_creation_pat() {
-		return date_creation_pat;
+	public String getDateCreationPat() {
+		return dateCreationPat;
 	}
 
-	public void setDate_creation_pat(Date date_creation_pat) {
-		this.date_creation_pat = date_creation_pat;
+	public void setDateCreationPat(String dateCreationPat) {
+		this.dateCreationPat = dateCreationPat;
 	}
 
 	@Column(name = "TELFIXE_PAT")
-	public String getTel_fixe_pat() {
-		return tel_fixe_pat;
+	public String getTelFixePat() {
+		return telFixePat;
 	}
 
 
-	public void setTel_fixe_pat(String tel_fixe_pat) {
-		this.tel_fixe_pat = tel_fixe_pat;
+	public void setTelFixePat(String telFixePat) {
+		this.telFixePat = telFixePat;
 	}
 
 	
 	@Column(name = "MDP_PAT")
-	public String getMdp_pat() {
-		return mdp_pat;
+	public String getMdpPat() {
+		return mdpPat;
 	}
 
-	public void setMdp_pat(String mdp_pat) {
-		this.mdp_pat = mdp_pat;
+	public void setMdpPat(String mdpPat) {
+		this.mdpPat = mdpPat;
 	}
 
 	//déclaration de plusieurs patient à un medecin
 	//avec un nom donné à ma table de jointure, non nullable. En mode Lazy, dès qu'on en aura besoin
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MEDECIN_ID", nullable = false)
+	@JsonIgnore
 	public Medecin getMedecin() {
 		return medecin;
 	}

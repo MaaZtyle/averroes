@@ -1,6 +1,8 @@
 package fr.maazouza.averroes.middleware.objetmetier.medecin;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,7 +14,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import fr.maazouza.averroes.middleware.objetmetier.patient.Patient;
 
@@ -25,25 +33,28 @@ public class Medecin implements Cloneable, Serializable  {
 	private static final long serialVersionUID = 1L;
 
 	/** Référence unique du médecin */
-	private long id_med;
+	private long idMed;
 
 	/** Nom */
-	private String nom_med;
+	private String nomMed;
 	
 	/** Prénom */
-	private String prenom_med;
+	private String prenomMed;
 	
 	/** Téléphone mobile*/
-	private String tel_mob_med;
+	private String telMobMed;
 	
 	/** Téléphone fixe*/
-	private String tel_fixe_med;
+	private String telFixeMed;
 	
 	/** Mot de passe **/
-	private String mdp_med;
+	private String mdpMed;
 	
 	/** Mail */
-	private String mail_med;
+	private String emailMed;
+	
+	/** Mail */
+	private String dateCreationMed;
 	
 	/** Patient */
 	private List<Patient> patients;
@@ -56,72 +67,71 @@ public class Medecin implements Cloneable, Serializable  {
 	@Id
 	@GeneratedValue//clé primaire générée automatiquement par Hibernate
 	@Column(name = "ID_MED")		
-	public long getId_med() {
-		return id_med;
+	public long getIdMed() {
+		return idMed;
 	}
 
 
-	public void setId_med(long id_med) {
-		this.id_med = id_med;
+	public void setIdMed(long idMed) {
+		this.idMed = idMed;
 	}
 
 	@Column(name = "NOM_MED")
-	public String getNom_med() {
-		return nom_med;
+	public String getNomMed() {
+		return nomMed;
 	}
 
 
-	public void setNom_med(String nom_med) {
-		this.nom_med = nom_med;
+	public void setNomMed(String nomMed) {
+		this.nomMed = nomMed;
 	}
 
 	@Column(name = "PRENOM_MED")
-	public String getPrenom_med() {
-		return prenom_med;
+	public String getPrenomMed() {
+		return prenomMed;
 	}
 
 
-	public void setPrenom_med(String prenom_med) {
-		this.prenom_med = prenom_med;
+	public void setPrenomMed(String prenomMed) {
+		this.prenomMed = prenomMed;
 	}
 
 	@Column(name = "TELMOB_MED")
-	public String getTel_mob_med() {
-		return tel_mob_med;
+	public String getTelMobMed() {
+		return telMobMed;
 	}
 	
-	public void setTel_mob_med(String tel_mob_med) {
-		this.tel_mob_med = tel_mob_med;
+	public void setTelMobMed(String telMobMed) {
+		this.telMobMed = telMobMed;
 	}
 
 	@Column(name = "TELFIXE_MED")
-	public String getTel_fixe_med() {
-		return tel_fixe_med;
+	public String getTelFixeMed() {
+		return telFixeMed;
 	}
 
 
-	public void setTel_fixe_med(String tel_fixe_med) {
-		this.tel_fixe_med = tel_fixe_med;
+	public void setTelFixeMed(String telFixeMed) {
+		this.telFixeMed = telFixeMed;
 	}
 
 	@Column(name = "MDP_MED")
-	public String getMdp_med() {
-		return mdp_med;
+	public String getMdpMed() {
+		return mdpMed;
 	}
 
-
-	public void setMdp_med(String mdp_med) {
-		this.mdp_med = mdp_med;
+	public void setMdpMed(String mdpMed) {
+		this.mdpMed = mdpMed;
 	}
 
 	@Column(name = "EMAIL_MED")
-	public String getMail_med() {
-		return mail_med;
+	public String getEmailMed() {
+		return emailMed;
 	}
 
 
-	public void setMail_med(String mail) {
-		this.mail_med = mail;
+	public void setEmailMed(String email) {
+		this.emailMed = email;
 	}
 
 
@@ -129,13 +139,24 @@ public class Medecin implements Cloneable, Serializable  {
 		return serialVersionUID;
 	}
 
+	@Column(name = "DATECREATION_MED")
+	public String getDateCreationMed() {
+		return dateCreationMed;
+	}
+
+	public void setDateCreationMed(String dateCreationMed) {
+		this.dateCreationMed = dateCreationMed;
+	}
 
 	//@OneToMany(cascade = CascadeType.ALL) pour créer en cascade
-	@OneToMany(fetch = FetchType.LAZY,mappedBy="medecin")
+	
+	@OneToMany(mappedBy="medecin",fetch = FetchType.LAZY)
+	//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
+	//		  property = "idPat") permet d'avoir chaque medecin avec les patients correspondant
+	@JsonIgnore
 	public List<Patient> getPatients() {
 		return patients;
 	}
-	
 	
 
 	public void setPatients(List<Patient> patients) {

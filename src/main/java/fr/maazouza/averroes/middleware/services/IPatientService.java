@@ -16,28 +16,26 @@ import java.util.List;
  */
 public interface IPatientService {
 	
-public void ajouterPatient(Patient patient)  throws PatientDejaExistantException ;
-			
-	
-public void ajouterPatients(Collection<Patient> patients);
-			
-
-public List<Patient> obtenirPatients(String predicat);
-
-public void modifierPatient(Patient patient);
 
 
+public List<Patient> obtenirPatients();
 
-public void supprimerPatient(String nomPatient);
+//public void modifierPatient(Patient patient);
+
+
+Medecin obtenirMedecinDunPatient(long idPat);
 
 
 boolean existerParNomEtPrenom(Patient patient);
 
 
-Patient obtenirUnPatient(String nom, String prenom);
 
 
-Medecin obtenirMedecinDunPatient(long id_pat);
+
+
+//public List<Patient> obtenirUnPatients();
+
+
 
 
 }

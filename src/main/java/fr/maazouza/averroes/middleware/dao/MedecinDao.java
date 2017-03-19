@@ -49,7 +49,7 @@ public class MedecinDao {
 		}
 		
 		
-		public List<Medecin> obtenir(String predicat) {
+		//public List<Medecin> obtenir(String predicat) {
 			
 			// Je récupère juste la référence de mon entité.
 			//return em.find(Medecin.class, id);
@@ -69,7 +69,7 @@ public class MedecinDao {
 			 */
 			//return (List<Medecin>) requete.getResultList();
 			
-			final String requeteJPQL = "SELECT b FROM Medecin b WHERE b.nom_med = :filtre or b.prenom_med =:filtre";
+			/*final String requeteJPQL = "SELECT b FROM Medecin b WHERE b.nomMed = :filtre or b.prenomMed =:filtre";
 			
 			final TypedQuery<Medecin> requeteType = em.createQuery(requeteJPQL, Medecin.class)
 				.setParameter("filtre", predicat);
@@ -78,18 +78,18 @@ public class MedecinDao {
 			
 			//return em.find(Medecin.class, nom);
 		}
+		*/
 		
-		
-		//recupérer un seul patient pour le modifier par nom et prénom
-		public Medecin obtenirUnMedecin(String nom, String prenom) {
+		//recupérer un seul medecin pour le modifier par nom et prénom
+		public Medecin obtenirUnMedecin(Long idMed) {
 			
 			
-			final String requeteJPQL = "SELECT b FROM Patient b WHERE b.nom_med = :filtre1 and b.prenom_med =:filtre2";
+			final String requeteJPQL = "SELECT b FROM Medecin b WHERE b.idMed = :filtre1";
 			
 			
 			final TypedQuery<Medecin> requeteType = em.createQuery(requeteJPQL, Medecin.class)
-				.setParameter("filtre1", nom)
-				.setParameter("filtre2", prenom);
+				.setParameter("filtre1", idMed);
+				//.setParameter("filtre2", prenom);
 		
 			
 			
@@ -107,6 +107,39 @@ public class MedecinDao {
 		public void modifier(Medecin medecin) {
 			
 			em.merge(medecin);
+		}
+
+
+		//liste des medecins
+		public List<Medecin> obtenir() {
+			final String requeteJPQL = "SELECT b FROM Medecin b";
+			
+			
+			final TypedQuery<Medecin> requeteType = em.createQuery(requeteJPQL, Medecin.class);
+				
+			
+			return requeteType.getResultList();
+		}
+
+		
+		public List<Patient> obtenirPatientsDunMedecin(Long idMed) {
+
+			
+			final String requeteJPQL = "SELECT b FROM Patient b where b.medecin.idMed= ?";
+			
+			final TypedQuery<Patient> requeteType = em.createQuery(requeteJPQL, Patient.class)
+				.setParameter(1, idMed);
+		
+			
+			List<Patient> elementList = requeteType.getResultList();
+			return elementList.isEmpty( ) ? null : elementList;
+						
+		}
+
+
+		public void supprimer(Long idMed) {
+			em.remove(em.getReference(Medecin.class, idMed));
+			
 		}
 		
 }

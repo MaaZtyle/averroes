@@ -1,8 +1,10 @@
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\webservices\MedecinWebService.java
+D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\objetmetier\medecin\MedecinAvecPatientsException.java
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\services\IPatientService.java
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\services\IMedecinService.java
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\objetmetier\patient\Patient.java
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\objetmetier\medecin\Medecin.java
+D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\objetmetier\medecin\MedecinInexistantException.java
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\dao\MedecinDao.java
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\dao\PatientDao.java
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\objetmetier\patient\PatientInexistantException.java

@@ -33,13 +33,14 @@ public class PatientService implements IPatientService{
 	@Override
 	public boolean existerParNomEtPrenom(Patient patient) {
 		
-		//je cherche tous les patients avec ce nom
-		List<Patient> listePatient = patientDao.obtenir(patient.getNom_pat());
+		//je cherche tous les patients
+		List<Patient> listePatient = patientDao.obtenir();
 		
-		// ensuite je vérifie si le prénom est aussi le même
+		// ensuite je filtre sur le nom et prénom
 		
 		Patient result = listePatient.stream()
-			     .filter(item -> item.getPrenom_pat().equals(patient.getPrenom_pat()))
+			     .filter(item -> item.getPrenomPat().equals(patient.getPrenomPat()))
+			     .filter(item -> item.getNomPat().equals(patient.getNomPat()))
 			     .findFirst()
 			     .orElse(null);
 		
@@ -54,62 +55,66 @@ public class PatientService implements IPatientService{
 			     	
 	}
 
-	@Override
+	/*@Override
 	public void ajouterPatient(Patient patient) throws PatientDejaExistantException {
 				
 		if((existerParNomEtPrenom(patient)==true ))
-			throw new PatientDejaExistantException("Le Patient"+ patient.getNom_pat()+ " existe déjà");
+			throw new PatientDejaExistantException("Le Patient"+ patient.getNomPat()+ " existe déjà");
 		else patientDao.persister(patient);
 		
-	}
+	}*/
+
 
 	@Override
-	public void ajouterPatients(Collection<Patient> patients) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public List<Patient> obtenirPatients(String predicat) {
-    List<Patient> resultat = patientDao.obtenir(predicat);
+	public List<Patient> obtenirPatients() {
+    List<Patient> resultat = patientDao.obtenir();
 		
 		return resultat;
 	}
 
-	@Override
+	/*@Override
 	public Patient obtenirUnPatient(String nom, String prenom){
     
 		Patient resultat = patientDao.obtenirUnPatient(nom,prenom);
 		
 		return resultat;
 	}
-
+*/
 	
 	@Override
-	public Medecin obtenirMedecinDunPatient(long id_pat){
+	public Medecin obtenirMedecinDunPatient(long idPat){
     
-		Medecin resultat = patientDao.obtenirMedecinDunPatient(id_pat);
+		Medecin resultat = patientDao.obtenirMedecinDunPatient(idPat);
 		
 		return resultat;
 	}
 
 	
+
 	
+	
+	/*
 	@Override
 	public void modifierPatient(Patient patient) {
 		// TODO Auto-generated method stub
 		patientDao.modifier(patient);
 		
 	}
-
+*/
 	
-	@Override
+	/*@Override
 	public void supprimerPatient(String nomPatient) {
 		// TODO Auto-generated method stub
 		patientDao.supprimer(nomPatient);
 		
+	}*/
+/*
+	@Override
+	public List<Patient> obtenirUnPatients() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	
+	*/
 	
 }
