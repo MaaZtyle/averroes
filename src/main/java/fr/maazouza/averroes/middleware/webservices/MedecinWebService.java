@@ -7,8 +7,10 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.jws.WebService;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -81,7 +83,7 @@ public class MedecinWebService {
 //OK
 	@POST
 	@Path(value = "/ajouter")
-	public Response ajouterMEdecin(
+	public Response ajouterMedecin(
 			@QueryParam("nomMed") String nomMed,
 			@QueryParam("prenomMed") String prenomMed,
 			@QueryParam("telMobMed") String telMobMed,
@@ -92,11 +94,8 @@ public class MedecinWebService {
 	) 
 	{
 	
-		
-		
 				
-				//pour l'instant je créé un medecin, mais après il sera dejà dans la base
-				// je devrais juste récupérer son id et l'insérer comme un champs normal
+				
 				Medecin medecin = new Medecin();
 				
 				//je défini un format date
@@ -134,7 +133,7 @@ public class MedecinWebService {
 	
 // Modifier un medecin
 	//OK
-	@POST
+	@PUT
 	@Path(value = "/modifier")
 	public Response modifierMedecin (
 			@QueryParam("nomMed") String nomMed,
@@ -184,7 +183,7 @@ public class MedecinWebService {
 //supprimer un medecin avec l'id. Je suppose qu'il y aune liste, on coche le medecin et on supprime. On a donc besoin que de l'id
 // je vérifie l'existance du medecin et s'il na pas de patients, sinon je lève les exceptions
 //OK
-			@POST
+			@DELETE
 			@Path(value = "/supprimer")
 			public Response supprimerMedecin(
 					@QueryParam("idMed") Long idMed
@@ -279,9 +278,7 @@ public class MedecinWebService {
 			//on créé un nouveau patient, et on lui affecte les valeurs, et le medecin
 			Patient patient = new Patient();
 			
-			//pour l'instant je créé un medecin, mais après il sera dejà dans la base
-			// je devrais juste récupérer son id et l'insérer comme un champs normal
-		
+				// je vérifie qu'il y a bien un medecin dans la base avec l'id fourni	
 				Medecin medecin = medecinService.obtenirUnMedecin(idmedecin);
 				
 				if(medecin != null){
@@ -324,7 +321,7 @@ public class MedecinWebService {
 		
 //supprimer le patient d'un medecin
 //OK
-		@POST
+		@DELETE
 		@Path(value = "/patient/supprimer")
 		public Response supprimerPatient(
 			@QueryParam("idPat") long idPat
@@ -337,7 +334,7 @@ public class MedecinWebService {
 			Patient patient = new Patient();
 			
 			patient= medecinService.obtenirUnPatient(idPat);
-			// si le patient existe dans la base, je le supprimer
+			// si le patient existe dans la base, je le supprime
 			if(patient != null)
 			{medecinService.supprimerPatient(idPat);
 			
@@ -354,7 +351,7 @@ public class MedecinWebService {
 		
 //Modifier le patient d'un medecin
 // OK
-		@POST
+		@PUT
 		@Path(value = "/patient/modifier")
 		public Response modifierPatient (
 				@QueryParam("idPat") Long idPat,
@@ -373,9 +370,10 @@ public class MedecinWebService {
 			Patient patient = new Patient();
 			Medecin medecin = new Medecin();
 			
+			// je récupère le patient avec l'id fourni
 			patient= medecinService.obtenirUnPatient(idPat);
 			
-			// je récupère le medecin du patient
+			// je récupère le medecin du patient avec l'id fourni
 			medecin = patientService.obtenirMedecinDunPatient(idMedecin);
 			
 			
