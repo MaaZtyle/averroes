@@ -49,20 +49,12 @@ public class Patient implements Cloneable, Serializable  {
 	/** Prénom */
 	private String prenomPat;
 	
-	/** Date de naissance */
-	private Date dateNaissancePat;
 	
-	/** Téléphone mobile*/
-	private String telMobPat;
-	
-	/** Téléphone fixe*/
-	private String telFixePat;
 		
 	/** Mot de passe **/
 	private String mdpPat;
 	
-	/** Adresse */
-	private String adressePat;
+	
 	
 	/** Mail */
 	private String emailPat;
@@ -118,32 +110,7 @@ public class Patient implements Cloneable, Serializable  {
 		this.prenomPat = prenomPat;
 	}
 
-	@Column(name = "DATENAISSANCE_PAT")
-	public Date getDateNaissancePat() {
-		return dateNaissancePat;
-	}
-
-	public void setDateNaissancePat(Date dateNaissance) {
-		this.dateNaissancePat = dateNaissance;
-	}
 	
-	@Column(name = "TELMOB_PAT")
-	public String getTelMobPat() {
-		return telMobPat;
-	}
-
-	public void setTelMobPat(String telMobPat) {
-		this.telMobPat = telMobPat;
-	}
-
-	@Column(name = "ADRESSE_PAT")
-	public String getAdressePat() {
-		return adressePat;
-	}
-
-	public void setAdressePat(String adressePat) {
-		this.adressePat = adressePat;
-	}
 
 	@Column(name = "EMAIL_PAT")
 	public String getEmailPat() {
@@ -163,15 +130,7 @@ public class Patient implements Cloneable, Serializable  {
 		this.dateCreationPat = dateCreationPat;
 	}
 
-	@Column(name = "TELFIXE_PAT")
-	public String getTelFixePat() {
-		return telFixePat;
-	}
-
-
-	public void setTelFixePat(String telFixePat) {
-		this.telFixePat = telFixePat;
-	}
+	
 
 	
 	@Column(name = "MDP_PAT")

@@ -1,19 +1,18 @@
 package fr.maazouza.averroes.middleware.objetmetier.dossierMedical;
 
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import fr.maazouza.averroes.middleware.objetmetier.medecin.Medecin;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import fr.maazouza.averroes.middleware.objetmetier.patient.Patient;
 
 @Entity
@@ -29,6 +28,18 @@ public class DossierMedical  implements Cloneable, Serializable  {
 	
 	/** Référence unique du dossier */
 	private long idDos;
+	
+	/** Date de naissance */
+	private String dateNaissancePat;
+	
+	/** Téléphone mobile*/
+	private String telMobPat;
+	
+	/** Téléphone fixe*/
+	private String telFixePat;
+	
+	/** Adresse */
+	private String adressePat;
 	
 	/** Numéro de sécurité sociale */
 	private long numSecu;
@@ -55,7 +66,7 @@ public class DossierMedical  implements Cloneable, Serializable  {
 	private Double imc;
 	
 	/** Groupe sanguin */
-	private Double groupeSanguin;
+	private String groupeSanguin;
 	
 	/** Donneur d'organes */
 	private Boolean donneurOrgane;
@@ -74,6 +85,7 @@ public class DossierMedical  implements Cloneable, Serializable  {
 	
 	/** Etat dossier*/
 	private Boolean dossierOuvert;
+	
 	
 	/** Le dossier du patient */
 	private Patient patient;
@@ -101,6 +113,45 @@ public class DossierMedical  implements Cloneable, Serializable  {
 		this.idDos = idDos;
 	}
 
+	
+	@Column(name = "DATENAISSANCE_PAT")
+	public String getDateNaissancePat() {
+		return dateNaissancePat;
+	}
+
+	public void setDateNaissancePat(String dateNaissance) {
+		this.dateNaissancePat = dateNaissance;
+	}
+	
+	@Column(name = "TELMOB_PAT")
+	public String getTelMobPat() {
+		return telMobPat;
+	}
+
+	public void setTelMobPat(String telMobPat) {
+		this.telMobPat = telMobPat;
+	}
+
+	@Column(name = "ADRESSE_PAT")
+	public String getAdressePat() {
+		return adressePat;
+	}
+
+	public void setAdressePat(String adressePat) {
+		this.adressePat = adressePat;
+	}
+	
+	@Column(name = "TELFIXE_PAT")
+	public String getTelFixePat() {
+		return telFixePat;
+	}
+
+
+	public void setTelFixePat(String telFixePat) {
+		this.telFixePat = telFixePat;
+	}
+	
+	
 	@Column(name = "NUM_SECURITE_SOCIALE")
 	public long getNumSecu() {
 		return numSecu;
@@ -182,12 +233,12 @@ public class DossierMedical  implements Cloneable, Serializable  {
 	}
 
 	@Column(name = "GROUPE_SANGUIN")
-	public Double getGroupeSanguin() {
+	public String getGroupeSanguin() {
 		return groupeSanguin;
 	}
 
 
-	public void setGroupeSanguin(Double groupeSanguin) {
+	public void setGroupeSanguin(String groupeSanguin) {
 		this.groupeSanguin = groupeSanguin;
 	}
 
@@ -253,7 +304,8 @@ public class DossierMedical  implements Cloneable, Serializable  {
 
 	// Un dossier medical n'est qu'a un seul patient
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "PATIENT_ID", nullable = false)
+	@JoinColumn(name = "PATIENT_ID", nullable = false, unique=true)
+	@JsonIgnore
 	public Patient getPatient() {
 		return patient;
 	}

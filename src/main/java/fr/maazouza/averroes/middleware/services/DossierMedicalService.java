@@ -1,5 +1,7 @@
 package fr.maazouza.averroes.middleware.services;
 
+import java.util.List;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
@@ -39,16 +41,60 @@ public class DossierMedicalService implements IDossierMedicalService {
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 	
-	
+
+// Rechecher un dossier medical par idPat
+		@Override
+		public boolean existerParId(Long idPat) {
+			
+			//je cherche tous les medecins avec ce nom
+			List<DossierMedical> listeDossierMedical= dossierMedicalDao.obtenir();
+			
+			// ensuite je vérifie si le prénom est aussi le même
+			
+			DossierMedical result = listeDossierMedical.stream()
+				     .filter(item -> idPat.equals(item.getPatient().getIdPat())) 
+				     .findFirst()
+				     .orElse(null);
+			
+			 
+			
+			//si le nom et le prenom sont les memes, je retourne true
+			if( result == null)
+				return false;
+				else return true;
+						
+				
+				     	
+		}
 	
 // Ajouter un Dossier Medical
 		@Override
 		public void ajouterDossierMedical(DossierMedical dossier) 
 		
 		{
+			
 			dossierMedicalDao.persister(dossier);
 							
 		}
+		
+// Returner un Dossier Medical d'un seul patient
+				@Override
+				public DossierMedical consulterUnDossierMedical(Long IpPat) 
+				
+				{
+					
+					return dossierMedicalDao.consulter(IpPat);
+					 
+									
+				}
+				
+//Retourner tous les dossiers medicaux
+				@Override
+				public List<DossierMedical> obtenir() {
+					return dossierMedicalDao.obtenir();
+				}
+
+				
 
 
 }

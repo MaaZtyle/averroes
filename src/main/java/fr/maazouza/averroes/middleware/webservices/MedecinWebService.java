@@ -86,8 +86,6 @@ public class MedecinWebService {
 	public Response ajouterMedecin(
 			@QueryParam("nomMed") String nomMed,
 			@QueryParam("prenomMed") String prenomMed,
-			@QueryParam("telMobMed") String telMobMed,
-			@QueryParam("telFixeMed") String telFixeMed,
 			@QueryParam("mdpMed") String mdpMed,
 			@QueryParam("emailMed") String emailMed			
 			
@@ -104,8 +102,6 @@ public class MedecinWebService {
 				//j'initialise tous les champs
 				medecin.setNomMed(nomMed);
 				medecin.setPrenomMed(prenomMed);
-				medecin.setTelMobMed(telMobMed);
-				medecin.setTelFixeMed(telFixeMed);
 				medecin.setMdpMed(mdpMed);
 				medecin.setEmailMed(emailMed);
 				medecin.setDateCreationMed(LocalDateTime.now().format(formatter));
@@ -264,11 +260,7 @@ public class MedecinWebService {
 		public Response ajouterPatient(
 				@QueryParam("nomPat") String nomPat,
 				@QueryParam("prenomPat") String prenomPat,
-				@QueryParam("dateNaissancePat") Date dateNaissancePat,
-				@QueryParam("telMobPat") String telMobPat,
-				@QueryParam("telFixePat") String telFixePat,
 				@QueryParam("mdpPat") String mdpPat,
-				@QueryParam("adressePat") String adressePat,
 				@QueryParam("emailPat") String emailPat,
 				@QueryParam("idmedecin") long idmedecin
 				
@@ -282,14 +274,10 @@ public class MedecinWebService {
 				Medecin medecin = medecinService.obtenirUnMedecin(idmedecin);
 				
 				if(medecin != null){
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 				patient.setNomPat(nomPat);
 				patient.setPrenomPat(prenomPat);
-				patient.setDateNaissancePat(dateNaissancePat);
-				patient.setTelMobPat(telMobPat);
-				patient.setTelFixePat(telFixePat);
 				patient.setMdpPat(mdpPat);
-				patient.setAdressePat(adressePat);
 				patient.setEmailPat(emailPat);
 				patient.setDateCreationPat(LocalDateTime.now().format(formatter));
 				
@@ -357,11 +345,7 @@ public class MedecinWebService {
 				@QueryParam("idPat") Long idPat,
 				@QueryParam("nomPat") String nomPat,
 				@QueryParam("prenomPat") String prenomPat,
-				@QueryParam("dateNaissancePat") Date dateNaissancePat,
-				@QueryParam("telMobPat") String telMobPat,
-				@QueryParam("telFixePat") String telFixePat,
 				@QueryParam("mdpPat") String mdpPat,
-				@QueryParam("adressePat") String adressePat,
 				@QueryParam("emailPat") String emailPat,
 				@QueryParam("idmedecin") long idMedecin
 				
@@ -383,11 +367,7 @@ public class MedecinWebService {
 					if(patient != null){
 						patient.setNomPat(nomPat);
 						patient.setPrenomPat(prenomPat);
-						patient.setDateNaissancePat(dateNaissancePat);
-						patient.setTelMobPat(telMobPat);
-						patient.setTelFixePat(telFixePat);
 						patient.setMdpPat(mdpPat);
-						patient.setAdressePat(adressePat);
 						patient.setEmailPat(emailPat);
 						patient.setMedecin(medecin);		
 			
@@ -395,7 +375,7 @@ public class MedecinWebService {
 						medecinService.modifierPatient(patient);
 						
 						return Response.status(200)
-								.entity("Le patient  : " + nomPat + ", age : " + prenomPat + " a été modifié")
+								.entity("Le patient  : " + nomPat + ", prenom : " + prenomPat + " a été modifié")
 								.build();
 						}
 			
