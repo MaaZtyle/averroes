@@ -6,8 +6,10 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import fr.maazouza.averroes.middleware.dao.DossierMedicalDao;
+import fr.maazouza.averroes.middleware.dao.MaladieDao;
 import fr.maazouza.averroes.middleware.dao.PatientDao;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedical;
+import fr.maazouza.averroes.middleware.objetmetier.maladie.Maladie;
 import fr.maazouza.averroes.middleware.objetmetier.medecin.Medecin;
 import fr.maazouza.averroes.middleware.objetmetier.medecin.MedecinDejaExistantException;
 
@@ -28,6 +30,10 @@ public class DossierMedicalService implements IDossierMedicalService {
 	@EJB
 	private PatientDao patientDao;
 	
+	@EJB
+	private MaladieDao maladieDao;
+	
+
 	//@EJB
 	//private IMedecinService medecinService;
 	
@@ -77,6 +83,15 @@ public class DossierMedicalService implements IDossierMedicalService {
 							
 		}
 		
+// Ajouter une maladie à un Dossier medical d'un patient
+		@Override
+		public void ajouterMaladie(Maladie maladie) 				
+		{
+					
+			maladieDao.persister(maladie);
+									
+		}		
+		
 // Returner un Dossier Medical d'un seul patient
 				@Override
 				public DossierMedical consulterUnDossierMedical(Long IpPat) 
@@ -93,7 +108,29 @@ public class DossierMedicalService implements IDossierMedicalService {
 				public List<DossierMedical> obtenir() {
 					return dossierMedicalDao.obtenir();
 				}
-
+				
+//Modifier un dossier medical
+				@Override
+				public void modifierDossierMedical(DossierMedical dossierMedical) {
+					dossierMedicalDao.modifier(dossierMedical);
+					
+				}
+// Obtenir un dossier
+				@Override
+				public DossierMedical obtenirUnDossier(Long idDos) {
+					// Obtenir un medecin par Id
+					
+					return dossierMedicalDao.obtenirUnDossier(idDos);
+						
+					}
+// Supprimer un dossier
+		
+				@Override
+				public void supprimerUnDossierMedical(Long idDos) {
+					 dossierMedicalDao.supprimerUnDossierMedical(idDos);
+					
+				}
+				
 				
 
 

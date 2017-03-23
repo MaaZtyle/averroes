@@ -25,7 +25,7 @@ public class DossierMedicalDao {
 	@PersistenceContext
 	private EntityManager em;
 			
-
+//Ajouter un dossier
 	public void persister(DossierMedical dossier) {
 		
 		em.persist(dossier);		
@@ -49,7 +49,7 @@ public class DossierMedicalDao {
 		
 	}
 
-	//liste des dossiers
+//Afficher la liste des dossiers
 		public List<DossierMedical> obtenir() {
 			final String requeteJPQL = "SELECT b FROM DossierMedical b";
 			
@@ -59,5 +59,34 @@ public class DossierMedicalDao {
 			
 			return requeteType.getResultList();
 		}
+		
+// Modifier un dossier
+		public void modifier(DossierMedical dossierMedical){
+			em.merge(dossierMedical);
+		}
+
+// recupérer un seul dossier
+		public DossierMedical obtenirUnDossier(Long idDos) {
+			
+			final String requeteJPQL = "SELECT b FROM DossierMedical b WHERE b.idDos = :filtre1";
+			
+			
+			final TypedQuery<DossierMedical> requeteType = em.createQuery(requeteJPQL, DossierMedical.class)
+				.setParameter("filtre1", idDos);
+					
+			
+			
+			//retourne le premier element de la liste, sinon null
+			List<DossierMedical> elementList = requeteType.getResultList();
+			return elementList.isEmpty( ) ? null : elementList.get(0);
+		}
+		
+		
+//Suppression d'un dossier
+		public void supprimerUnDossierMedical(Long idDos) {
+			em.remove(em.getReference(DossierMedical.class, idDos));
+			
+		}
+		
 
 }

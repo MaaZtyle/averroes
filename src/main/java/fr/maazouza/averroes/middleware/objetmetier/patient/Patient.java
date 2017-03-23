@@ -33,6 +33,7 @@ import fr.maazouza.averroes.middleware.objetmetier.medecin.Medecin;
  *
  */
 
+
 @Entity
 @Table(name = "T_PATIENT")
 @XmlRootElement

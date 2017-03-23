@@ -269,9 +269,9 @@ public class MedecinWebService {
 		{
 			//on créé un nouveau patient, et on lui affecte les valeurs, et le medecin
 			Patient patient = new Patient();
-			
+			Medecin medecin = new Medecin();
 				// je vérifie qu'il y a bien un medecin dans la base avec l'id fourni	
-				Medecin medecin = medecinService.obtenirUnMedecin(idmedecin);
+				 medecin = medecinService.obtenirUnMedecin(idmedecin);
 				
 				if(medecin != null){
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");

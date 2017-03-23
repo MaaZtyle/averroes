@@ -7,8 +7,10 @@ D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middl
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\objetmetier\dossierMedical\DossierMedical.java
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\objetmetier\patient\Patient.java
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\objetmetier\dossierMedical\DossierMedicalDejaExistantException.java
+D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\objetmetier\maladie\Maladie.java
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\objetmetier\medecin\Medecin.java
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\objetmetier\medecin\MedecinInexistantException.java
+D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\dao\MaladieDao.java
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\dao\MedecinDao.java
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\dao\PatientDao.java
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\objetmetier\patient\PatientInexistantException.java

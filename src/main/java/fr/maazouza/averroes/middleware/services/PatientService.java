@@ -71,14 +71,14 @@ public class PatientService implements IPatientService{
 		return resultat;
 	}
 
-	/*@Override
-	public Patient obtenirUnPatient(String nom, String prenom){
+	@Override
+	public Patient obtenirUnPatient(Long idPat){
     
-		Patient resultat = patientDao.obtenirUnPatient(nom,prenom);
+		Patient resultat = patientDao.obtenirUnPatient(idPat);
 		
 		return resultat;
 	}
-*/
+
 	
 	@Override
 	public Medecin obtenirMedecinDunPatient(long idPat){

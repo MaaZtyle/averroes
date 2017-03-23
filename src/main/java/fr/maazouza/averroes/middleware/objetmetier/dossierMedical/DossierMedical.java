@@ -1,19 +1,27 @@
 package fr.maazouza.averroes.middleware.objetmetier.dossierMedical;
 
 import java.io.Serializable;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import fr.maazouza.averroes.middleware.objetmetier.maladie.Maladie;
 import fr.maazouza.averroes.middleware.objetmetier.patient.Patient;
+
+
 
 @Entity
 @Table(name = "T_DOSSIERMEDICAL")
@@ -89,6 +97,11 @@ public class DossierMedical  implements Cloneable, Serializable  {
 	
 	/** Le dossier du patient */
 	private Patient patient;
+	
+	/** Toutes les infos des autres tables **/
+	
+	/** Patient */
+	private List<Maladie> maladie;
 	
 	
 	/**************************************/
@@ -315,7 +328,19 @@ public class DossierMedical  implements Cloneable, Serializable  {
 		this.patient = patient;
 	}
 
+	// Un dossier medical a plusieurs maladies, je référence la relation avec le dossier médical
+	@OneToMany(mappedBy="dossierMedical",fetch = FetchType.LAZY)
+	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
+	property = "idMal") //JsonIdentityInfo, va récupérer les entités maladies liées
+	public List<Maladie> getMaladie() {
+		return maladie;
+	}
 
+	public void setMaladie(List<Maladie> maladie) {
+		this.maladie = maladie;
+	}
+
+	
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}

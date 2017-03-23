@@ -28,6 +28,12 @@ Medecin obtenirMedecinDunPatient(long idPat);
 
 boolean existerParNomEtPrenom(Patient patient);
 
+Patient obtenirUnPatient(Long idPat);
+
+
+
+
+
 
 
 
