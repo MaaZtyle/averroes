@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import fr.maazouza.averroes.middleware.objetmetier.allergie.Allergie;
 import fr.maazouza.averroes.middleware.objetmetier.maladie.Maladie;
 import fr.maazouza.averroes.middleware.objetmetier.patient.Patient;
 
@@ -100,8 +101,11 @@ public class DossierMedical  implements Cloneable, Serializable  {
 	
 	/** Toutes les infos des autres tables **/
 	
-	/** Patient */
+	/** Maladie */
 	private List<Maladie> maladie;
+	
+	/** Allergies */
+	private List<Allergie> allergie;
 	
 	
 	/**************************************/
@@ -340,10 +344,24 @@ public class DossierMedical  implements Cloneable, Serializable  {
 		this.maladie = maladie;
 	}
 
+	// Un dossier medical a plusieurs allergies, je référence la relation avec le dossier médical
+	@OneToMany(mappedBy="dossierMedical",fetch = FetchType.LAZY)
+	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
+	property = "idAll") //JsonIdentityInfo, va récupérer les entités allergies liées
+	public List<Allergie> getAllergie() {
+		return allergie;
+	}
+
+	public void setAllergie(List<Allergie> allergie) {
+		this.allergie = allergie;
+	}
+	
 	
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
+	
 	
 	
 	

@@ -2,6 +2,8 @@ package fr.maazouza.averroes.middleware.services;
 
 import java.util.List;
 
+import fr.maazouza.averroes.middleware.objetmetier.allergie.Allergie;
+import fr.maazouza.averroes.middleware.objetmetier.allergie.AllergieInexistanteException;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedical;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalDejaExistantException;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalInexistantException;
@@ -38,6 +40,16 @@ public interface IDossierMedicalService{
 	void supprimerMaladie(Long idMal) throws MaladieInexistanteException;
 
 	void modifierMaladie(Maladie maladie) throws MaladieInexistanteException;
+
+	void ajouterAllergie(Allergie allergie);
+
+	Allergie obtenirAllergie(Long idAll) throws AllergieInexistanteException, AllergieInexistanteException;
+
+	void supprimerAllergie(Long idAll) throws AllergieInexistanteException;
+
+	void modifierAllergie(Allergie allergie) throws AllergieInexistanteException;
+
+
 
 	
 

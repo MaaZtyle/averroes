@@ -10,6 +10,7 @@ fr\maazouza\averroes\middleware\dao\MedecinDao.class
 fr\maazouza\averroes\middleware\objetmetier\medecin\MedecinAvecPatientsException.class
 fr\maazouza\averroes\middleware\objetmetier\patient\PatientDejaExistantException.class
 fr\maazouza\averroes\middleware\webservices\DossierMedicalWebService.class
+fr\maazouza\averroes\middleware\objetmetier\allergie\Allergie.class
 fr\maazouza\averroes\middleware\webservices\PatientWebService.class
 fr\maazouza\averroes\middleware\dao\PatientDao.class
 fr\maazouza\averroes\middleware\dao\MaladieDao.class
@@ -17,8 +18,10 @@ fr\maazouza\averroes\middleware\objetmetier\patient\Patient.class
 fr\maazouza\averroes\middleware\services\PatientService.class
 fr\maazouza\averroes\middleware\webservices\MedecinWebService.class
 fr\maazouza\averroes\middleware\objetmetier\dossierMedical\DossierMedical.class
+fr\maazouza\averroes\middleware\objetmetier\allergie\AllergieInexistanteException.class
 fr\maazouza\averroes\middleware\objetmetier\medecin\Medecin.class
 fr\maazouza\averroes\middleware\services\IMedecinService.class
+fr\maazouza\averroes\middleware\dao\AllergieDao.class
 fr\maazouza\averroes\middleware\services\MedecinService.class
 fr\maazouza\averroes\middleware\objetmetier\dossierMedical\DossierMedicalDejaExistantException.class
 fr\maazouza\averroes\middleware\objetmetier\medecin\MedecinInexistantException.class

@@ -1,5 +1,6 @@
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\dao\DossierMedicalDao.java
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\services\IPatientService.java
+D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\dao\AllergieDao.java
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\services\IMedecinService.java
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\objetmetier\patient\Patient.java
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\objetmetier\dossierMedical\DossierMedicalDejaExistantException.java
@@ -21,5 +22,7 @@ D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middl
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\objetmetier\maladie\MaladieInexistanteException.java
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\dao\MaladieDao.java
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\dao\MedecinDao.java
+D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\objetmetier\allergie\Allergie.java
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\services\MedecinService.java
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\webservices\PatientWebService.java
+D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\objetmetier\allergie\AllergieInexistanteException.java
