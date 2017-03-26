@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,7 +36,7 @@ public class Medecin implements Cloneable, Serializable  {
 
 	/** Référence unique du médecin */
 	private long idMed;
-
+	
 	/** Nom */
 	private String nomMed;
 	
@@ -56,12 +58,17 @@ public class Medecin implements Cloneable, Serializable  {
 	/** Mail */
 	private String dateCreationMed;
 	
+	/** Profil Medecin **/
+	private final Boolean profilMedecin=true;
+	
 	/** Patient */
 	private List<Patient> patients;
 	
 	public Medecin(){
 		
 	}
+	
+	
 	
 	// les getteurs et setteurs publiques
 	@Id
@@ -147,6 +154,15 @@ public class Medecin implements Cloneable, Serializable  {
 	public void setDateCreationMed(String dateCreationMed) {
 		this.dateCreationMed = dateCreationMed;
 	}
+	/*AccessType.FIELD
+	 * les lectures / modifications se font directement sur les champs */
+
+	@Access(AccessType.FIELD)
+	@Column(name = "PROFIL_MEDECIN")
+	public Boolean getProfilMedecin() {
+		return profilMedecin;
+	}
+
 
 	//@OneToMany(cascade = CascadeType.ALL) pour créer en cascade
 	
@@ -162,6 +178,8 @@ public class Medecin implements Cloneable, Serializable  {
 	public void setPatients(List<Patient> patients) {
 		this.patients = patients;
 	}
+
+
 
 	
 }

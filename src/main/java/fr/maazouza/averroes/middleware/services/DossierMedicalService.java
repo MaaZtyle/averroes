@@ -5,13 +5,20 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+
 import fr.maazouza.averroes.middleware.dao.DossierMedicalDao;
 import fr.maazouza.averroes.middleware.dao.MaladieDao;
 import fr.maazouza.averroes.middleware.dao.PatientDao;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedical;
+import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalDejaExistantException;
+import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalInexistantException;
 import fr.maazouza.averroes.middleware.objetmetier.maladie.Maladie;
+import fr.maazouza.averroes.middleware.objetmetier.maladie.MaladieInexistanteException;
 import fr.maazouza.averroes.middleware.objetmetier.medecin.Medecin;
 import fr.maazouza.averroes.middleware.objetmetier.medecin.MedecinDejaExistantException;
+import fr.maazouza.averroes.middleware.objetmetier.patient.Patient;
+import fr.maazouza.averroes.middleware.objetmetier.patient.PatientDejaExistantException;
+import fr.maazouza.averroes.middleware.objetmetier.patient.PatientInexistantException;
 
 /**
  * 
@@ -52,10 +59,10 @@ public class DossierMedicalService implements IDossierMedicalService {
 		@Override
 		public boolean existerParId(Long idPat) {
 			
-			//je cherche tous les medecins avec ce nom
+			//je cherche tous les dossiers
 			List<DossierMedical> listeDossierMedical= dossierMedicalDao.obtenir();
 			
-			// ensuite je vérifie si le prénom est aussi le même
+			// ensuite je vérifie si l'id existe
 			
 			DossierMedical result = listeDossierMedical.stream()
 				     .filter(item -> idPat.equals(item.getPatient().getIdPat())) 
@@ -64,7 +71,7 @@ public class DossierMedicalService implements IDossierMedicalService {
 			
 			 
 			
-			//si le nom et le prenom sont les memes, je retourne true
+			//si on le trouve
 			if( result == null)
 				return false;
 				else return true;
@@ -72,26 +79,81 @@ public class DossierMedicalService implements IDossierMedicalService {
 				
 				     	
 		}
+		
+// Rechecher un dossier medical du patient
+		@Override
+		public boolean exister(Patient patient) {
+					
+			//je cherche tous les dossier medicaux
+			List<DossierMedical> listeDossierMedical= dossierMedicalDao.obtenir();
+			
+			// je crée une arible pour stocke l'id
+			Long idPat = patient.getIdPat();
+					
+			// ensuite je vérifie si le prénom est aussi le même
+					
+			DossierMedical result = listeDossierMedical.stream()
+				     .filter(item -> idPat.equals(item.getPatient().getIdPat())) 
+				     .findFirst()
+				     .orElse(null);
+					
+					 
+					
+			//si le nom et le prenom sont les memes, je retourne true
+			if( result == null)
+				return false;
+				else return true;
+								
+						
+						     	
+		}
+		
+
+// Rechecher un dossier medical par idDos
+		@Override
+		public boolean existerParIdDos(Long idDos) {
+			
+			//je cherche tous les dossiers
+			List<DossierMedical> listeDossierMedical= dossierMedicalDao.obtenir();
+					
+			// ensuite je vérifie si le prénom est aussi le même
+					
+			DossierMedical result = listeDossierMedical.stream()
+				     .filter(item -> idDos.equals(item.getIdDos())) 
+				     .findFirst()
+				     .orElse(null);
+					
+					 
+					
+					//si le nom et le prenom sont les memes, je retourne true
+			if( result == null)
+				return false;
+				else return true;
+								
+						
+						     	
+		}
 	
 // Ajouter un Dossier Medical
 		@Override
-		public void ajouterDossierMedical(DossierMedical dossier) 
+		public void ajouterDossierMedical(DossierMedical dossier) throws DossierMedicalDejaExistantException 
 		
 		{
+		
 			
+			//si le patient  a déjà un dossier, je lève une exception
+			if(exister(dossier.getPatient())== true)
+				throw new DossierMedicalDejaExistantException("Le Patient"+ dossier.getPatient().getNomPat()+ " a déjà un dossier");
+			// enfin je l'ajoute
+			
+			// si le patient n'existe pas
+			//if(patientService.obtenirUnPatient(dossier.getPatient().getIdPat())==null)
+			//	throw new PatientInexistantException("Le Patient n'existe pas dans la base");
 			dossierMedicalDao.persister(dossier);
 							
 		}
 		
-// Ajouter une maladie à un Dossier medical d'un patient
-		@Override
-		public void ajouterMaladie(Maladie maladie) 				
-		{
-					
-			maladieDao.persister(maladie);
-									
-		}		
-		
+
 // Returner un Dossier Medical d'un seul patient
 				@Override
 				public DossierMedical consulterUnDossierMedical(Long IpPat) 
@@ -115,13 +177,16 @@ public class DossierMedicalService implements IDossierMedicalService {
 					dossierMedicalDao.modifier(dossierMedical);
 					
 				}
-// Obtenir un dossier
+// Obtenir un dossier par id
 				@Override
-				public DossierMedical obtenirUnDossier(Long idDos) {
-					// Obtenir un medecin par Id
+				public DossierMedical obtenirUnDossierMedical(Long idDos) throws DossierMedicalInexistantException {
+				
+					// si je trouve le dossier, je le modifie, sinon exception
+					if(existerParIdDos(idDos)==false)
+						throw new DossierMedicalInexistantException("Le dossier"+ idDos+ " n'existe pas"); 
+					else return dossierMedicalDao.obtenirUnDossierMedical(idDos) ;
 					
-					return dossierMedicalDao.obtenirUnDossier(idDos);
-						
+					          
 					}
 // Supprimer un dossier
 		
@@ -130,7 +195,61 @@ public class DossierMedicalService implements IDossierMedicalService {
 					 dossierMedicalDao.supprimerUnDossierMedical(idDos);
 					
 				}
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////MALADIES////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////			
+
 				
+// Ajouter une maladie à un Dossier medical d'un patient
+				@Override
+				public void ajouterMaladie(Maladie maladie) 				
+				{
+							
+					maladieDao.persister(maladie);
+											
+				}
+
+				
+// Consulter une maladie à un Dossier medical d'un patient par Id
+				@Override
+				public Maladie obtenirMaladie(Long idMal) throws MaladieInexistanteException 				
+				{
+							
+					
+					// si je trouve la maladie, je le modifie, sinon exception
+					if(maladieDao.obtenirMaladie(idMal)==null)
+						throw new MaladieInexistanteException("La maladie"+ idMal+ " n'existe pas"); 
+					else return maladieDao.obtenirMaladie(idMal);
+					
+											
+				}
+				
+	
+// Supprimer une maladie à un Dossier medical d'un patient par Id
+				@Override
+				public void supprimerMaladie(Long idMal) throws MaladieInexistanteException 				
+				{
+					// si je trouve pas la maladie, je la supprime pas, et je leve une exception
+					if(maladieDao.obtenirMaladie(idMal)==null)
+						throw new MaladieInexistanteException("La maladie n'existe pas"); 
+					else maladieDao.supprimerMaladie(idMal); ;		
+					
+											
+				}
+
+				@Override
+				public void modifierMaladie(Maladie maladie) throws MaladieInexistanteException {
+					
+					if(maladieDao.obtenirMaladie(maladie.getIdMal())==null)
+						throw new MaladieInexistanteException("La maladie n'existe pas"); 
+					else maladieDao.modifierMaladie(maladie);
+					
+					
+				}					
+				
+					
 				
 
 

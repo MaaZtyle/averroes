@@ -3,6 +3,9 @@ package fr.maazouza.averroes.middleware.objetmetier.patient;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
+
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -62,6 +65,9 @@ public class Patient implements Cloneable, Serializable  {
 	
 	/** Date création du patient */
 	private String dateCreationPat;
+	
+	/** Profil Medecin **/
+	private final Boolean profilMedecin=false;
 	
 	/** Medecin de mon patient, utilisé par le medecin pour avoir la liste de ses patients */
 	private Medecin medecin;
@@ -143,6 +149,14 @@ public class Patient implements Cloneable, Serializable  {
 		this.mdpPat = mdpPat;
 	}
 
+	@Access(AccessType.FIELD)
+	@Column(name = "PROFIL_MEDECIN")
+	public Boolean getProfilMedecin() {
+		return profilMedecin;
+	}
+	
+	
+
 	//déclaration de plusieurs patient à un medecin
 	//avec un nom donné à ma table de jointure, non nullable. En mode Lazy, dès qu'on en aura besoin
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -165,6 +179,7 @@ public class Patient implements Cloneable, Serializable  {
 	public void setDossierMedical(DossierMedical dossierMedical) {
 		this.dossierMedical = dossierMedical;
 	}
+
 	
 	
 }

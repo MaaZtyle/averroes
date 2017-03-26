@@ -66,7 +66,7 @@ public class DossierMedicalDao {
 		}
 
 // recupérer un seul dossier
-		public DossierMedical obtenirUnDossier(Long idDos) {
+		public DossierMedical obtenirUnDossierMedical(Long idDos) {
 			
 			final String requeteJPQL = "SELECT b FROM DossierMedical b WHERE b.idDos = :filtre1";
 			

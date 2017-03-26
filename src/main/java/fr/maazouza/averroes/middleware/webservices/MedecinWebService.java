@@ -23,6 +23,7 @@ import fr.maazouza.averroes.middleware.objetmetier.medecin.MedecinDejaExistantEx
 import fr.maazouza.averroes.middleware.objetmetier.medecin.MedecinInexistantException;
 import fr.maazouza.averroes.middleware.objetmetier.patient.Patient;
 import fr.maazouza.averroes.middleware.objetmetier.patient.PatientDejaExistantException;
+import fr.maazouza.averroes.middleware.objetmetier.patient.PatientInexistantException;
 import fr.maazouza.averroes.middleware.services.IMedecinService;
 import fr.maazouza.averroes.middleware.services.IPatientService;
 
@@ -286,7 +287,14 @@ public class MedecinWebService {
 				//On appelle le service d'ajout de patient
 				
 				try {
-					medecinService.ajouterPatient(patient);
+					try {
+						medecinService.ajouterPatient(patient);
+					} catch (PatientInexistantException e) {
+						
+						return Response.status(200)
+								.entity(e.getMessage())
+								.build();
+					}
 					return Response.status(200)
 							.entity("Le patient  : " + nomPat + ", Prenom : " + prenomPat + " a été ajouté")
 							.build();

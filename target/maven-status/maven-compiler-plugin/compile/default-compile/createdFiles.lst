@@ -1,5 +1,6 @@
 fr\maazouza\averroes\middleware\objetmetier\patient\PatientInexistantException.class
 fr\maazouza\averroes\middleware\services\DossierMedicalService.class
+fr\maazouza\averroes\middleware\objetmetier\dossierMedical\DossierMedicalInexistantException.class
 fr\maazouza\averroes\middleware\services\IDossierMedicalService.class
 fr\maazouza\averroes\middleware\dao\DossierMedicalDao.class
 fr\maazouza\averroes\middleware\objetmetier\maladie\Maladie.class
@@ -21,3 +22,4 @@ fr\maazouza\averroes\middleware\services\IMedecinService.class
 fr\maazouza\averroes\middleware\services\MedecinService.class
 fr\maazouza\averroes\middleware\objetmetier\dossierMedical\DossierMedicalDejaExistantException.class
 fr\maazouza\averroes\middleware\objetmetier\medecin\MedecinInexistantException.class
+fr\maazouza\averroes\middleware\objetmetier\maladie\MaladieInexistanteException.class

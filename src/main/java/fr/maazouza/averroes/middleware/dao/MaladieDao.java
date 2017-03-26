@@ -5,7 +5,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+
 import fr.maazouza.averroes.middleware.objetmetier.maladie.Maladie;
+import fr.maazouza.averroes.middleware.objetmetier.medecin.Medecin;
 
 /**
  * @author Maazouza
@@ -29,6 +31,23 @@ public class MaladieDao {
 		
 		
 		em.persist(maladie);
+	}
+
+// Consulter une maladie par son Id
+	public Maladie obtenirMaladie(Long idMal) {
+			
+		return em.find(Maladie.class,idMal);
+		
+	}
+
+	public void supprimerMaladie(Long idMal) {
+		em.remove(em.getReference(Maladie.class, idMal));
+		
+	}
+
+	public void modifierMaladie(Maladie maladie) {
+		em.merge(maladie);
+		
 	}
 
 }

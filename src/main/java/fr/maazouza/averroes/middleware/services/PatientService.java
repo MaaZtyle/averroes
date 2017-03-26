@@ -10,9 +10,12 @@ import javax.ejb.Stateless;
 
 
 import fr.maazouza.averroes.middleware.dao.PatientDao;
+import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalDejaExistantException;
 import fr.maazouza.averroes.middleware.objetmetier.medecin.Medecin;
+import fr.maazouza.averroes.middleware.objetmetier.medecin.MedecinDejaExistantException;
 import fr.maazouza.averroes.middleware.objetmetier.patient.Patient;
 import fr.maazouza.averroes.middleware.objetmetier.patient.PatientDejaExistantException;
+import fr.maazouza.averroes.middleware.objetmetier.patient.PatientInexistantException;
 
 /**
  * @author Maazouza
@@ -53,6 +56,30 @@ public class PatientService implements IPatientService{
 			
 			     	
 	}
+	
+	@Override
+	public boolean existerId(Long idPat) {
+		
+		//je cherche tous les patients
+		List<Patient> listePatient = patientDao.obtenir();
+		
+		// ensuite je filtre sur le nom et prénom
+		
+		Patient result = listePatient.stream()
+				 .filter(item -> idPat.equals(item.getIdPat())) 
+			     .findFirst()
+			     .orElse(null);
+		
+		 
+		
+		//si le nom et le prenom sont les meme, je retourne true
+		if( result == null)
+			return false;
+			else return true;
+					
+			
+			     	
+	}
 
 	/*@Override
 	public void ajouterPatient(Patient patient) throws PatientDejaExistantException {
@@ -72,11 +99,13 @@ public class PatientService implements IPatientService{
 	}
 
 	@Override
-	public Patient obtenirUnPatient(Long idPat){
+	public Patient obtenirUnPatient(Long idPat) throws PatientInexistantException{
     
-		Patient resultat = patientDao.obtenirUnPatient(idPat);
+		if((existerId(idPat)==false ))
+			throw new PatientInexistantException("Le patient id: "+ idPat + " n'existe pas");
+		 
+		   return patientDao.obtenirUnPatient(idPat);
 		
-		return resultat;
 	}
 
 	

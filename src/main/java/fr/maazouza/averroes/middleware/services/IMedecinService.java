@@ -9,6 +9,7 @@ import fr.maazouza.averroes.middleware.objetmetier.medecin.MedecinDejaExistantEx
 import fr.maazouza.averroes.middleware.objetmetier.medecin.MedecinInexistantException;
 import fr.maazouza.averroes.middleware.objetmetier.patient.Patient;
 import fr.maazouza.averroes.middleware.objetmetier.patient.PatientDejaExistantException;
+import fr.maazouza.averroes.middleware.objetmetier.patient.PatientInexistantException;
 
 public interface IMedecinService {
 	
@@ -31,7 +32,7 @@ public interface IMedecinService {
 
 
 
-	void ajouterPatient(Patient patient) throws PatientDejaExistantException;
+	void ajouterPatient(Patient patient) throws PatientDejaExistantException,PatientInexistantException;
 
 
 	void supprimerPatient(Long idPat);
