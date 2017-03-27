@@ -45,56 +45,7 @@ public class PatientWebService {
 	@EJB
 	IPatientService patientService;
 	
-	//Afficher la liste des patients
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path(value = "/medicament/nom")
-	public String obtenirMedicament( 
-			@QueryParam("nomMed") String nomMed
-			
-	) 
-	{
-		
-		String medocs = null;
-		
-		try {
-
-			URL url = new URL("https://www.open-medicaments.fr/api/v1/medicaments?query="+nomMed);
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
-			conn.setRequestProperty("Accept", "application/json");
-
-			if (conn.getResponseCode() != 200) {
-				throw new RuntimeException("Failed : HTTP error code : "
-						+ conn.getResponseCode());
-			}
-
-			BufferedReader br = new BufferedReader(new InputStreamReader(
-				(conn.getInputStream())));
-
-			String output;
-			
-			medocs = br.readLine();
-			
-
-			conn.disconnect();
-
-		  } catch (MalformedURLException e) {
-
-			e.printStackTrace();
-
-		  } catch (IOException e1) {
-
-			e1.printStackTrace();
-
-		  }
-		return medocs;
-
-	}
 	
-	////////////////
-	
-	//test
 	
 	//Afficher la liste des patients
 		@GET

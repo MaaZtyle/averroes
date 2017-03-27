@@ -24,8 +24,6 @@ public interface IDossierMedicalService{
 
 	List<DossierMedical> obtenir();
 
-	void ajouterMaladie(Maladie maladie);
-
 	void modifierDossierMedical(DossierMedical dossierMedical);
 
 	DossierMedical obtenirUnDossierMedical(Long idDos) throws DossierMedicalInexistantException;
@@ -37,30 +35,7 @@ public interface IDossierMedicalService{
 
 	boolean existerParIdDos(Long idDos);
 
-	Maladie obtenirMaladie(Long idMal) throws  MaladieInexistanteException;
-
-	void supprimerMaladie(Long idMal) throws MaladieInexistanteException;
-
-	void modifierMaladie(Maladie maladie) throws MaladieInexistanteException;
-
-	void ajouterAllergie(Allergie allergie);
-
-	Allergie obtenirAllergie(Long idAll) throws AllergieInexistanteException, AllergieInexistanteException;
-
-	void supprimerAllergie(Long idAll) throws AllergieInexistanteException;
-
-	void modifierAllergie(Allergie allergie) throws AllergieInexistanteException;
-
-	void ajouterOrdonnance(Ordonnance ordonnance);
-
-	Ordonnance obtenirOrdonnance(Long idOrd) throws OrdonnanceInexistanteException;
-
-	void supprimerOrdonnance(Long idOrd) throws OrdonnanceInexistanteException;
-
-	void modifierOrdonnance(Ordonnance ordonnance) throws OrdonnanceInexistanteException;
-
-
-
+	
 	
 
 }

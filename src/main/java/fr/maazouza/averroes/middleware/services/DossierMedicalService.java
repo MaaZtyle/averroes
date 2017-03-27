@@ -55,6 +55,9 @@ public class DossierMedicalService implements IDossierMedicalService {
 
 	@EJB
 	private IPatientService patientService;
+	
+	@EJB
+	private IMaladieService maladieService;
 
 	///////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////
@@ -184,154 +187,13 @@ public class DossierMedicalService implements IDossierMedicalService {
 
 	@Override
 	public void supprimerUnDossierMedical(Long idDos) {
-		dossierMedicalDao.supprimerUnDossierMedical(idDos);
+		if(dossierMedicalDao.obtenirUnDossierMedical(idDos).getMaladie()==null)
+			if(dossierMedicalDao.obtenirUnDossierMedical(idDos).getAllergie()==null)
+				if(dossierMedicalDao.obtenirUnDossierMedical(idDos).getOrdonnance()==null)
+						dossierMedicalDao.supprimerUnDossierMedical(idDos);
 
 	}
-	///////////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////
-	/////////////////////////////////// MALADIES////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////
+	
 
-	// Ajouter une maladie à un Dossier medical d'un patient
-	@Override
-	public void ajouterMaladie(Maladie maladie) {
-
-		maladieDao.persister(maladie);
-
-	}
-
-	// Consulter une maladie à un Dossier medical d'un patient par Id
-	@Override
-	public Maladie obtenirMaladie(Long idMal) throws MaladieInexistanteException {
-
-		// si je trouve la maladie, je le modifie, sinon exception
-		if (maladieDao.obtenirMaladie(idMal) == null)
-			throw new MaladieInexistanteException("La maladie" + idMal + " n'existe pas");
-		else
-			return maladieDao.obtenirMaladie(idMal);
-
-	}
-
-	// Supprimer une maladie à un Dossier medical d'un patient par Id
-	@Override
-	public void supprimerMaladie(Long idMal) throws MaladieInexistanteException {
-		// si je trouve pas la maladie, je la supprime pas, et je leve une
-		// exception
-		if (maladieDao.obtenirMaladie(idMal) == null)
-			throw new MaladieInexistanteException("La maladie n'existe pas");
-		else
-			maladieDao.supprimerMaladie(idMal);
-		;
-
-	}
-
-	@Override
-	public void modifierMaladie(Maladie maladie) throws MaladieInexistanteException {
-
-		if (maladieDao.obtenirMaladie(maladie.getIdMal()) == null)
-			throw new MaladieInexistanteException("La maladie n'existe pas");
-		else
-			maladieDao.modifierMaladie(maladie);
-
-	}
-
-	///////////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////
-	/////////////////////////////////// Allergie////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////
-
-	// Ajouter une maladie à un Dossier medical d'un patient
-	@Override
-	public void ajouterAllergie(Allergie allergie) {
-
-		allergieDao.persister(allergie);
-
-	}
-
-	// Consulter une allergie à un Dossier medical d'un patient par Id
-	@Override
-	public Allergie obtenirAllergie(Long idAll) throws AllergieInexistanteException {
-
-		// si je trouve la maladie, je le modifie, sinon exception
-		if (allergieDao.obtenirAllergie(idAll) == null)
-			throw new AllergieInexistanteException("L'allergie" + idAll + " n'existe pas");
-		else
-			return allergieDao.obtenirAllergie(idAll);
-
-	}
-
-	// Supprimer une maladie à un Dossier medical d'un patient par Id
-	@Override
-	public void supprimerAllergie(Long idAll) throws AllergieInexistanteException {
-		// si je trouve pas la maladie, je la supprime pas, et je leve une
-		// exception
-		if (allergieDao.obtenirAllergie(idAll) == null)
-			throw new AllergieInexistanteException("L'allergie n'existe pas");
-		else
-			allergieDao.supprimerAllergie(idAll);
-		;
-
-	}
-
-	@Override
-	public void modifierAllergie(Allergie allergie) throws AllergieInexistanteException {
-
-		if (allergieDao.obtenirAllergie(allergie.getIdAll()) == null)
-			throw new AllergieInexistanteException("L'allergie n'existe pas");
-		else
-			allergieDao.modifierAllergie(allergie);
-
-	}
-
-	///////////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////
-	/////////////////////////////////// Ordonnance/////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////
-
-	// Ajouter une ordonnance à un Dossier medical d'un patient
-	@Override
-	public void ajouterOrdonnance(Ordonnance ordonnance) {
-
-		ordonnanceDao.persister(ordonnance);
-
-	}
-
-	// Consulter une ordonnance à un Dossier medical d'un patient par Id
-	@Override
-	public Ordonnance obtenirOrdonnance(Long idOrd) throws OrdonnanceInexistanteException {
-
-		// si je trouve la maladie, je le modifie, sinon exception
-		if (ordonnanceDao.obtenirOrdonnance(idOrd) == null)
-			throw new OrdonnanceInexistanteException("L'ordonnance" + idOrd + " n'existe pas");
-		else
-			return ordonnanceDao.obtenirOrdonnance(idOrd);
-
-	}
-
-	// Supprimer une ordonnance à un Dossier medical d'un patient par Id
-	@Override
-	public void supprimerOrdonnance(Long idOrd) throws OrdonnanceInexistanteException {
-		// si je trouve pas la maladie, je la supprime pas, et je leve une
-		// exception
-		if (ordonnanceDao.obtenirOrdonnance(idOrd) == null)
-			throw new OrdonnanceInexistanteException("L'ordonnance n'existe pas");
-		else
-			ordonnanceDao.supprimerOrdonnance(idOrd);
-		;
-
-	}
-
-	@Override
-	public void modifierOrdonnance(Ordonnance ordonnance) throws OrdonnanceInexistanteException {
-
-		if (ordonnanceDao.obtenirOrdonnance(ordonnance.getIdOrd()) == null)
-			throw new OrdonnanceInexistanteException("L'ordonnance n'existe pas");
-		else
-			ordonnanceDao.modifierOrdonnance(ordonnance);
-
-	}
-
+	
 }
