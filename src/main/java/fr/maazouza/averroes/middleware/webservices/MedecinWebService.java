@@ -83,7 +83,7 @@ public class MedecinWebService {
 // Ajouter un medecin à partir de l'interface medecin
 //OK
 	@POST
-	@Path(value = "/ajouter")
+	@Path(value = "/")
 	public Response ajouterMedecin(
 			@QueryParam("nomMed") String nomMed,
 			@QueryParam("prenomMed") String prenomMed,
@@ -131,7 +131,7 @@ public class MedecinWebService {
 // Modifier un medecin
 	//OK
 	@PUT
-	@Path(value = "/modifier")
+	@Path(value = "/")
 	public Response modifierMedecin (
 			@QueryParam("nomMed") String nomMed,
 			@QueryParam("prenomMed") String prenomMed,
@@ -181,7 +181,7 @@ public class MedecinWebService {
 // je vérifie l'existance du medecin et s'il na pas de patients, sinon je lève les exceptions
 //OK
 			@DELETE
-			@Path(value = "/supprimer")
+			@Path(value = "/")
 			public Response supprimerMedecin(
 					@QueryParam("idMed") Long idMed
 					
@@ -257,7 +257,7 @@ public class MedecinWebService {
 							
 //ajouter un patient à partir de l'interface medecin, avec son id medecin
 		@POST
-		@Path(value = "/patient/ajouter")
+		@Path(value = "/patient")
 		public Response ajouterPatient(
 				@QueryParam("nomPat") String nomPat,
 				@QueryParam("prenomPat") String prenomPat,
@@ -318,7 +318,7 @@ public class MedecinWebService {
 //supprimer le patient d'un medecin
 //OK
 		@DELETE
-		@Path(value = "/patient/supprimer")
+		@Path(value = "/patient")
 		public Response supprimerPatient(
 			@QueryParam("idPat") long idPat
 				
@@ -348,7 +348,7 @@ public class MedecinWebService {
 //Modifier le patient d'un medecin
 // OK
 		@PUT
-		@Path(value = "/patient/modifier")
+		@Path(value = "/patient")
 		public Response modifierPatient (
 				@QueryParam("idPat") Long idPat,
 				@QueryParam("nomPat") String nomPat,

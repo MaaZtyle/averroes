@@ -55,7 +55,7 @@ public class Medecin implements Cloneable, Serializable  {
 	/** Mail */
 	private String emailMed;
 	
-	/** Mail */
+	/** Date création medecin */
 	private String dateCreationMed;
 	
 	/** Profil Medecin **/

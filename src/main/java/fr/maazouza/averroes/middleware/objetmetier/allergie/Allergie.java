@@ -39,6 +39,9 @@ public class Allergie implements Cloneable, Serializable {
 	/** Date apparition de la allergie */
 	private String dateAppAll;
 	
+	/** Date création allergie */
+	private String dateCreationAll;
+	
 	/** Etat de la allergie */
 	private Boolean etatAll;
 	
@@ -101,6 +104,16 @@ public class Allergie implements Cloneable, Serializable {
 		this.etatAll = etatAll;
 	}
 	
+	
+	@Column(name = "DATE_CREATION")
+	public String getDateCreationAll() {
+		return dateCreationAll;
+	}
+
+	public void setDateCreationAll(String dateCreationAll) {
+		this.dateCreationAll = dateCreationAll;
+	}
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "DOSSIER_ID", nullable = false)
 	@JsonIgnore
@@ -111,6 +124,7 @@ public class Allergie implements Cloneable, Serializable {
 	public void setDossierMedical(DossierMedical dossierMedical) {
 		this.dossierMedical = dossierMedical;
 	}
+
 
 	
 	

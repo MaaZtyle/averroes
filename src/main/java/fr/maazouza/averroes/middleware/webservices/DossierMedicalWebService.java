@@ -24,6 +24,8 @@ import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedical
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalInexistantException;
 import fr.maazouza.averroes.middleware.objetmetier.maladie.Maladie;
 import fr.maazouza.averroes.middleware.objetmetier.maladie.MaladieInexistanteException;
+import fr.maazouza.averroes.middleware.objetmetier.ordonnance.Ordonnance;
+import fr.maazouza.averroes.middleware.objetmetier.ordonnance.OrdonnanceInexistanteException;
 import fr.maazouza.averroes.middleware.objetmetier.patient.Patient;
 import fr.maazouza.averroes.middleware.objetmetier.patient.PatientInexistantException;
 import fr.maazouza.averroes.middleware.services.IDossierMedicalService;
@@ -42,6 +44,20 @@ public class DossierMedicalWebService {
 
 	@EJB
 	IDossierMedicalService dossierMedicalService;
+
+	/////////////////////////////////////////////////////////////////////////
+	// test pour afficher une liste de medicament
+	// Afficher la liste des patients
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path(value = "/")
+	public List<Patient> obtenirPatients(
+
+	) {
+
+		return patientService.obtenirPatients();
+
+	}
 
 	///////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////
@@ -80,7 +96,7 @@ public class DossierMedicalWebService {
 	// http://localhost:8080/AVERROES_MIDDLEWARE/ws/dossiermedical/ajouter
 	// OK
 	@POST
-	@Path(value = "/ajouter")
+	@Path(value = "/")
 	public Response ajouterDossier(@QueryParam("idPat") Long idPat, @QueryParam("numSecu") Long numSecu,
 			@QueryParam("dateNaissance") String dateNaissance, @QueryParam("telMobPat") String telMobPat,
 			@QueryParam("adressePat") String adressePat, @QueryParam("telFixePat") String telFixePat,
@@ -147,7 +163,7 @@ public class DossierMedicalWebService {
 	// avec son ID
 	// OK
 	@PUT
-	@Path(value = "/modifier")
+	@Path(value = "/")
 	public Response modifierDossier(@QueryParam("idDos") Long idDos, @QueryParam("numSecu") Long numSecu,
 			@QueryParam("dateNaissance") String dateNaissance, @QueryParam("telMobPat") String telMobPat,
 			@QueryParam("adressePat") String adressePat, @QueryParam("telFixePat") String telFixePat,
@@ -217,7 +233,7 @@ public class DossierMedicalWebService {
 	// avec son ID
 	// OK
 	@DELETE
-	@Path(value = "/supprimer")
+	@Path(value = "/")
 	public Response supprimerUnDossierMedical(@QueryParam("idDos") Long idDos
 
 	) {
@@ -258,7 +274,7 @@ public class DossierMedicalWebService {
 	// Ajouter un dossier medical à partir de l'interface medecin
 	// OK
 	@POST
-	@Path(value = "/maladie/ajouter")
+	@Path(value = "/maladie")
 	public Response ajouterMaladie(@QueryParam("idDos") Long idDos, @QueryParam("designationMal") String designationMal,
 			@QueryParam("descriptionMal") String descriptionMal, @QueryParam("dateAppMal") String dateAppMal) {
 
@@ -271,6 +287,9 @@ public class DossierMedicalWebService {
 			return Response.status(200).entity(e.getMessage()).build();
 		}
 
+		//je défini un format date
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		maladie.setDateCreationMal(LocalDateTime.now().format(formatter));
 		maladie.setDateAppMal(dateAppMal);
 		maladie.setDescriptionMal(descriptionMal);
 		maladie.setDesignationMal(designationMal);
@@ -286,7 +305,7 @@ public class DossierMedicalWebService {
 	// Afficher la maladie d'un patient, à partir de son dossier
 	// ok
 	@GET
-	@Path(value = "/maladie/id")
+	@Path(value = "/maladie")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Maladie obtenirMaladie(@QueryParam("idMal") Long idMal)
 
@@ -306,7 +325,7 @@ public class DossierMedicalWebService {
 	// Modifier une maladie d'un dossier medical d'un patient
 	// ok
 	@PUT
-	@Path(value = "/maladie/modifier")
+	@Path(value = "/maladie")
 	public Response modifierMaladie(@QueryParam("idMal") Long idMal, @QueryParam("idDos") Long idDos,
 			@QueryParam("designationMal") String designationMal, @QueryParam("descriptionMal") String descriptionMal,
 			@QueryParam("dateAppMal") String dateAppMal) {
@@ -342,7 +361,7 @@ public class DossierMedicalWebService {
 
 	// Supprimer une maladie d'un dossier medical d'un patient
 	@DELETE
-	@Path(value = "/maladie/supprimer")
+	@Path(value = "/maladie")
 	public Response supprimerMaladie(@QueryParam("idMal") Long idMal)
 
 	{
@@ -374,10 +393,10 @@ public class DossierMedicalWebService {
 	// Ajouter un dossier medical à partir de l'interface medecin
 	// OK
 	@POST
-	@Path(value = "/allergie/ajouter")
-	public Response ajouterAllergie(@QueryParam("idDos") Long idDos, @QueryParam("designationAll") String designationAll,
-			@QueryParam("descriptionAll") String descriptionAll, @QueryParam("dateAppAll") String dateAppAll,
-			@QueryParam("etatAll") Boolean etatAll) {
+	@Path(value = "/allergie")
+	public Response ajouterAllergie(@QueryParam("idDos") Long idDos,
+			@QueryParam("designationAll") String designationAll, @QueryParam("descriptionAll") String descriptionAll,
+			@QueryParam("dateAppAll") String dateAppAll, @QueryParam("etatAll") Boolean etatAll) {
 
 		Allergie allergie = new Allergie();
 		DossierMedical dossierMedical = new DossierMedical();
@@ -388,6 +407,9 @@ public class DossierMedicalWebService {
 			return Response.status(200).entity(e.getMessage()).build();
 		}
 
+		//je défini un format date
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		allergie.setDateCreationAll(LocalDateTime.now().format(formatter));
 		allergie.setDateAppAll(dateAppAll);
 		allergie.setDescriptionAll(descriptionAll);
 		allergie.setDesignationAll(designationAll);
@@ -404,7 +426,7 @@ public class DossierMedicalWebService {
 	// Afficher l'allergie d'un patient, à partir de son dossier
 	// ok
 	@GET
-	@Path(value = "/allergie/id")
+	@Path(value = "/allergie")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Allergie obtenirAllergie(@QueryParam("idAll") Long idAll)
 
@@ -424,10 +446,10 @@ public class DossierMedicalWebService {
 	// Modifier une maladie d'un dossier medical d'un patient
 	// ok
 	@PUT
-	@Path(value = "/allergie/modifier")
+	@Path(value = "/allergie")
 	public Response modifierAllergie(@QueryParam("idAll") Long idAll, @QueryParam("idDos") Long idDos,
 			@QueryParam("designationAll") String designationAll, @QueryParam("descriptionAll") String descriptionAll,
-			@QueryParam("dateAppAll") String dateAppAll,@QueryParam("etatAll") Boolean etatAll ) {
+			@QueryParam("dateAppAll") String dateAppAll, @QueryParam("etatAll") Boolean etatAll) {
 
 		try {
 			Allergie allergie = new Allergie();
@@ -444,7 +466,6 @@ public class DossierMedicalWebService {
 			allergie.setDescriptionAll(descriptionAll);
 			allergie.setDesignationAll(designationAll);
 			allergie.setEtatAll(etatAll);
-			
 
 			dossierMedicalService.modifierAllergie(allergie);
 
@@ -462,7 +483,7 @@ public class DossierMedicalWebService {
 
 	// Supprimer une allergie d'un dossier medical d'un patient
 	@DELETE
-	@Path(value = "/allergie/supprimer")
+	@Path(value = "/allergie")
 	public Response supprimerAllergie(@QueryParam("idAll") Long idAll)
 
 	{
@@ -481,7 +502,130 @@ public class DossierMedicalWebService {
 
 	///////////////////////////////////////////////////////////////////////////////
 	/////////////////////////// ALLERGIE FIN
-	/////////////////////////////////////////////////////////////////////////////// 
+	///////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////
+
+	//////////////////////////////////////////////////////////////////////////
+	/////////////////////////// Ordonnance///////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+
+	// Pas besoin de faire consulter, car ells sont déjà toutes visible sur le
+	// dossier medical
+	// Ajouter une maladie sur un dossier medical
+	// Ajouter un dossier medical à partir de l'interface medecin
+	// OK
+	@POST
+	@Path(value = "/ordonnance/")
+	public Response ajouterOrdonnance(@QueryParam("idDos") Long idDos,@QueryParam("dateOrd") String dateOrd)
+			 {
+
+		Ordonnance ordonnance = new Ordonnance();
+		DossierMedical dossierMedical = new DossierMedical();
+		
+		//je défini un format date
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		ordonnance.setDateCreationOrd(LocalDateTime.now().format(formatter));
+		ordonnance.setDateOrd(dateOrd);
+
+		try {
+			dossierMedical = dossierMedicalService.obtenirUnDossierMedical(idDos);
+		} catch (DossierMedicalInexistantException e) {
+			return Response.status(200).entity(e.getMessage()).build();
+		}
+
+		
+		// Je l'affecte au dossier medical
+		ordonnance.setDossierMedical(dossierMedical);
+
+		dossierMedicalService.ajouterOrdonnance(ordonnance);
+		return Response.status(200).entity("L'ordonnance a été ajouté au dossier " ).build();
+
+	}
+
+	// Afficher l'allergie d'un patient, à partir de son dossier
+	// ok
+	@GET
+	@Path(value = "/ordonnance")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Ordonnance obtenirOrdonnance(@QueryParam("idOrd") Long idOrd)
+
+	{
+
+		Ordonnance ordonnance = new Ordonnance();
+		try {
+			ordonnance = dossierMedicalService.obtenirOrdonnance(idOrd);
+		} catch (OrdonnanceInexistanteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ordonnance;
+
+	}
+
+	// Modifier une ordonnance d'un dossier medical d'un patient
+	// ok
+	@PUT
+	@Path(value = "/ordonnance")
+	public Response modifierOrdonnance(@QueryParam("idOrd") Long idOrd, @QueryParam("idDos") 
+	Long idDos,@QueryParam("dateOrd") String dateOrd)
+			 {
+		Ordonnance ordonnance = new Ordonnance();
+		DossierMedical dossierMedical  = new DossierMedical();
+		
+		if((idOrd == null) ||  (idDos == null ))
+		return Response.status(200).entity("il faut l'idDos et idOrd").build();
+		
+		
+		try {
+			
+			ordonnance = dossierMedicalService.obtenirOrdonnance(idOrd);
+
+			// je récupère le dossier du patient
+			
+
+			dossierMedical = dossierMedicalService.obtenirUnDossierMedical(idDos);
+
+			// Je modifie tous les champs
+			// maladie.setDossierMedical(dossierMedical);
+			ordonnance.setDateOrd(dateOrd);
+			
+
+			dossierMedicalService.modifierOrdonnance(ordonnance);
+
+			return Response.status(200).entity("l'Ordonnance  " + idOrd + " a été modifiée ").build();
+
+		}
+
+		catch (OrdonnanceInexistanteException e) {
+			return Response.status(200).entity(e.getMessage()).build();
+		} catch (DossierMedicalInexistantException e) {
+			return Response.status(200).entity(e.getMessage()).build();
+		}
+
+	}
+
+	// Supprimer une ordonnance d'un dossier medical d'un patient
+	@DELETE
+	@Path(value = "/ordonnance")
+	public Response supprimerOrdonnance(@QueryParam("idOrd") Long idOrd)
+
+	{
+
+		try {
+			dossierMedicalService.supprimerOrdonnance(idOrd);
+
+			return Response.status(200).entity("L'ordonnance   " + idOrd + " a été supprimée au dossier ").build();
+		}
+
+		catch (OrdonnanceInexistanteException e) {
+			return Response.status(200).entity(e.getMessage()).build();
+		}
+
+	}
+
+	///////////////////////////////////////////////////////////////////////////////
+	/////////////////////////// ORDONNANCE FIN
+	///////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////
 
 }

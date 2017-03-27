@@ -39,6 +39,10 @@ public class Maladie implements Cloneable, Serializable {
 	/** Date apparition de la maladie */
 	private String dateAppMal;
 	
+	/** Date création Maladie */
+	private String dateCreationMal;
+	
+	
 	/** dossier medical du patient**/
 	private DossierMedical dossierMedical;
 	
@@ -88,6 +92,16 @@ public class Maladie implements Cloneable, Serializable {
 
 	public void setDateAppMal(String dateAppMal) {
 		this.dateAppMal = dateAppMal;
+	}
+	
+	
+	@Column(name = "DATE_CREATION")
+	public String getDateCreationMal() {
+		return dateCreationMal;
+	}
+
+	public void setDateCreationMal(String dateCreationMal) {
+		this.dateCreationMal = dateCreationMal;
 	}
 	
 	@ManyToOne(fetch = FetchType.LAZY)
