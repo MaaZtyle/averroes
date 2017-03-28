@@ -25,7 +25,12 @@ import javax.ws.rs.core.Response;
 import fr.maazouza.averroes.middleware.dao.MaladieDao;
 import fr.maazouza.averroes.middleware.objetmetier.allergie.Allergie;
 import fr.maazouza.averroes.middleware.objetmetier.allergie.AllergieInexistanteException;
+import fr.maazouza.averroes.middleware.objetmetier.antecedent.Antecedent;
+import fr.maazouza.averroes.middleware.objetmetier.antecedent.AntecedentInexistantException;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedical;
+import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalAvecAllergieException;
+import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalAvecMaladieException;
+import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalAvecOrdonnanceException;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalDejaExistantException;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalInexistantException;
 import fr.maazouza.averroes.middleware.objetmetier.maladie.Maladie;
@@ -37,6 +42,7 @@ import fr.maazouza.averroes.middleware.objetmetier.ordonnance.OrdonnanceInexista
 import fr.maazouza.averroes.middleware.objetmetier.patient.Patient;
 import fr.maazouza.averroes.middleware.objetmetier.patient.PatientInexistantException;
 import fr.maazouza.averroes.middleware.services.IAllergieService;
+import fr.maazouza.averroes.middleware.services.IAntecedentService;
 import fr.maazouza.averroes.middleware.services.IDossierMedicalService;
 import fr.maazouza.averroes.middleware.services.IMaladieService;
 import fr.maazouza.averroes.middleware.services.IMedecinService;
@@ -69,6 +75,10 @@ public class DossierMedicalWebService {
 
 	@EJB
 	IMedicamentService medicamentService;
+	
+	@EJB
+	IAntecedentService antecedentService;
+
 	/////////////////////////////////////////////////////////////////////////
 	// test pour afficher une liste de medicament
 	// Afficher la liste des patients
@@ -275,7 +285,16 @@ public class DossierMedicalWebService {
 
 		// On appelle le service de suppression de dossier
 
-		dossierMedicalService.supprimerUnDossierMedical(idDos);
+		try {
+			dossierMedicalService.supprimerUnDossierMedical(idDos);
+		} catch (DossierMedicalAvecMaladieException e) {
+			return Response.status(200).entity(e.getMessage()).build();
+		} catch (DossierMedicalAvecAllergieException e) {
+			return Response.status(200).entity(e.getMessage()).build();
+		} catch (DossierMedicalAvecOrdonnanceException e) {
+			return Response.status(200).entity(e.getMessage()).build();
+		}
+
 		return Response.status(200).entity("Le dossier du patient :" + dossierMedical.getPatient().getNomPat() + " ID "
 				+ dossierMedical.getIdDos() + " a été supprimé").build();
 
@@ -744,14 +763,14 @@ public class DossierMedicalWebService {
 	// OK
 	@POST
 	@Path(value = "/ordonnance/medicament")
-	public Response ajouterMedicament(@QueryParam("idOrd") Long idOrd,
-			@QueryParam("codeCis") String codeCis, @QueryParam("denomination") String denomination,
-			@QueryParam("posologie") String posologie, @QueryParam("quantite") Integer quantite) {
+	public Response ajouterMedicament(@QueryParam("idOrd") Long idOrd, @QueryParam("codeCis") String codeCis,
+			@QueryParam("denomination") String denomination, @QueryParam("posologie") String posologie,
+			@QueryParam("quantite") Integer quantite) {
 
 		Ordonnance ordonnance = new Ordonnance();
 		Medicament medicament = new Medicament();
-		
-		if(codeCis==null)
+
+		if (codeCis == null)
 			return Response.status(200).entity("Merci de renseigner le code CIS").build();
 
 		try {
@@ -767,13 +786,14 @@ public class DossierMedicalWebService {
 		medicament.setDenomination(denomination);
 		medicament.setPosologie(posologie);
 		medicament.setQuantite(quantite);
-		
-		
+
 		// Je les medicaments à l'ordonnace
-		medicament.setOrdonnance(ordonnance);;
+		medicament.setOrdonnance(ordonnance);
+		;
 
 		medicamentService.ajouterMedicament(medicament);
-		return Response.status(200).entity("Le medicament   :" + denomination + " a été ajouté à l'ordonnance ").build();
+		return Response.status(200).entity("Le medicament   :" + denomination + " a été ajouté à l'ordonnance ")
+				.build();
 
 	}
 
@@ -801,9 +821,9 @@ public class DossierMedicalWebService {
 	// ok
 	@PUT
 	@Path(value = "/ordonnance/medicament")
-	public Response modifierMedicament(@QueryParam("idOrd") Long idOrd,
-	@QueryParam("codeCis") String codeCis, @QueryParam("denomination") String denomination,
-	@QueryParam("posologie") String posologie, @QueryParam("quantite") Integer quantite){
+	public Response modifierMedicament(@QueryParam("idOrd") Long idOrd, @QueryParam("codeCis") String codeCis,
+			@QueryParam("denomination") String denomination, @QueryParam("posologie") String posologie,
+			@QueryParam("quantite") Integer quantite) {
 
 		try {
 			Medicament medicament = new Medicament();
@@ -854,5 +874,144 @@ public class DossierMedicalWebService {
 		}
 
 	}
+	//////////////////////////////////////////////////////////////////////////
+	/////////////////////////// ANTECEDENT///////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+
+	// Pas besoin de faire consulter, car ells sont déjà toutes visible sur le
+	// dossier medical
+	// Ajouter une maladie sur un dossier medical
+	// Ajouter un dossier medical à partir de l'interface medecin
+	// OK
+	@POST
+	@Path(value = "/antecedent/")
+	public Response ajouterAntecedent(
+			@QueryParam("idDos") Long idDos, 
+			@QueryParam("dateAnt") String dateAnt,
+			@QueryParam("descriptionAnt") String descriptionAnt, 
+			@QueryParam("commentaireAnt") String commentaireAnt,
+			@QueryParam("sujetAnt") String sujetAnt) {
+
+		Antecedent antecedent = new Antecedent();
+		DossierMedical dossierMedical = new DossierMedical();
+
+		// je défini un format date
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		antecedent.setDateCreationAnt(LocalDateTime.now().format(formatter));
+		antecedent.setDateAnt(dateAnt);
+		antecedent.setDescriptionAnt(descriptionAnt);
+		antecedent.setCommentaireAnt(commentaireAnt);
+		antecedent.setSujetAnt(sujetAnt);
+		
+
+		try {
+			dossierMedical = dossierMedicalService.obtenirUnDossierMedical(idDos);
+		} catch (DossierMedicalInexistantException e) {
+			return Response.status(200).entity(e.getMessage()).build();
+		}
+
+		// Je l'affecte au dossier medical
+		antecedent.setDossierMedical(dossierMedical);
+
+		antecedentService.ajouterAntecedent(antecedent);
+		return Response.status(200).entity("L'antecedent a été ajouté au dossier ").build();
+
+	}
+
+	// Afficher l'antecedent d'un patient, à partir de son dossier
+	// ok
+	@GET
+	@Path(value = "/antecedent")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Antecedent obtenirAntecedent(@QueryParam("idAnt") Long idAnt)
+
+	{
+
+		Antecedent antecedent = new Antecedent();
+		try {
+			antecedent = antecedentService.obtenirAntecedent(idAnt);
+		} catch (AntecedentInexistantException e) {
+			e.printStackTrace();
+		}
+		return antecedent;
+
+	}
+
+	// Modifier un Antecedent d'un dossier medical d'un patient
+	// ok
+	@PUT
+	@Path(value = "/antecedent")
+	public Response modifierAntecedent(
+			@QueryParam("idDos") Long idDos, 
+			@QueryParam("idAnt") Long idAnt,
+			@QueryParam("dateAnt") String dateAnt,
+			@QueryParam("descriptionAnt") String descriptionAnt, 
+			@QueryParam("commentaireAnt") String commentaireAnt,
+			@QueryParam("sujetAnt") String sujetAnt) {
+		
+		
+		Antecedent antecedent = new Antecedent();
+		DossierMedical dossierMedical = new DossierMedical();
+
+		if ((idAnt.equals(null)) || (idDos.equals(null)))
+			return Response.status(200).entity("il faut l'idDos et idOrd").build();
+		
+		//marche pas
+
+		try {
+
+			antecedent = antecedentService.obtenirAntecedent(idAnt);
+
+			// je récupère le dossier du patient
+
+			dossierMedical = dossierMedicalService.obtenirUnDossierMedical(idDos);
+
+			// Je modifie tous les champs
+			// maladie.setDossierMedical(dossierMedical);
+			
+			
+			antecedent.setDateAnt(dateAnt);
+			antecedent.setDescriptionAnt(descriptionAnt);
+			antecedent.setDescriptionAnt(commentaireAnt); 
+			antecedent.setSujetAnt(sujetAnt);
+
+			antecedentService.modifierAntecedent(antecedent);
+
+			return Response.status(200).entity("l'Antecedent  " + idAnt + " a été modifiée ").build();
+
+		}
+
+		catch (AntecedentInexistantException e) {
+			return Response.status(200).entity(e.getMessage()).build();
+		} catch (DossierMedicalInexistantException e) {
+			return Response.status(200).entity(e.getMessage()).build();
+		}
+
+	}
+
+	// Supprimer une ordonnance d'un dossier medical d'un patient
+	@DELETE
+	@Path(value = "/antecedent")
+	public Response supprimerAntecedent(@QueryParam("idAnt") Long idAnt)
+
+	{
+
+		try {
+			antecedentService.supprimerAntecedent(idAnt);
+
+			return Response.status(200).entity("L'antecedent   " + idAnt + " a été supprimée au dossier ").build();
+		}
+
+		catch (AntecedentInexistantException e) {
+			return Response.status(200).entity(e.getMessage()).build();
+		}
+
+	}
+
+	///////////////////////////////////////////////////////////////////////////////
+	/////////////////////////// ANTECEDENT FIN
+	///////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////
 
 }

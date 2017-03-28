@@ -63,7 +63,7 @@ public class Ordonnance implements Cloneable, Serializable {
 	// les getteurs et setteurs publiques
 	@Id
 	@GeneratedValue//clé primaire générée automatiquement par Hibernate
-	@Column(name = "ID_ORD")
+	@Column(name = "ID_ORD", nullable = false)
 	public long getIdOrd() {
 		return idOrd;
 	}

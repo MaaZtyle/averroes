@@ -13,6 +13,9 @@ import fr.maazouza.averroes.middleware.dao.PatientDao;
 import fr.maazouza.averroes.middleware.objetmetier.allergie.Allergie;
 import fr.maazouza.averroes.middleware.objetmetier.allergie.AllergieInexistanteException;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedical;
+import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalAvecAllergieException;
+import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalAvecMaladieException;
+import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalAvecOrdonnanceException;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalDejaExistantException;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalInexistantException;
 import fr.maazouza.averroes.middleware.objetmetier.maladie.Maladie;
@@ -46,7 +49,7 @@ public class DossierMedicalService implements IDossierMedicalService {
 
 	@EJB
 	private AllergieDao allergieDao;
-	
+
 	@EJB
 	private OrdonnanceDao ordonnanceDao;
 
@@ -55,7 +58,7 @@ public class DossierMedicalService implements IDossierMedicalService {
 
 	@EJB
 	private IPatientService patientService;
-	
+
 	@EJB
 	private IMaladieService maladieService;
 
@@ -183,17 +186,33 @@ public class DossierMedicalService implements IDossierMedicalService {
 			return dossierMedicalDao.obtenirUnDossierMedical(idDos);
 
 	}
-	// Supprimer un dossier
+	// Supprimer un dossier medical
 
 	@Override
-	public void supprimerUnDossierMedical(Long idDos) {
-		if(dossierMedicalDao.obtenirUnDossierMedical(idDos).getMaladie()==null)
-			if(dossierMedicalDao.obtenirUnDossierMedical(idDos).getAllergie()==null)
-				if(dossierMedicalDao.obtenirUnDossierMedical(idDos).getOrdonnance()==null)
-						dossierMedicalDao.supprimerUnDossierMedical(idDos);
+	public void supprimerUnDossierMedical(Long idDos) throws DossierMedicalAvecMaladieException,
+			DossierMedicalAvecAllergieException, DossierMedicalAvecOrdonnanceException {
+
+		// s'il y a des allergies, je lève une exception
+		if (dossierMedicalDao.obtenirUnDossierMedical(idDos).getAllergie().isEmpty() == false)
+			throw new DossierMedicalAvecAllergieException("Le dossier" + idDos + " possède des allergies");
+
+		// s'il y a des maladies, je lève une exception
+		if (dossierMedicalDao.obtenirUnDossierMedical(idDos).getMaladie().isEmpty() == false)
+			throw new DossierMedicalAvecMaladieException("Le dossier" + idDos + " possède des maladies");
+
+		// s'il y a des ordonnances, je lève une exception
+		if (dossierMedicalDao.obtenirUnDossierMedical(idDos).getOrdonnance().isEmpty() == false)
+			throw new DossierMedicalAvecOrdonnanceException("Le dossier" + idDos + " possède des ordonnances");
+		
+		// s'il y a des antecédents, je lève une exception
+				if (dossierMedicalDao.obtenirUnDossierMedical(idDos).getAntecedent().isEmpty() == false)
+					throw new DossierMedicalAvecOrdonnanceException("Le dossier" + idDos + " possède des antecedents");
+
+			
+		else 
+			// si on a rien je supprime
+		dossierMedicalDao.supprimerUnDossierMedical(idDos);
 
 	}
-	
 
-	
 }

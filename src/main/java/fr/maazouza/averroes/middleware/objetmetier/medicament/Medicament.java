@@ -10,7 +10,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.hibernate.annotations.Check;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -58,19 +62,14 @@ public class Medicament implements Cloneable, Serializable{
 	
 	
 	// les getteurs et setteurs publiques
-	/*@Id
-	@GeneratedValue//clé primaire générée automatiquement par Hibernate
-	@Column(name = "ID_MED")
-	public long getIdMed() {
-		return idMed;
-	}
 
-	public void setIdMed(long idMed) {
-		this.idMed = idMed;
-	}*/
+	// je prends comme clé primaire le code cis unique à chaque produit
+	// c'est ma clé primaire fonctionnelle qui est non nule et non vide
 	@Id
-	//@GeneratedValue//clé primaire générée automatiquement par Hibernate
-	@Column(name = "CODE_CIS")
+	@NotNull
+	@Size(min=1)
+	@Column(name = "CODE_CIS",nullable= false)
+	
 	public String getCodeCIS() {
 		return codeCIS;
 	}

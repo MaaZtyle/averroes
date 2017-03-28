@@ -90,7 +90,7 @@ public class Patient implements Cloneable, Serializable  {
 	// les getteurs et setteurs publiques
 	@Id
 	@GeneratedValue//clé primaire générée automatiquement par Hibernate
-	@Column(name = "ID_PAT")
+	@Column(name = "ID_PAT", nullable = false)
 	public long getIdPat() {
 		return idPat;
 	}

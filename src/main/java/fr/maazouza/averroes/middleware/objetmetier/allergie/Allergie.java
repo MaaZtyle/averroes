@@ -62,7 +62,7 @@ public class Allergie implements Cloneable, Serializable {
 	// les getteurs et setteurs publiques
 	@Id
 	@GeneratedValue//clé primaire générée automatiquement par Hibernate
-	@Column(name = "ID_ALL")
+	@Column(name = "ID_ALL", nullable = false)
 	public long getIdAll() {
 		return idAll;
 	}

@@ -73,7 +73,7 @@ public class Medecin implements Cloneable, Serializable  {
 	// les getteurs et setteurs publiques
 	@Id
 	@GeneratedValue//clé primaire générée automatiquement par Hibernate
-	@Column(name = "ID_MED")		
+	@Column(name = "ID_MED", nullable = false)		
 	public long getIdMed() {
 		return idMed;
 	}

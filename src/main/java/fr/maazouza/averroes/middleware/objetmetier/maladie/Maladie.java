@@ -60,7 +60,7 @@ public class Maladie implements Cloneable, Serializable {
 	// les getteurs et setteurs publiques
 	@Id
 	@GeneratedValue//clé primaire générée automatiquement par Hibernate
-	@Column(name = "ID_MAL")
+	@Column(name = "ID_MAL",nullable = false)
 	public long getIdMal() {
 		return idMal;
 	}
