@@ -23,6 +23,7 @@ import fr.maazouza.averroes.middleware.objetmetier.antecedent.Antecedent;
 import fr.maazouza.averroes.middleware.objetmetier.maladie.Maladie;
 import fr.maazouza.averroes.middleware.objetmetier.ordonnance.Ordonnance;
 import fr.maazouza.averroes.middleware.objetmetier.patient.Patient;
+import fr.maazouza.averroes.middleware.objetmetier.vaccin.Vaccin;
 
 @Entity
 @Table(name = "T_DOSSIERMEDICAL")
@@ -110,6 +111,9 @@ public class DossierMedical implements Cloneable, Serializable {
 
 	/** Antecedents */
 	private List<Antecedent> antecedent;
+	
+	/** Vaccins */
+	private List<Vaccin> vaccin;
 
 	/**************************************/
 
@@ -349,10 +353,10 @@ public class DossierMedical implements Cloneable, Serializable {
 		this.allergie = allergie;
 	}
 
-	// Un dossier medical a plusieurs ordonnances, je référence la relation avec
+	// Un dossier medical a plusieurs antecedent, je référence la relation avec
 	// le dossier médical
 	@OneToMany(mappedBy = "dossierMedical", fetch = FetchType.LAZY)
-	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idOrd") // JsonIdentityInfo,
+	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idAnt") // JsonIdentityInfo,
 																									// va
 																									// récupérer
 																									// les
@@ -370,7 +374,7 @@ public class DossierMedical implements Cloneable, Serializable {
 	// Un dossier medical a plusieurs ordonnances, je référence la relation avec
 	// le dossier médical
 	@OneToMany(mappedBy = "dossierMedical", fetch = FetchType.LAZY)
-	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idAnt") // JsonIdentityInfo,
+	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idOrd") // JsonIdentityInfo,
 																									// va
 																									// récupérer
 																									// les
@@ -384,6 +388,25 @@ public class DossierMedical implements Cloneable, Serializable {
 	public void setOrdonnance(List<Ordonnance> ordonnance) {
 		this.ordonnance = ordonnance;
 	}
+	
+	
+	// Un dossier medical a plusieurs vaccins, je référence la relation avec
+		// le dossier médical
+		@OneToMany(mappedBy = "dossierMedical", fetch = FetchType.LAZY)
+		@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idVac") // JsonIdentityInfo,
+																										// va
+																										// récupérer
+																										// les
+																										// entités
+																										// vaccins
+																										// liées
+		public List<Vaccin> getVaccin() {
+			return vaccin;
+		}
+
+		public void setVaccin(List<Vaccin> vaccin) {
+			this.vaccin = vaccin;
+		}
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;

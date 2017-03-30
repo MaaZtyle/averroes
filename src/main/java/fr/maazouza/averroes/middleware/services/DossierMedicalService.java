@@ -16,6 +16,7 @@ import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedical
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalAvecAllergieException;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalAvecMaladieException;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalAvecOrdonnanceException;
+import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalAvecVaccinException;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalDejaExistantException;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalInexistantException;
 import fr.maazouza.averroes.middleware.objetmetier.maladie.Maladie;
@@ -190,7 +191,7 @@ public class DossierMedicalService implements IDossierMedicalService {
 
 	@Override
 	public void supprimerUnDossierMedical(Long idDos) throws DossierMedicalAvecMaladieException,
-			DossierMedicalAvecAllergieException, DossierMedicalAvecOrdonnanceException {
+			DossierMedicalAvecAllergieException, DossierMedicalAvecOrdonnanceException, DossierMedicalAvecVaccinException {
 
 		// s'il y a des allergies, je lève une exception
 		if (dossierMedicalDao.obtenirUnDossierMedical(idDos).getAllergie().isEmpty() == false)
@@ -203,15 +204,18 @@ public class DossierMedicalService implements IDossierMedicalService {
 		// s'il y a des ordonnances, je lève une exception
 		if (dossierMedicalDao.obtenirUnDossierMedical(idDos).getOrdonnance().isEmpty() == false)
 			throw new DossierMedicalAvecOrdonnanceException("Le dossier" + idDos + " possède des ordonnances");
-		
-		// s'il y a des antecédents, je lève une exception
-				if (dossierMedicalDao.obtenirUnDossierMedical(idDos).getAntecedent().isEmpty() == false)
-					throw new DossierMedicalAvecOrdonnanceException("Le dossier" + idDos + " possède des antecedents");
 
-			
-		else 
+		// s'il y a des antecédents, je lève une exception
+		if (dossierMedicalDao.obtenirUnDossierMedical(idDos).getAntecedent().isEmpty() == false)
+			throw new DossierMedicalAvecOrdonnanceException("Le dossier" + idDos + " possède des antecedents");
+		
+		// s'il y a des vaccins, je lève une exception
+		if (dossierMedicalDao.obtenirUnDossierMedical(idDos).getVaccin().isEmpty() == false)
+			throw new DossierMedicalAvecVaccinException("Le dossier" + idDos + " possède des vaccin");
+
+		else
 			// si on a rien je supprime
-		dossierMedicalDao.supprimerUnDossierMedical(idDos);
+			dossierMedicalDao.supprimerUnDossierMedical(idDos);
 
 	}
 

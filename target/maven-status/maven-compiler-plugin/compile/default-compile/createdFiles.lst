@@ -1,6 +1,8 @@
 fr\maazouza\averroes\middleware\objetmetier\patient\PatientInexistantException.class
 fr\maazouza\averroes\middleware\services\DossierMedicalService.class
 fr\maazouza\averroes\middleware\objetmetier\dossierMedical\DossierMedicalInexistantException.class
+fr\maazouza\averroes\middleware\services\VaccinService.class
+fr\maazouza\averroes\middleware\objetmetier\vaccin\Vaccin.class
 fr\maazouza\averroes\middleware\dao\MedecinDao.class
 fr\maazouza\averroes\middleware\objetmetier\patient\PatientDejaExistantException.class
 fr\maazouza\averroes\middleware\webservices\DossierMedicalWebService.class
@@ -18,6 +20,7 @@ fr\maazouza\averroes\middleware\services\IMaladieService.class
 fr\maazouza\averroes\middleware\objetmetier\medecin\Medecin.class
 fr\maazouza\averroes\middleware\objetmetier\dossierMedical\DossierMedicalAvecAnalyseException.class
 fr\maazouza\averroes\middleware\dao\AllergieDao.class
+fr\maazouza\averroes\middleware\services\IVaccinService.class
 fr\maazouza\averroes\middleware\objetmetier\dossierMedical\DossierMedicalDejaExistantException.class
 fr\maazouza\averroes\middleware\objetmetier\medecin\MedecinInexistantException.class
 fr\maazouza\averroes\middleware\services\IMedicamentService.class
@@ -41,6 +44,7 @@ fr\maazouza\averroes\middleware\objetmetier\medecin\MedecinAvecPatientsException
 fr\maazouza\averroes\middleware\objetmetier\medicament\Medicament.class
 fr\maazouza\averroes\middleware\objetmetier\antecedent\Antecedent.class
 fr\maazouza\averroes\middleware\webservices\PatientWebService.class
+fr\maazouza\averroes\middleware\dao\VaccinDao.class
 fr\maazouza\averroes\middleware\services\AllergieService.class
 fr\maazouza\averroes\middleware\services\PatientService.class
 fr\maazouza\averroes\middleware\objetmetier\dossierMedical\DossierMedical.class
@@ -52,5 +56,6 @@ fr\maazouza\averroes\middleware\objetmetier\ordonnance\Ordonnance.class
 fr\maazouza\averroes\middleware\objetmetier\ordonnance\OrdonnanceInexistanteException.class
 fr\maazouza\averroes\middleware\services\MedecinService.class
 fr\maazouza\averroes\middleware\objetmetier\medicament\MedicamentInexistantException.class
+fr\maazouza\averroes\middleware\objetmetier\vaccin\VaccinInexistantException.class
 fr\maazouza\averroes\middleware\dao\MedicamentDao.class
 fr\maazouza\averroes\middleware\objetmetier\maladie\MaladieInexistanteException.class

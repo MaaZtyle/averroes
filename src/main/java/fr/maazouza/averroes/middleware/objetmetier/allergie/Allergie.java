@@ -27,7 +27,7 @@ public class Allergie implements Cloneable, Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	
-	/** Référence unique du dossier */
+	/** Référence unique de l'allergie */
 	private long idAll;
 	
 	/** Designation de la allergie */

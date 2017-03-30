@@ -1,9 +1,6 @@
 package fr.maazouza.averroes.middleware.objetmetier.patient;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.Date;
-
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
@@ -13,17 +10,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedical;
 import fr.maazouza.averroes.middleware.objetmetier.medecin.Medecin;
 

@@ -31,6 +31,7 @@ import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedical
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalAvecAllergieException;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalAvecMaladieException;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalAvecOrdonnanceException;
+import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalAvecVaccinException;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalDejaExistantException;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalInexistantException;
 import fr.maazouza.averroes.middleware.objetmetier.maladie.Maladie;
@@ -41,6 +42,8 @@ import fr.maazouza.averroes.middleware.objetmetier.ordonnance.Ordonnance;
 import fr.maazouza.averroes.middleware.objetmetier.ordonnance.OrdonnanceInexistanteException;
 import fr.maazouza.averroes.middleware.objetmetier.patient.Patient;
 import fr.maazouza.averroes.middleware.objetmetier.patient.PatientInexistantException;
+import fr.maazouza.averroes.middleware.objetmetier.vaccin.Vaccin;
+import fr.maazouza.averroes.middleware.objetmetier.vaccin.VaccinInexistantException;
 import fr.maazouza.averroes.middleware.services.IAllergieService;
 import fr.maazouza.averroes.middleware.services.IAntecedentService;
 import fr.maazouza.averroes.middleware.services.IDossierMedicalService;
@@ -49,6 +52,7 @@ import fr.maazouza.averroes.middleware.services.IMedecinService;
 import fr.maazouza.averroes.middleware.services.IMedicamentService;
 import fr.maazouza.averroes.middleware.services.IOrdonnanceService;
 import fr.maazouza.averroes.middleware.services.IPatientService;
+import fr.maazouza.averroes.middleware.services.IVaccinService;
 import fr.maazouza.averroes.middleware.services.MedicamentService;
 
 @WebService
@@ -75,9 +79,12 @@ public class DossierMedicalWebService {
 
 	@EJB
 	IMedicamentService medicamentService;
-	
+
 	@EJB
 	IAntecedentService antecedentService;
+
+	@EJB
+	IVaccinService vaccinService;
 
 	/////////////////////////////////////////////////////////////////////////
 	// test pour afficher une liste de medicament
@@ -293,7 +300,10 @@ public class DossierMedicalWebService {
 			return Response.status(200).entity(e.getMessage()).build();
 		} catch (DossierMedicalAvecOrdonnanceException e) {
 			return Response.status(200).entity(e.getMessage()).build();
+		} catch (DossierMedicalAvecVaccinException e) {
+				return Response.status(200).entity(e.getMessage()).build();
 		}
+		
 
 		return Response.status(200).entity("Le dossier du patient :" + dossierMedical.getPatient().getNomPat() + " ID "
 				+ dossierMedical.getIdDos() + " a été supprimé").build();
@@ -583,7 +593,7 @@ public class DossierMedicalWebService {
 
 	}
 
-	// Afficher l'allergie d'un patient, à partir de son dossier
+	// Afficher l'ordonnance d'un patient, à partir de son dossier
 	// ok
 	@GET
 	@Path(value = "/ordonnance")
@@ -885,11 +895,8 @@ public class DossierMedicalWebService {
 	// OK
 	@POST
 	@Path(value = "/antecedent/")
-	public Response ajouterAntecedent(
-			@QueryParam("idDos") Long idDos, 
-			@QueryParam("dateAnt") String dateAnt,
-			@QueryParam("descriptionAnt") String descriptionAnt, 
-			@QueryParam("commentaireAnt") String commentaireAnt,
+	public Response ajouterAntecedent(@QueryParam("idDos") Long idDos, @QueryParam("dateAnt") String dateAnt,
+			@QueryParam("descriptionAnt") String descriptionAnt, @QueryParam("commentaireAnt") String commentaireAnt,
 			@QueryParam("sujetAnt") String sujetAnt) {
 
 		Antecedent antecedent = new Antecedent();
@@ -902,7 +909,6 @@ public class DossierMedicalWebService {
 		antecedent.setDescriptionAnt(descriptionAnt);
 		antecedent.setCommentaireAnt(commentaireAnt);
 		antecedent.setSujetAnt(sujetAnt);
-		
 
 		try {
 			dossierMedical = dossierMedicalService.obtenirUnDossierMedical(idDos);
@@ -941,22 +947,17 @@ public class DossierMedicalWebService {
 	// ok
 	@PUT
 	@Path(value = "/antecedent")
-	public Response modifierAntecedent(
-			@QueryParam("idDos") Long idDos, 
-			@QueryParam("idAnt") Long idAnt,
-			@QueryParam("dateAnt") String dateAnt,
-			@QueryParam("descriptionAnt") String descriptionAnt, 
-			@QueryParam("commentaireAnt") String commentaireAnt,
-			@QueryParam("sujetAnt") String sujetAnt) {
-		
-		
+	public Response modifierAntecedent(@QueryParam("idDos") Long idDos, @QueryParam("idAnt") Long idAnt,
+			@QueryParam("dateAnt") String dateAnt, @QueryParam("descriptionAnt") String descriptionAnt,
+			@QueryParam("commentaireAnt") String commentaireAnt, @QueryParam("sujetAnt") String sujetAnt) {
+
 		Antecedent antecedent = new Antecedent();
 		DossierMedical dossierMedical = new DossierMedical();
 
 		if ((idAnt.equals(null)) || (idDos.equals(null)))
 			return Response.status(200).entity("il faut l'idDos et idOrd").build();
-		
-		//marche pas
+
+		// marche pas
 
 		try {
 
@@ -968,11 +969,10 @@ public class DossierMedicalWebService {
 
 			// Je modifie tous les champs
 			// maladie.setDossierMedical(dossierMedical);
-			
-			
+
 			antecedent.setDateAnt(dateAnt);
 			antecedent.setDescriptionAnt(descriptionAnt);
-			antecedent.setDescriptionAnt(commentaireAnt); 
+			antecedent.setDescriptionAnt(commentaireAnt);
 			antecedent.setSujetAnt(sujetAnt);
 
 			antecedentService.modifierAntecedent(antecedent);
@@ -1010,6 +1010,143 @@ public class DossierMedicalWebService {
 
 	///////////////////////////////////////////////////////////////////////////////
 	/////////////////////////// ANTECEDENT FIN
+	///////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////
+
+	//////////////////////////////////////////////////////////////////////////
+	/////////////////////////// VACCIN///////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+
+	// Pas besoin de faire consulter, car ells sont déjà toutes visible sur le
+	// dossier medical
+	// Ajouter une maladie sur un dossier medical
+	// Ajouter un dossier medical à partir de l'interface medecin
+	// OK
+	@POST
+	@Path(value = "/vaccin/")
+	public Response ajouterVaccin(
+			@QueryParam("idDos") Long idDos, 
+			@QueryParam("nomVac") String nomVac,
+			@QueryParam("descriptionVac") String descriptionVac, 
+			@QueryParam("dateDernierVac") String dateDernierVac,
+			@QueryParam("dateProchainVac") String dateProchainVac,
+			@QueryParam("alertePatientVac") Boolean alertePatientVac,
+			@QueryParam("alerteMedecinVac") Boolean alerteMedecinVac
+
+	) {
+
+		Vaccin vaccin = new Vaccin();
+		DossierMedical dossierMedical = new DossierMedical();
+
+		// je défini un format date
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		vaccin.setDateCreationVac(LocalDateTime.now().format(formatter));
+		vaccin.setNomVac(nomVac);
+		vaccin.setDescriptionVac(descriptionVac);
+		vaccin.setDateDernierVac(dateDernierVac);
+		vaccin.setDateProchainVac(dateProchainVac);
+		vaccin.setAlertePatientVac(alertePatientVac);
+		vaccin.setAlerteMedecinVac(alerteMedecinVac);
+		try {
+			dossierMedical = dossierMedicalService.obtenirUnDossierMedical(idDos);
+		} catch (DossierMedicalInexistantException e) {
+			return Response.status(200).entity(e.getMessage()).build();
+		}
+
+		// Je l'affecte au dossier medical
+		vaccin.setDossierMedical(dossierMedical);
+
+		vaccinService.ajouterVaccin(vaccin);
+		return Response.status(200).entity("vaccin a été ajouté au dossier ").build();
+
+	}
+
+	// Afficher le vaccin d'un patient, à partir de son dossier
+	// ok
+	@GET
+	@Path(value = "/vaccin")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Vaccin obtenirVaccin(@QueryParam("idVac") Long idVac)
+
+	{
+
+		Vaccin vaccin = new Vaccin();
+		try {
+			vaccin = vaccinService.obtenirVaccin(idVac);
+		} catch (VaccinInexistantException e) {
+			e.printStackTrace();
+		}
+		return vaccin;
+
+	}
+
+	// Modifier un vaccin d'un dossier medical d'un patient
+	// ok
+	@PUT
+	@Path(value = "/vaccin")
+	public Response modifierVaccin(@QueryParam("idDos") Long idDos, @QueryParam("idVac") Long idVac,
+			@QueryParam("nomVac") String nomVac, @QueryParam("descriptionVac") String descriptionVac,
+			@QueryParam("dateDernierVac") String dateDernierVac, @QueryParam("dateProchainVac") String dateProchainVac,
+			@QueryParam("alertePatientVac") Boolean alertePatientVac,
+			@QueryParam("alerteMedecinVac") Boolean alerteMedecinVac) {
+
+		Vaccin vaccin = new Vaccin();
+		DossierMedical dossierMedical = new DossierMedical();
+
+		try {
+
+			vaccin = vaccinService.obtenirVaccin(idVac);
+
+			// je récupère le dossier du patient
+
+			dossierMedical = dossierMedicalService.obtenirUnDossierMedical(idDos);
+
+			// Je modifie tous les champs
+			// maladie.setDossierMedical(dossierMedical);
+
+			vaccin.setNomVac(nomVac);
+			vaccin.setDescriptionVac(descriptionVac);
+			vaccin.setDateDernierVac(dateDernierVac);
+			vaccin.setDateProchainVac(dateProchainVac);
+			vaccin.setAlertePatientVac(alertePatientVac);
+			vaccin.setAlerteMedecinVac(alerteMedecinVac);
+
+			vaccinService.modifierVaccin(vaccin);
+
+			return Response.status(200).entity("Le vaccin  " + idVac + " a été modifiée ").build();
+
+		}
+
+		catch (VaccinInexistantException e) {
+			return Response.status(200).entity(e.getMessage()).build();
+		} catch (DossierMedicalInexistantException e) {
+			return Response.status(200).entity(e.getMessage()).build();
+		}
+
+	}
+
+	// Supprimer un vaccin d'un dossier medical d'un patient
+	@DELETE
+	@Path(value = "/vaccin")
+	public Response supprimerVaccin(@QueryParam("idVac") Long idVac)
+
+	{
+
+		try {
+			vaccinService.supprimerVaccin(idVac);
+
+			return Response.status(200).entity("Le vaccin   " + idVac + " a été supprimée au dossier ").build();
+		}
+
+		catch (VaccinInexistantException e) {
+			return Response.status(200).entity(e.getMessage()).build();
+		}
+
+	}
+
+	///////////////////////////////////////////////////////////////////////////////
+	/////////////////////////// VACCIN FIN
 	///////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////

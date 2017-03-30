@@ -8,6 +8,7 @@ import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedical
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalAvecAllergieException;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalAvecMaladieException;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalAvecOrdonnanceException;
+import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalAvecVaccinException;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalDejaExistantException;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalInexistantException;
 import fr.maazouza.averroes.middleware.objetmetier.maladie.Maladie;
@@ -32,7 +33,7 @@ public interface IDossierMedicalService{
 	DossierMedical obtenirUnDossierMedical(Long idDos) throws DossierMedicalInexistantException;
 
 	
-	void supprimerUnDossierMedical(Long idDos) throws DossierMedicalAvecMaladieException, DossierMedicalAvecAllergieException, DossierMedicalAvecOrdonnanceException;
+	void supprimerUnDossierMedical(Long idDos) throws DossierMedicalAvecMaladieException, DossierMedicalAvecAllergieException, DossierMedicalAvecOrdonnanceException, DossierMedicalAvecVaccinException;
 
 	boolean exister(Patient patient);
 
