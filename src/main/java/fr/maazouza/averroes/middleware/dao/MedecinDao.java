@@ -84,11 +84,11 @@ public class MedecinDao {
 		public Medecin obtenirUnMedecin(Long idMed) {
 			
 			
-			final String requeteJPQL = "SELECT b FROM Medecin b WHERE b.idMed = :filtre1";
+			final String requeteJPQL = "SELECT b FROM Medecin b WHERE b.idMed =:filtre";
 			
 			
 			final TypedQuery<Medecin> requeteType = em.createQuery(requeteJPQL, Medecin.class)
-				.setParameter("filtre1", idMed);
+				.setParameter("filtre", idMed);
 				//.setParameter("filtre2", prenom);
 		
 			
@@ -121,14 +121,14 @@ public class MedecinDao {
 			return requeteType.getResultList();
 		}
 
-		
+		// obtenir liste des patients par email du medecin par id medecin	
 		public List<Patient> obtenirPatientsDunMedecin(Long idMed) {
 
 			
-			final String requeteJPQL = "SELECT b FROM Patient b where b.medecin.idMed= ?";
+			final String requeteJPQL = "SELECT b FROM Patient b where b.medecin.idMed =:filtre";
 			
 			final TypedQuery<Patient> requeteType = em.createQuery(requeteJPQL, Patient.class)
-				.setParameter(1, idMed);
+				.setParameter("filtre", idMed);
 		
 			
 			List<Patient> elementList = requeteType.getResultList();
@@ -140,10 +140,10 @@ public class MedecinDao {
 public List<Patient> obtenirPatientsDunMedecinParEmailMed(String email) {
 
 			
-			final String requeteJPQL = "SELECT b FROM Patient b where b.medecin.emailMed= :filtre1";
+			final String requeteJPQL = "SELECT b FROM Patient b where b.medecin.emailMed =:filtre";
 			
 			final TypedQuery<Patient> requeteType = em.createQuery(requeteJPQL, Patient.class)
-					.setParameter("filtre1", email);
+					.setParameter("filtre", email);
 		
 			
 			List<Patient> elementList = requeteType.getResultList();
@@ -154,18 +154,18 @@ public List<Patient> obtenirPatientsDunMedecinParEmailMed(String email) {
 		
 		//Obtenir medecin par eMail
 		
-			public List<Medecin> obtenirMedecinPareMail(String eMail) {
+			public Medecin obtenirMedecinPareMail(String eMail) {
 
 			
-			final String requeteJPQL = "SELECT b FROM Medecin b where b.medecin.emailMed= ?";
+			final String requeteJPQL = "SELECT b FROM Medecin b where b.emailMed =:filtre";
 			
 			final TypedQuery<Medecin> requeteType = em.createQuery(requeteJPQL, Medecin.class)
-				.setParameter(1, eMail);
+				.setParameter("filtre", eMail);
 		
 			
-			// je met en liste mais j'en aurait qu'un seul
+			
 			List<Medecin> elementList = requeteType.getResultList();
-			return elementList.isEmpty( ) ? null : elementList;
+			return elementList.isEmpty( ) ? null : elementList.get(0);
 						
 		}
 

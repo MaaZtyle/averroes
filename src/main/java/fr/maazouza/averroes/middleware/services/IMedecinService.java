@@ -78,4 +78,8 @@ public interface IMedecinService {
 	List<Patient> obtenirPatientsDunMedecinParEmail(String eMail);
 
 
+
+	Medecin obtenirMedecinPareMail(String eMail);
+
+
 }

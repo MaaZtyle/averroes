@@ -38,6 +38,8 @@ String authentifierUnPatient(String nom, String motDePasse) throws NomOuMotDePas
 
 boolean existerPareMail(String eMail);
 
+Patient obtenirPatientPareMail(String eMail);
+
 
 
 

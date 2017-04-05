@@ -60,12 +60,12 @@ public class PatientDao {
 	public Patient obtenirUnPatient(Long idPat) {
 		
 		
-		final String requeteJPQL = "SELECT b FROM Patient b WHERE b.idPat = :filtre1";
+		final String requeteJPQL = "SELECT b FROM Patient b WHERE b.idPat =:filtre";
 		
 		
 		final TypedQuery<Patient> requeteType = em.createQuery(requeteJPQL, Patient.class)
 			//.setParameter("filtre1", nom)
-			.setParameter("filtre1", idPat);
+			.setParameter("filtre", idPat);
 		
 		
 		//retourne le premier element de la liste, sinon null. il faut gerer le NPE
@@ -77,7 +77,7 @@ public class PatientDao {
 public Medecin obtenirMedecinDunPatient(long idPat) {
 		
 		
-		final String requeteJPQL = "SELECT b FROM Medecin b WHERE b.idMed = :filtre";
+		final String requeteJPQL = "SELECT b FROM Medecin b WHERE b.idMed =:filtre";
 		
 		
 		final TypedQuery<Medecin> requeteType = em.createQuery(requeteJPQL, Medecin.class)
@@ -104,6 +104,18 @@ public Medecin obtenirMedecinDunPatient(long idPat) {
 		
 		
 		em.remove(em.getReference(Patient.class, idPat));
+	}
+// obtenir un seul patient avec son email
+	public Patient obtenirPatientPareMail(String eMail) {
+		final String requeteJPQL = "SELECT b FROM Patient b where b.emailPat =:filtre";
+		
+		final TypedQuery<Patient> requeteType = em.createQuery(requeteJPQL, Patient.class)
+			.setParameter("filtre", eMail);
+	
+		
+		
+		List<Patient> elementList = requeteType.getResultList();
+		return elementList.isEmpty( ) ? null : elementList.get(0);
 	}
 
 	

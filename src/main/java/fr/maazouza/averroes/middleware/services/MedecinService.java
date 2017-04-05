@@ -100,8 +100,6 @@ public class MedecinService implements IMedecinService {
 		if( result == null)
 			return false;
 			else return true;
-					
-			
 			     	
 	}
 	
@@ -186,6 +184,15 @@ public class MedecinService implements IMedecinService {
 		return resultat;
 	}
 	
+	
+	// Obtenir un medecin par email
+	@Override
+	public Medecin obtenirMedecinPareMail(String eMail){ 
+    
+		Medecin resultat = medecinDao.obtenirMedecinPareMail(eMail);
+		
+		return resultat;
+	}
 	
 	
 	

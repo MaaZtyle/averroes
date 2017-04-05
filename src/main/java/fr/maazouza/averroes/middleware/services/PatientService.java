@@ -135,6 +135,15 @@ public class PatientService implements IPatientService{
 	}
 
 	
+	// Obtenir un patient par email
+	@Override
+	public Patient obtenirPatientPareMail(String eMail){ 
+    
+		Patient resultat = patientDao.obtenirPatientPareMail(eMail);
+		
+		return resultat;
+	}
+	
 
 	// Obtenir un patient par nom et mot de passe
 		@Override

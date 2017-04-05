@@ -19,11 +19,15 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import fr.maazouza.averroes.middleware.objetmetier.medecin.Medecin;
 import fr.maazouza.averroes.middleware.objetmetier.medecin.NomOuMotDePasseException;
+import fr.maazouza.averroes.middleware.objetmetier.patient.Patient;
 import fr.maazouza.averroes.middleware.objetmetier.token.Token;
 import fr.maazouza.averroes.middleware.services.IMedecinService;
 import fr.maazouza.averroes.middleware.services.IPatientService;
 import fr.maazouza.averroes.middleware.services.TokenService;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -50,7 +54,19 @@ public class AuthentificationWebService {
 
 	@EJB
 	IPatientService patientService;
+	
+	// pour récupérer le role de l'utilisateur
+	private Role role;
 
+	// pour récupérer son id
+	private Long id;
+	
+	// Pour récupérer son nom
+	private String nom;
+	
+	// les claims du token
+	
+	Claims claims;
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -94,7 +110,7 @@ public class AuthentificationWebService {
 		// si c'ets toujorus null, je lève une exception
 			
 			if(eMail==null) 
-				throw new NomOuMotDePasseException("Nom ou mot de pass incorrect");
+				throw new NomOuMotDePasseException("Nom ou mot de passe incorrect");
 		
 		return eMail;
 
@@ -156,12 +172,44 @@ public class AuthentificationWebService {
 	 
 	    
 	    //Let's set the JWT Claims
+	   
+	    
+	    // je mets le role dans le token ca peut servir
+	    if(medecinService.existerPareMail(eMail))		
+			 {
+	    		role=Role.medecin;
+			 	//l'id de l'utilisateur aussi
+			    Medecin medecin = medecinService.obtenirMedecinPareMail(eMail);
+			    id=medecin.getIdMed();
+			    nom=medecin.getNomMed();
+			    
+			 }
+			 
+		else {
+			role = Role.patient;
+			//l'id de l'utilisateur aussi
+		    Patient patient = patientService.obtenirPatientPareMail(eMail);
+		    id=patient.getIdPat();
+		    nom=patient.getNomPat();
+		}
+	    
+	    
+	    
+	    
+	    // initialisation des claims
+	   
+	  	    
+	    
+	    
 	    JwtBuilder builder = Jwts.builder()//.setId(username)
 	    									.setHeaderParam("typ", "JWT")
                 							.setIssuedAt(now)
                 							.setSubject(eMail)
                 							.setIssuer("Averroes")
-                							.signWith(signatureAlgorithm, signingKey);
+	    									.claim("nom", nom)
+	    									.claim("role", role)
+	    								    .claim("id", id)
+	    									.signWith(signatureAlgorithm, signingKey);
 	    									
 	 
 	    //if it has been specified, let's add the expiration
