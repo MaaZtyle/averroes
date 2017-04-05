@@ -2,20 +2,23 @@ package fr.maazouza.averroes.middleware.webservices;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
 import javax.jws.WebService;
+import javax.resource.spi.work.SecurityContext;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 
 import fr.maazouza.averroes.middleware.objetmetier.medecin.Medecin;
 import fr.maazouza.averroes.middleware.objetmetier.medecin.MedecinAvecPatientsException;
@@ -49,10 +52,12 @@ public class MedecinWebService {
 //http://localhost:8080/AVERROES_MIDDLEWARE/ws/medecin/
 // OK
 			@GET
+			@Secured({Role.medecin})// que les medecins ont le droit
 			@Produces(MediaType.APPLICATION_JSON)
+			
 			@Path(value = "/")
 			
-			public List<Medecin> obtenirMedecins() 
+			public List<Medecin> obtenirMedecins(@Context SecurityContext securityContext) 
 			{
 				
 				return medecinService.obtenirMedecins();
@@ -65,10 +70,11 @@ public class MedecinWebService {
 //http://localhost:8080/AVERROES_MIDDLEWARE/ws/medecin/nometprenom/
 //OK
 	@GET
+	@Secured({Role.medecin})// que les medecins ont le droit
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path(value = "/id")
-	public Medecin obtenirUnMedecin( 
-			@QueryParam("idMed") Long idMed
+	public Medecin obtenirUnMedecin( @Context SecurityContext securityContext,
+			@FormParam("idMed") Long idMed
 			
 	) 
 	{
@@ -83,12 +89,13 @@ public class MedecinWebService {
 // Ajouter un medecin à partir de l'interface medecin
 //OK
 	@POST
+	@Secured({Role.medecin})// que les medecins ont le droit
 	@Path(value = "/")
-	public Response ajouterMedecin(
-			@QueryParam("nomMed") String nomMed,
-			@QueryParam("prenomMed") String prenomMed,
-			@QueryParam("mdpMed") String mdpMed,
-			@QueryParam("emailMed") String emailMed			
+	public Response ajouterMedecin(@Context SecurityContext securityContext,
+			@FormParam("nomMed") String nomMed,
+			@FormParam("prenomMed") String prenomMed,
+			@FormParam("mdpMed") String mdpMed,
+			@FormParam("emailMed") String emailMed			
 			
 	) 
 	{
@@ -131,15 +138,16 @@ public class MedecinWebService {
 // Modifier un medecin
 	//OK
 	@PUT
+	@Secured({Role.medecin})// que les medecins ont le droit
 	@Path(value = "/")
-	public Response modifierMedecin (
-			@QueryParam("nomMed") String nomMed,
-			@QueryParam("prenomMed") String prenomMed,
-			@QueryParam("idMed") Long idMed,
-			@QueryParam("telMobMed") String telMobMed,
-			@QueryParam("telFixeMed") String telFixeMed,
-			@QueryParam("mdpMed") String mdpMed,
-			@QueryParam("emailMed") String emailMed			
+	public Response modifierMedecin (@Context SecurityContext securityContext,
+			@FormParam("nomMed") String nomMed,
+			@FormParam("prenomMed") String prenomMed,
+			@FormParam("idMed") Long idMed,
+			@FormParam("telMobMed") String telMobMed,
+			@FormParam("telFixeMed") String telFixeMed,
+			@FormParam("mdpMed") String mdpMed,
+			@FormParam("emailMed") String emailMed			
 						
 	) 
 	{
@@ -181,9 +189,10 @@ public class MedecinWebService {
 // je vérifie l'existance du medecin et s'il na pas de patients, sinon je lève les exceptions
 //OK
 			@DELETE
+			@Secured({Role.medecin})// que les medecins ont le droit
 			@Path(value = "/")
-			public Response supprimerMedecin(
-					@QueryParam("idMed") Long idMed
+			public Response supprimerMedecin(@Context SecurityContext securityContext,
+					@FormParam("idMed") Long idMed
 					
 			) 
 			{
@@ -218,52 +227,59 @@ public class MedecinWebService {
 ///////////////////////////////////////PATIENT/////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
-	
+			
+// Afficher la liste des patients  d'un medecin
+// sera le point d'entrée du medecin après s'être identifié, j'affiche la liste de ses patients
+// je vais récupérer l'id du medecin via l'adresse mail, puis afficher ses patients
+//http://localhost:8080/AVERROES_MIDDLEWARE/ws/medecin/patients
+// OK
+				@GET
+				@Secured({Role.medecin})// que les medecins ont le droit
+				@Produces(MediaType.APPLICATION_JSON)
+				@Path(value = "/patients")
+							
+				public List<Patient> obtenirPatientsDunMedecin(
+						@QueryParam("eMailMed") String eMailMed,
+						@Context SecurityContext securityContext)
+						
+				{
+										
+						return medecinService.obtenirPatientsDunMedecinParEmail(eMailMed);
 
+				}	
+				
+/*
 			
 // Afficher la liste des patients 
 //http://localhost:8080/AVERROES_MIDDLEWARE/ws/medecin/patients
+
 // OK
 			@GET
+			@Secured({Role.medecin})// que les medecins ont le droit
 			@Produces(MediaType.APPLICATION_JSON)
 			@Path(value = "/patients/")
 						
-			public List<Patient> obtenirPatients() 
+			public List<Patient> obtenirPatients(@Context SecurityContext securityContext) 
 			{
 							
 					return medecinService.obtenirPatients();
 
 			}
 			
-
-			
-// Afficher la liste des patients  d'un medecin
-//http://localhost:8080/AVERROES_MIDDLEWARE/ws/medecin/patients
-// OK
-				@GET
-				@Produces(MediaType.APPLICATION_JSON)
-				@Path(value = "/patientsMedecin")
-							
-				public List<Patient> obtenirPatientsDunMedecin(
-						@QueryParam("idMed") Long idMed
-						
-						)  
-				{
-										
-						return medecinService.obtenirPatientsDunMedecin(idMed);
-
-				}		
+*/
+	
 				
 							
 //ajouter un patient à partir de l'interface medecin, avec son id medecin
 		@POST
+		@Secured({Role.medecin})// que les medecins ont le droit
 		@Path(value = "/patient")
-		public Response ajouterPatient(
-				@QueryParam("nomPat") String nomPat,
-				@QueryParam("prenomPat") String prenomPat,
-				@QueryParam("mdpPat") String mdpPat,
-				@QueryParam("emailPat") String emailPat,
-				@QueryParam("idmedecin") long idmedecin
+		public Response ajouterPatient(@Context SecurityContext securityContext,
+				@FormParam("nomPat") String nomPat,
+				@FormParam("prenomPat") String prenomPat,
+				@FormParam("mdpPat") String mdpPat,
+				@FormParam("emailPat") String emailPat,
+				@FormParam("idMedecin") long idMedecin
 				
 				
 		) 
@@ -272,7 +288,7 @@ public class MedecinWebService {
 			Patient patient = new Patient();
 			Medecin medecin = new Medecin();
 				// je vérifie qu'il y a bien un medecin dans la base avec l'id fourni	
-				 medecin = medecinService.obtenirUnMedecin(idmedecin);
+				 medecin = medecinService.obtenirUnMedecin(idMedecin);
 				
 				if(medecin != null){
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
@@ -310,7 +326,7 @@ public class MedecinWebService {
 			
 			
 				return Response.status(200)
-						.entity("Le medecin  : " + idmedecin +" n'existe pas")
+						.entity("Le medecin  : " + idMedecin +" n'existe pas")
 						.build();
 					
 		}
@@ -318,9 +334,10 @@ public class MedecinWebService {
 //supprimer le patient d'un medecin
 //OK
 		@DELETE
+		@Secured({Role.medecin})// que les medecins ont le droit
 		@Path(value = "/patient")
-		public Response supprimerPatient(
-			@QueryParam("idPat") long idPat
+		public Response supprimerPatient(@Context SecurityContext securityContext,
+			@FormParam("idPat") long idPat
 				
 				
 				
@@ -348,14 +365,15 @@ public class MedecinWebService {
 //Modifier le patient d'un medecin
 // OK
 		@PUT
+		@Secured({Role.medecin})// que les medecins ont le droit
 		@Path(value = "/patient")
-		public Response modifierPatient (
-				@QueryParam("idPat") Long idPat,
-				@QueryParam("nomPat") String nomPat,
-				@QueryParam("prenomPat") String prenomPat,
-				@QueryParam("mdpPat") String mdpPat,
-				@QueryParam("emailPat") String emailPat,
-				@QueryParam("idmedecin") long idMedecin
+		public Response modifierPatient (@Context SecurityContext securityContext,
+				@FormParam("idPat") Long idPat,
+				@FormParam("nomPat") String nomPat,
+				@FormParam("prenomPat") String prenomPat,
+				@FormParam("mdpPat") String mdpPat,
+				@FormParam("emailPat") String emailPat,
+				@FormParam("idmedecin") long idMedecin
 				
 		) 
 		{

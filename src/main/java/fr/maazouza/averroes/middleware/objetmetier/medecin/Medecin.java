@@ -83,7 +83,7 @@ public class Medecin implements Cloneable, Serializable  {
 		this.idMed = idMed;
 	}
 
-	@Column(name = "NOM_MED")
+	@Column(name = "NOM_MED", nullable = false)
 	public String getNomMed() {
 		return nomMed;
 	}
@@ -122,7 +122,7 @@ public class Medecin implements Cloneable, Serializable  {
 		this.telFixeMed = telFixeMed;
 	}
 
-	@Column(name = "MDP_MED")
+	@Column(name = "MDP_MED", nullable = false)
 	public String getMdpMed() {
 		return mdpMed;
 	}
@@ -131,7 +131,7 @@ public class Medecin implements Cloneable, Serializable  {
 		this.mdpMed = mdpMed;
 	}
 
-	@Column(name = "EMAIL_MED")
+	@Column(name = "EMAIL_MED", nullable = false)
 	public String getEmailMed() {
 		return emailMed;
 	}
@@ -146,7 +146,7 @@ public class Medecin implements Cloneable, Serializable  {
 		return serialVersionUID;
 	}
 
-	@Column(name = "DATECREATION_MED")
+	@Column(name = "DATECREATION_MED", nullable = false)
 	public String getDateCreationMed() {
 		return dateCreationMed;
 	}

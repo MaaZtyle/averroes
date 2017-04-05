@@ -1,10 +1,17 @@
 package fr.maazouza.averroes.middleware.services;
 
+import java.security.Principal;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ResourceInfo;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.SecurityContext;
+import javax.xml.ws.WebServiceContext;
 
 import fr.maazouza.averroes.middleware.dao.MedecinDao;
 import fr.maazouza.averroes.middleware.dao.PatientDao;
@@ -12,6 +19,7 @@ import fr.maazouza.averroes.middleware.objetmetier.medecin.Medecin;
 import fr.maazouza.averroes.middleware.objetmetier.medecin.MedecinAvecPatientsException;
 import fr.maazouza.averroes.middleware.objetmetier.medecin.MedecinDejaExistantException;
 import fr.maazouza.averroes.middleware.objetmetier.medecin.MedecinInexistantException;
+import fr.maazouza.averroes.middleware.objetmetier.medecin.NomOuMotDePasseException;
 import fr.maazouza.averroes.middleware.objetmetier.patient.Patient;
 import fr.maazouza.averroes.middleware.objetmetier.patient.PatientDejaExistantException;
 
@@ -36,6 +44,10 @@ public class MedecinService implements IMedecinService {
 	
 	@EJB
 	private IPatientService patientService;
+	
+
+	
+
 	
 	
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -93,6 +105,31 @@ public class MedecinService implements IMedecinService {
 			     	
 	}
 	
+	// Rcherche mail d'un medecin
+		@Override
+		public boolean existerPareMail(String eMail) {
+			
+			//je cherche tous les medecins avec ce nom
+			List<Medecin> listeMedecin = medecinDao.obtenir();
+			
+			// ensuite je vérifie si le prénom est aussi le même
+			
+			Medecin result = listeMedecin.stream()
+				     .filter(item -> eMail.equals(item.getEmailMed())) 
+				     .findAny()
+				     .orElse(null);
+			
+			 
+			
+			//si le nom et le prenom sont les memes, je retourne true
+			if( result == null)
+				return false;
+				else return true;
+						
+				
+				     	
+		}
+	
 	
 	
 	// Obtenir la liste complète des medecins, le filtre se fera dans l'interface angular
@@ -149,17 +186,42 @@ public class MedecinService implements IMedecinService {
 		return resultat;
 	}
 	
-	// Obtenir la liste des patients de mon medecin
-	@Override
-	public List<Patient> obtenirPatientsDunMedecin(Long idMed) {
-		// Récuperer le patient d'un medecin pour le modifier
-			
-				
-					List<Patient> resultat = medecinDao.obtenirPatientsDunMedecin(idMed);
-							
-				return resultat;
-	}
 	
+	
+	
+	// Obtenir un medecin par nom et mot de passe
+		@Override
+		public String authentifierUnMedecin(String nom, String motDePasse ) throws NomOuMotDePasseException{ 
+	    
+			//je cherche tous les medecins avec ce nom
+			List<Medecin> listeMedecin = medecinDao.obtenir();
+			
+			// ensuite je vérifie si le nom et mdp est aussi le même
+			
+			
+			Medecin result = listeMedecin.stream()
+				     .filter(item -> item.getNomMed().equals(nom))
+				     .filter(item -> item.getMdpMed().equals(motDePasse))
+				     .findFirst()
+				     .orElse(null);
+			
+			 
+			
+			//si le nom et le mdp sont trouvé, je retourne true
+			if( result == null)
+				return null;
+				//throw new NomOuMotDePasseException("Nom ou mot de passe incorrecte");
+						
+				else return result.getEmailMed();
+		}
+	
+		
+		
+		
+	
+	
+
+		
 	/*@Override
 	public List<Medecin> obtenirMedecin(String predicat) {
 		List<Medecin> resultat = medecinDao.obtenir(predicat);
@@ -211,16 +273,27 @@ public class MedecinService implements IMedecinService {
 		}
 		
 
-/*// Récuperer le patient d'un medecin pour le modifier
+// Récuperer le patient d'un medecin par id
 		@Override
 		public List<Patient> obtenirPatientsDunMedecin(Long idMed){
 			    
-			List<Patient> resultat = patientDao.obtenirPatientsDunMedecin(idMed);
+			List<Patient> resultat = medecinDao.obtenirPatientsDunMedecin(idMed);
 					
 		return resultat;
 		}		
 
-		*/
+// Récuperer le patient d'un medecin par email
+		@Override
+		public List<Patient> obtenirPatientsDunMedecinParEmail(String eMail){
+			
+			
+					    
+			List<Patient> resultat = medecinDao.obtenirPatientsDunMedecinParEmailMed(eMail);
+						
+		return resultat;
+		}		
+		
+		
 		
 // Ajouter un patient au medecin
 	@Override
@@ -255,4 +328,5 @@ public class MedecinService implements IMedecinService {
 			return resultat;
 		
 	}
+	
 }

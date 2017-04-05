@@ -4,6 +4,7 @@
 package fr.maazouza.averroes.middleware.services;
 
 import fr.maazouza.averroes.middleware.objetmetier.medecin.Medecin;
+import fr.maazouza.averroes.middleware.objetmetier.medecin.NomOuMotDePasseException;
 import fr.maazouza.averroes.middleware.objetmetier.patient.Patient;
 import fr.maazouza.averroes.middleware.objetmetier.patient.PatientDejaExistantException;
 import fr.maazouza.averroes.middleware.objetmetier.patient.PatientInexistantException;
@@ -32,6 +33,10 @@ boolean existerParNomEtPrenom(Patient patient);
 Patient obtenirUnPatient(Long idPat) throws PatientInexistantException;
 
 boolean existerId(Long idPat);
+
+String authentifierUnPatient(String nom, String motDePasse) throws NomOuMotDePasseException;
+
+boolean existerPareMail(String eMail);
 
 
 

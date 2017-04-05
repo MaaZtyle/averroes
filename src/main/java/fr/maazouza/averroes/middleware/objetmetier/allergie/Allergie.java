@@ -70,7 +70,7 @@ public class Allergie implements Cloneable, Serializable {
 	public void setIdAll(long idAll) {
 		this.idAll = idAll;
 	}
-	@Column(name = "DESIGNATION_ALL")
+	@Column(name = "DESIGNATION_ALL", nullable = false)
 	public String getDesignationAll() {
 		return designationAll;
 	}
@@ -87,7 +87,7 @@ public class Allergie implements Cloneable, Serializable {
 	public void setDescriptionAll(String descriptionAll) {
 		this.descriptionAll = descriptionAll;
 	}
-	@Column(name = "DATE_APPARITION_ALL")
+	@Column(name = "DATE_APPARITION_ALL", nullable = false)
 	public String getDateAppAll() {
 		return dateAppAll;
 	}
@@ -95,7 +95,7 @@ public class Allergie implements Cloneable, Serializable {
 	public void setDateAppAll(String dateAppAll) {
 		this.dateAppAll = dateAppAll;
 	}
-	@Column(name = "ETAT_ALL")
+	@Column(name = "ETAT_ALL", nullable = false)
 	public Boolean getEtatAll() {
 		return etatAll;
 	}
@@ -105,7 +105,7 @@ public class Allergie implements Cloneable, Serializable {
 	}
 	
 	
-	@Column(name = "DATE_CREATION")
+	@Column(name = "DATE_CREATION", nullable = false)
 	public String getDateCreationAll() {
 		return dateCreationAll;
 	}

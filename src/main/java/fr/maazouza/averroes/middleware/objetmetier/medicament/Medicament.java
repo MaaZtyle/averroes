@@ -79,7 +79,7 @@ public class Medicament implements Cloneable, Serializable{
 	}
 	
 
-	@Column(name = "DENOMINATION")
+	@Column(name = "DENOMINATION", nullable = false)
 	public String getDenomination() {
 		return denomination;
 	}
@@ -91,11 +91,11 @@ public class Medicament implements Cloneable, Serializable{
 	public String getPosologie() {
 		return posologie;
 	}
-	@Column(name = "POSOLOGIE")
+	@Column(name = "POSOLOGIE", nullable = false)
 	public void setPosologie(String posologie) {
 		this.posologie = posologie;
 	}
-	@Column(name = "QUANTITE")
+	@Column(name = "QUANTITE", nullable = false)
 	public Integer getQuantite() {
 		return quantite;
 	}
@@ -104,7 +104,7 @@ public class Medicament implements Cloneable, Serializable{
 		this.quantite = quantite;
 	}
 
-	@Column(name = "DATE_CREATION")
+	@Column(name = "DATE_CREATION", nullable = false)
 	public String getDateCreationMed() {
 		return dateCreationMed;
 	}

@@ -136,6 +136,38 @@ public class MedecinDao {
 						
 		}
 
+		// obtenir liste des patients par email du medecin
+public List<Patient> obtenirPatientsDunMedecinParEmailMed(String email) {
+
+			
+			final String requeteJPQL = "SELECT b FROM Patient b where b.medecin.emailMed= :filtre1";
+			
+			final TypedQuery<Patient> requeteType = em.createQuery(requeteJPQL, Patient.class)
+					.setParameter("filtre1", email);
+		
+			
+			List<Patient> elementList = requeteType.getResultList();
+			return elementList.isEmpty( ) ? null : elementList;
+						
+		}
+
+		
+		//Obtenir medecin par eMail
+		
+			public List<Medecin> obtenirMedecinPareMail(String eMail) {
+
+			
+			final String requeteJPQL = "SELECT b FROM Medecin b where b.medecin.emailMed= ?";
+			
+			final TypedQuery<Medecin> requeteType = em.createQuery(requeteJPQL, Medecin.class)
+				.setParameter(1, eMail);
+		
+			
+			// je met en liste mais j'en aurait qu'un seul
+			List<Medecin> elementList = requeteType.getResultList();
+			return elementList.isEmpty( ) ? null : elementList;
+						
+		}
 
 		public void supprimer(Long idMed) {
 			em.remove(em.getReference(Medecin.class, idMed));

@@ -68,7 +68,7 @@ public class Maladie implements Cloneable, Serializable {
 	public void setIdMal(long idMal) {
 		this.idMal = idMal;
 	}
-	@Column(name = "DESIGNATION_MAL")
+	@Column(name = "DESIGNATION_MAL", nullable = false)
 	public String getDesignationMal() {
 		return designationMal;
 	}
@@ -85,7 +85,7 @@ public class Maladie implements Cloneable, Serializable {
 	public void setDescriptionMal(String descriptionMal) {
 		this.descriptionMal = descriptionMal;
 	}
-	@Column(name = "DATE_APPARITION_MAL")
+	@Column(name = "DATE_APPARITION_MAL", nullable = false)
 	public String getDateAppMal() {
 		return dateAppMal;
 	}
@@ -95,7 +95,7 @@ public class Maladie implements Cloneable, Serializable {
 	}
 	
 	
-	@Column(name = "DATE_CREATION")
+	@Column(name = "DATE_CREATION", nullable = false)
 	public String getDateCreationMal() {
 		return dateCreationMal;
 	}

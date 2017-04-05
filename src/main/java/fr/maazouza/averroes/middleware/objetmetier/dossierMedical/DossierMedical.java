@@ -134,7 +134,7 @@ public class DossierMedical implements Cloneable, Serializable {
 		this.idDos = idDos;
 	}
 
-	@Column(name = "DATENAISSANCE_PAT")
+	@Column(name = "DATENAISSANCE_PAT", nullable = false)
 	public String getDateNaissancePat() {
 		return dateNaissancePat;
 	}
@@ -143,7 +143,7 @@ public class DossierMedical implements Cloneable, Serializable {
 		this.dateNaissancePat = dateNaissance;
 	}
 
-	@Column(name = "TELMOB_PAT")
+	@Column(name = "TELMOB_PAT", nullable = false)
 	public String getTelMobPat() {
 		return telMobPat;
 	}
@@ -170,7 +170,7 @@ public class DossierMedical implements Cloneable, Serializable {
 		this.telFixePat = telFixePat;
 	}
 
-	@Column(name = "NUM_SECURITE_SOCIALE")
+	@Column(name = "NUM_SECURITE_SOCIALE", nullable = false)
 	public long getNumSecu() {
 		return numSecu;
 	}
@@ -188,7 +188,7 @@ public class DossierMedical implements Cloneable, Serializable {
 		this.mutuelle = mutuelle;
 	}
 
-	@Column(name = "SEXE")
+	@Column(name = "SEXE", nullable = false)
 	public String getSexe() {
 		return sexe;
 	}
@@ -206,7 +206,7 @@ public class DossierMedical implements Cloneable, Serializable {
 		this.statutFamiliale = statutFamiliale;
 	}
 
-	@Column(name = "AGE")
+	@Column(name = "AGE", nullable = false)
 	public Integer getAge() {
 		return age;
 	}
@@ -215,7 +215,7 @@ public class DossierMedical implements Cloneable, Serializable {
 		this.age = age;
 	}
 
-	@Column(name = "TAILLE")
+	@Column(name = "TAILLE", nullable = false)
 	public Double getTaille() {
 		return taille;
 	}
@@ -224,7 +224,7 @@ public class DossierMedical implements Cloneable, Serializable {
 		this.taille = taille;
 	}
 
-	@Column(name = "POIDS")
+	@Column(name = "POIDS", nullable = false)
 	public Double getPoids() {
 		return poids;
 	}
@@ -242,7 +242,7 @@ public class DossierMedical implements Cloneable, Serializable {
 		this.imc = imc;
 	}
 
-	@Column(name = "GROUPE_SANGUIN")
+	@Column(name = "GROUPE_SANGUIN", nullable = false)
 	public String getGroupeSanguin() {
 		return groupeSanguin;
 	}
@@ -260,7 +260,7 @@ public class DossierMedical implements Cloneable, Serializable {
 		this.donneurOrgane = donneurOrgane;
 	}
 
-	@Column(name = "SUIVI")
+	@Column(name = "SUIVI", nullable = false)
 	public Boolean getSuivi() {
 		return suivi;
 	}
@@ -269,7 +269,7 @@ public class DossierMedical implements Cloneable, Serializable {
 		this.suivi = suivi;
 	}
 
-	@Column(name = "CONTACT_FAMILLE")
+	@Column(name = "CONTACT_FAMILLE", nullable = false)
 	public String getContactFamille() {
 		return contactFamille;
 	}
@@ -278,7 +278,7 @@ public class DossierMedical implements Cloneable, Serializable {
 		this.contactFamille = contactFamille;
 	}
 
-	@Column(name = "TELEPHONE_CONTACT_FAMILLE")
+	@Column(name = "TELEPHONE_CONTACT_FAMILLE", nullable = false)
 	public String getTelContactFamille() {
 		return telContactFamille;
 	}
@@ -287,7 +287,7 @@ public class DossierMedical implements Cloneable, Serializable {
 		this.telContactFamille = telContactFamille;
 	}
 
-	@Column(name = "DATE_CREATION")
+	@Column(name = "DATE_CREATION", nullable = false)
 	public String getDateCreationDos() {
 		return dateCreationDos;
 	}
@@ -296,7 +296,7 @@ public class DossierMedical implements Cloneable, Serializable {
 		this.dateCreationDos = dateCreationDos;
 	}
 
-	@Column(name = "DOSSIER_OUVERT")
+	@Column(name = "DOSSIER_OUVERT", nullable = false)
 	public Boolean getDossierOuvert() {
 		return dossierOuvert;
 	}

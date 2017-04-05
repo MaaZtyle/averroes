@@ -12,13 +12,16 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.jws.WebService;
+import javax.resource.spi.work.SecurityContext;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -87,18 +90,20 @@ public class DossierMedicalWebService {
 	IVaccinService vaccinService;
 
 	/////////////////////////////////////////////////////////////////////////
-	// test pour afficher une liste de medicament
-	// Afficher la liste des patients
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path(value = "/")
-	public List<Patient> obtenirPatients(
 
-	) {
-
-		return patientService.obtenirPatients();
-
-	}
+	/*
+	 * @GET
+	 * 
+	 * @Produces(MediaType.APPLICATION_JSON)
+	 * 
+	 * @Path(value = "/") public List<Patient> obtenirPatients(
+	 * 
+	 * ) {
+	 * 
+	 * return patientService.obtenirPatients();
+	 * 
+	 * }
+	 */
 
 	///////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////
@@ -111,25 +116,28 @@ public class DossierMedicalWebService {
 	// http://localhost:8080/AVERROES_MIDDLEWARE/ws/dossiermedical/
 	// OK
 	@GET
+	@Secured({ Role.medecin }) // que les medecins ont le droit
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path(value = "/")
 
-	public List<DossierMedical> obtenir() {
+	public List<DossierMedical> obtenir(@Context SecurityContext securityContext) {
 
 		return dossierMedicalService.obtenir();
 
 	}
 
-	// Afficher un dossier medical par son ID
+	// Afficher un dossier medical par son mail patient
 	// http://localhost:8080/AVERROES_MIDDLEWARE/ws/dossiermedical/id
 	// OK
 	@GET
+	@Secured({ Role.medecin, Role.patient }) // patients et medecins ont le
+												// droit
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path(value = "/id")
 
-	public DossierMedical obtenirUnDossier(@QueryParam("idPat") Long idPat) {
+	public DossierMedical obtenirUnDossier(@QueryParam("eMailPat") String eMailPat) {
 
-		return dossierMedicalService.consulterUnDossierMedical(idPat);
+		return dossierMedicalService.consulterUnDossierMedical(eMailPat);
 
 	}
 
@@ -137,16 +145,27 @@ public class DossierMedicalWebService {
 	// http://localhost:8080/AVERROES_MIDDLEWARE/ws/dossiermedical/ajouter
 	// OK
 	@POST
+	@Secured({ Role.medecin }) // medecins ont le droit
 	@Path(value = "/")
-	public Response ajouterDossier(@QueryParam("idPat") Long idPat, @QueryParam("numSecu") Long numSecu,
-			@QueryParam("dateNaissance") String dateNaissance, @QueryParam("telMobPat") String telMobPat,
-			@QueryParam("adressePat") String adressePat, @QueryParam("telFixePat") String telFixePat,
-			@QueryParam("mutuelle") String mutuelle, @QueryParam("sexe") String sexe,
-			@QueryParam("statutFamiliale") String statutFamiliale, @QueryParam("age") Integer age,
-			@QueryParam("taille") Double taille, @QueryParam("poids") Double poids, @QueryParam("imc") Double imc,
-			@QueryParam("groupeSanguin") String groupeSanguin, @QueryParam("donneurOrgane") Boolean donneurOrgane,
-			@QueryParam("suivi") Boolean suivi, @QueryParam("contactFamille") String contactFamille,
-			@QueryParam("telContactFamille") String telContactFamille
+	public Response ajouterDossier(@Context SecurityContext securityContext,
+			@FormParam("idPat") Long idPat, 
+			@FormParam("numSecu") Long numSecu,
+			@FormParam("dateNaissance") String dateNaissance, 
+			@FormParam("telMobPat") String telMobPat,
+			@FormParam("adressePat") String adressePat, 
+			@FormParam("telFixePat") String telFixePat,
+			@FormParam("mutuelle") String mutuelle, 
+			@FormParam("sexe") String sexe,
+			@FormParam("statutFamiliale") String statutFamiliale, 
+			@FormParam("age") Integer age,
+			@FormParam("taille") Double taille, 
+			@FormParam("poids") Double poids, 
+			@FormParam("imc") Double imc,
+			@FormParam("groupeSanguin") String groupeSanguin, 
+			@FormParam("donneurOrgane") Boolean donneurOrgane,
+			@FormParam("suivi") Boolean suivi, 
+			@FormParam("contactFamille") String contactFamille,
+			@FormParam("telContactFamille") String telContactFamille
 
 	) {
 
@@ -204,16 +223,27 @@ public class DossierMedicalWebService {
 	// avec son ID
 	// OK
 	@PUT
+	@Secured({ Role.medecin }) // medecins ont le droit
 	@Path(value = "/")
-	public Response modifierDossier(@QueryParam("idDos") Long idDos, @QueryParam("numSecu") Long numSecu,
-			@QueryParam("dateNaissance") String dateNaissance, @QueryParam("telMobPat") String telMobPat,
-			@QueryParam("adressePat") String adressePat, @QueryParam("telFixePat") String telFixePat,
-			@QueryParam("mutuelle") String mutuelle, @QueryParam("sexe") String sexe,
-			@QueryParam("statutFamiliale") String statutFamiliale, @QueryParam("age") Integer age,
-			@QueryParam("taille") Double taille, @QueryParam("poids") Double poids, @QueryParam("imc") Double imc,
-			@QueryParam("groupeSanguin") String groupeSanguin, @QueryParam("donneurOrgane") Boolean donneurOrgane,
-			@QueryParam("suivi") Boolean suivi, @QueryParam("contactFamille") String contactFamille,
-			@QueryParam("telContactFamille") String telContactFamille
+	public Response modifierDossier(@Context SecurityContext securityContext,
+			@FormParam("idDos") Long idDos, 
+			@FormParam("numSecu") Long numSecu,
+			@FormParam("dateNaissance") String dateNaissance, 
+			@FormParam("telMobPat") String telMobPat,
+			@FormParam("adressePat") String adressePat, 
+			@FormParam("telFixePat") String telFixePat,
+			@FormParam("mutuelle") String mutuelle, 
+			@FormParam("sexe") String sexe,
+			@FormParam("statutFamiliale") String statutFamiliale,
+			@FormParam("age") Integer age,
+			@FormParam("taille") Double taille, 
+			@FormParam("poids") Double poids, 
+			@FormParam("imc") Double imc,
+			@FormParam("groupeSanguin") String groupeSanguin,
+			@FormParam("donneurOrgane") Boolean donneurOrgane,
+			@FormParam("suivi") Boolean suivi, 
+			@FormParam("contactFamille") String contactFamille,
+			@FormParam("telContactFamille") String telContactFamille
 
 	) {
 
@@ -274,8 +304,10 @@ public class DossierMedicalWebService {
 	// avec son ID
 	// OK
 	@DELETE
+	@Secured({ Role.medecin }) // medecins ont le droit
 	@Path(value = "/")
-	public Response supprimerUnDossierMedical(@QueryParam("idDos") Long idDos
+	public Response supprimerUnDossierMedical(@Context SecurityContext securityContext,
+			@FormParam("idDos") Long idDos
 
 	) {
 
@@ -301,9 +333,8 @@ public class DossierMedicalWebService {
 		} catch (DossierMedicalAvecOrdonnanceException e) {
 			return Response.status(200).entity(e.getMessage()).build();
 		} catch (DossierMedicalAvecVaccinException e) {
-				return Response.status(200).entity(e.getMessage()).build();
+			return Response.status(200).entity(e.getMessage()).build();
 		}
-		
 
 		return Response.status(200).entity("Le dossier du patient :" + dossierMedical.getPatient().getNomPat() + " ID "
 				+ dossierMedical.getIdDos() + " a été supprimé").build();
@@ -327,9 +358,14 @@ public class DossierMedicalWebService {
 	// Ajouter un dossier medical à partir de l'interface medecin
 	// OK
 	@POST
+	@Secured({ Role.medecin, Role.patient }) // patients et medecins ont le
+												// droit
 	@Path(value = "/maladie")
-	public Response ajouterMaladie(@QueryParam("idDos") Long idDos, @QueryParam("designationMal") String designationMal,
-			@QueryParam("descriptionMal") String descriptionMal, @QueryParam("dateAppMal") String dateAppMal) {
+	public Response ajouterMaladie(@Context SecurityContext securityContext,
+			@FormParam("idDos") Long idDos, 
+			@FormParam("designationMal") String designationMal,
+			@FormParam("descriptionMal") String descriptionMal, 
+			@FormParam("dateAppMal") String dateAppMal) {
 
 		Maladie maladie = new Maladie();
 		DossierMedical dossierMedical = new DossierMedical();
@@ -358,9 +394,12 @@ public class DossierMedicalWebService {
 	// Afficher la maladie d'un patient, à partir de son dossier
 	// ok
 	@GET
+	@Secured({ Role.medecin, Role.patient }) // patients et medecins ont le
+												// droit
 	@Path(value = "/maladie")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Maladie obtenirMaladie(@QueryParam("idMal") Long idMal)
+	public Maladie obtenirMaladie(@Context SecurityContext securityContext,
+			@FormParam("idMal") Long idMal)
 
 	{
 
@@ -378,10 +417,14 @@ public class DossierMedicalWebService {
 	// Modifier une maladie d'un dossier medical d'un patient
 	// ok
 	@PUT
+	@Secured({ Role.medecin }) // medecins ont le droit
 	@Path(value = "/maladie")
-	public Response modifierMaladie(@QueryParam("idMal") Long idMal, @QueryParam("idDos") Long idDos,
-			@QueryParam("designationMal") String designationMal, @QueryParam("descriptionMal") String descriptionMal,
-			@QueryParam("dateAppMal") String dateAppMal) {
+	public Response modifierMaladie(@Context SecurityContext securityContext,
+			@FormParam("idMal") Long idMal, 
+			@FormParam("idDos") Long idDos,
+			@FormParam("designationMal") String designationMal, 
+			@FormParam("descriptionMal") String descriptionMal,
+			@FormParam("dateAppMal") String dateAppMal) {
 
 		try {
 			Maladie maladie = new Maladie();
@@ -414,8 +457,10 @@ public class DossierMedicalWebService {
 
 	// Supprimer une maladie d'un dossier medical d'un patient
 	@DELETE
+	@Secured({ Role.medecin }) // medecins ont le droit
 	@Path(value = "/maladie")
-	public Response supprimerMaladie(@QueryParam("idMal") Long idMal)
+	public Response supprimerMaladie(@Context SecurityContext securityContext,
+			@FormParam("idMal") Long idMal)
 
 	{
 
@@ -432,8 +477,9 @@ public class DossierMedicalWebService {
 	}
 
 	///////////////////////////////////////////////////////////////////////////////
-	/////////////////////////// MALADIES FIN
-	/////////////////////////////////////////////////////////////////////////////// ///////////////////////////////////////
+	/////////////////////////// MALADIES///////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////// 
+	///////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////
 
 	//////////////////////////////////////////////////////////////////////////
@@ -442,14 +488,19 @@ public class DossierMedicalWebService {
 
 	// Pas besoin de faire consulter, car ells sont déjà toutes visible sur le
 	// dossier medical
-	// Ajouter une maladie sur un dossier medical
+	// Ajouter une allergie sur un dossier medical
 	// Ajouter un dossier medical à partir de l'interface medecin
 	// OK
 	@POST
+	@Secured({ Role.medecin, Role.patient }) // patients et medecins ont le
+												// droit
 	@Path(value = "/allergie")
-	public Response ajouterAllergie(@QueryParam("idDos") Long idDos,
-			@QueryParam("designationAll") String designationAll, @QueryParam("descriptionAll") String descriptionAll,
-			@QueryParam("dateAppAll") String dateAppAll, @QueryParam("etatAll") Boolean etatAll) {
+	public Response ajouterAllergie(@Context SecurityContext securityContext,
+			@FormParam("idDos") Long idDos,
+			@FormParam("designationAll") String designationAll, 
+			@FormParam("descriptionAll") String descriptionAll,
+			@FormParam("dateAppAll") String dateAppAll, 
+			@FormParam("etatAll") Boolean etatAll) {
 
 		Allergie allergie = new Allergie();
 		DossierMedical dossierMedical = new DossierMedical();
@@ -479,9 +530,12 @@ public class DossierMedicalWebService {
 	// Afficher l'allergie d'un patient, à partir de son dossier
 	// ok
 	@GET
+	@Secured({ Role.medecin, Role.patient }) // patients et medecins ont le
+												// droit
 	@Path(value = "/allergie")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Allergie obtenirAllergie(@QueryParam("idAll") Long idAll)
+	public Allergie obtenirAllergie(@Context SecurityContext securityContext,
+			@FormParam("idAll") Long idAll)
 
 	{
 
@@ -499,10 +553,15 @@ public class DossierMedicalWebService {
 	// Modifier une maladie d'un dossier medical d'un patient
 	// ok
 	@PUT
+	@Secured({ Role.medecin }) // medecins ont le droit
 	@Path(value = "/allergie")
-	public Response modifierAllergie(@QueryParam("idAll") Long idAll, @QueryParam("idDos") Long idDos,
-			@QueryParam("designationAll") String designationAll, @QueryParam("descriptionAll") String descriptionAll,
-			@QueryParam("dateAppAll") String dateAppAll, @QueryParam("etatAll") Boolean etatAll) {
+	public Response modifierAllergie(@Context SecurityContext securityContext,
+			@FormParam("idAll") Long idAll, 
+			@FormParam("idDos") Long idDos,
+			@FormParam("designationAll") String designationAll, 
+			@FormParam("descriptionAll") String descriptionAll,
+			@FormParam("dateAppAll") String dateAppAll, 
+			@FormParam("etatAll") Boolean etatAll) {
 
 		try {
 			Allergie allergie = new Allergie();
@@ -536,8 +595,10 @@ public class DossierMedicalWebService {
 
 	// Supprimer une allergie d'un dossier medical d'un patient
 	@DELETE
+	@Secured({ Role.medecin }) // medecins ont le droit
 	@Path(value = "/allergie")
-	public Response supprimerAllergie(@QueryParam("idAll") Long idAll)
+	public Response supprimerAllergie(@Context SecurityContext securityContext,
+			@FormParam("idAll") Long idAll)
 
 	{
 
@@ -554,13 +615,14 @@ public class DossierMedicalWebService {
 	}
 
 	///////////////////////////////////////////////////////////////////////////////
-	/////////////////////////// ALLERGIE FIN
+	/////////////////////////// ALLERGIE//////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////// 
 	///////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////
 
-	//////////////////////////////////////////////////////////////////////////
-	/////////////////////////// Ordonnance///////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////
+	/////////////////////////// ORDONNANCE///////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
 
 	// Pas besoin de faire consulter, car ells sont déjà toutes visible sur le
 	// dossier medical
@@ -568,8 +630,12 @@ public class DossierMedicalWebService {
 	// Ajouter un dossier medical à partir de l'interface medecin
 	// OK
 	@POST
+	@Secured({ Role.medecin, Role.patient }) // patients et medecins ont le
+												// droit
 	@Path(value = "/ordonnance/")
-	public Response ajouterOrdonnance(@QueryParam("idDos") Long idDos, @QueryParam("dateOrd") String dateOrd) {
+	public Response ajouterOrdonnance(@Context SecurityContext securityContext,
+			@FormParam("idDos") Long idDos, 
+			@FormParam("dateOrd") String dateOrd) {
 
 		Ordonnance ordonnance = new Ordonnance();
 		DossierMedical dossierMedical = new DossierMedical();
@@ -596,9 +662,12 @@ public class DossierMedicalWebService {
 	// Afficher l'ordonnance d'un patient, à partir de son dossier
 	// ok
 	@GET
+	@Secured({ Role.medecin, Role.patient }) // patients et medecins ont le
+												// droit
 	@Path(value = "/ordonnance")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Ordonnance obtenirOrdonnance(@QueryParam("idOrd") Long idOrd)
+	public Ordonnance obtenirOrdonnance(@Context SecurityContext securityContext,
+			@FormParam("idOrd") Long idOrd)
 
 	{
 
@@ -616,9 +685,12 @@ public class DossierMedicalWebService {
 	// Modifier une ordonnance d'un dossier medical d'un patient
 	// ok
 	@PUT
+	@Secured({ Role.medecin }) // medecins ont le droit
 	@Path(value = "/ordonnance")
-	public Response modifierOrdonnance(@QueryParam("idOrd") Long idOrd, @QueryParam("idDos") Long idDos,
-			@QueryParam("dateOrd") String dateOrd) {
+	public Response modifierOrdonnance(@Context SecurityContext securityContext,
+			@FormParam("idOrd") Long idOrd, 
+			@FormParam("idDos") Long idDos,
+			@FormParam("dateOrd") String dateOrd) {
 		Ordonnance ordonnance = new Ordonnance();
 		DossierMedical dossierMedical = new DossierMedical();
 
@@ -653,8 +725,10 @@ public class DossierMedicalWebService {
 
 	// Supprimer une ordonnance d'un dossier medical d'un patient
 	@DELETE
+	@Secured({ Role.medecin }) // medecins ont le droit
 	@Path(value = "/ordonnance")
-	public Response supprimerOrdonnance(@QueryParam("idOrd") Long idOrd)
+	public Response supprimerOrdonnance(@Context SecurityContext securityContext,
+			@FormParam("idOrd") Long idOrd)
 
 	{
 
@@ -671,8 +745,8 @@ public class DossierMedicalWebService {
 	}
 
 	///////////////////////////////////////////////////////////////////////////////
-	/////////////////////////// ORDONNANCE
-	/////////////////////////////////////////////////////////////////////////////// FIN/////////////////////////////////////
+	/////////////////////////// ORDONNANCE////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////
 
@@ -684,9 +758,11 @@ public class DossierMedicalWebService {
 	// Appel du WS de base des medicaments
 	// Ajout d'un medicament sur une ordonnance
 	@GET
+	@Secured({ Role.medecin }) // medecins ont le droit
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path(value = "/ordonnance/medicament/recherche")
-	public String rechercheMedicament(@QueryParam("nomMed") String nomMed
+	@Path(value = "/ordonnance/medicament/")
+	public String rechercheMedicament(@Context SecurityContext securityContext,
+			@FormParam("nomMed") String nomMed
 
 	) {
 
@@ -724,9 +800,11 @@ public class DossierMedicalWebService {
 
 	// pour avoir toutes les infos d'un medicament
 	@GET
+	@Secured({ Role.medecin }) // medecins ont le droit
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path(value = "/ordonnance/medicament/information")
-	public String InformationMedicament(@QueryParam("codeCIS") String codeCIS
+	public String InformationMedicament(@Context SecurityContext securityContext,
+			@FormParam("codeCIS") String codeCIS
 
 	) {
 
@@ -772,10 +850,14 @@ public class DossierMedicalWebService {
 	// Ajouter un dossier medical à partir de l'interface medecin
 	// OK
 	@POST
+	@Secured({ Role.medecin }) // medecins ont le droit
 	@Path(value = "/ordonnance/medicament")
-	public Response ajouterMedicament(@QueryParam("idOrd") Long idOrd, @QueryParam("codeCis") String codeCis,
-			@QueryParam("denomination") String denomination, @QueryParam("posologie") String posologie,
-			@QueryParam("quantite") Integer quantite) {
+	public Response ajouterMedicament(@Context SecurityContext securityContext,
+			@FormParam("idOrd") Long idOrd, 
+			@FormParam("codeCis") String codeCis,
+			@FormParam("denomination") String denomination, 
+			@FormParam("posologie") String posologie,
+			@FormParam("quantite") Integer quantite) {
 
 		Ordonnance ordonnance = new Ordonnance();
 		Medicament medicament = new Medicament();
@@ -807,12 +889,15 @@ public class DossierMedicalWebService {
 
 	}
 
-	// Afficher l'allergie d'un patient, à partir de son dossier
+	// Afficher le medicmanet d'un patient
 	// ok
 	@GET
+	@Secured({ Role.medecin, Role.patient }) // patients et medecins ont le
+												// droit
 	@Path(value = "/ordonnance/medicament")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Medicament obtenirMedicament(@QueryParam("codeCis") String codeCis)
+	public Medicament obtenirMedicament(@Context SecurityContext securityContext,
+			@FormParam("codeCis") String codeCis)
 
 	{
 
@@ -827,13 +912,17 @@ public class DossierMedicalWebService {
 
 	}
 
-	// Modifier une maladie d'un dossier medical d'un patient
+	// Modifier un medicament sur une ordonnance
 	// ok
 	@PUT
+	@Secured({ Role.medecin }) // medecins ont le droit
 	@Path(value = "/ordonnance/medicament")
-	public Response modifierMedicament(@QueryParam("idOrd") Long idOrd, @QueryParam("codeCis") String codeCis,
-			@QueryParam("denomination") String denomination, @QueryParam("posologie") String posologie,
-			@QueryParam("quantite") Integer quantite) {
+	public Response modifierMedicament(@Context SecurityContext securityContext,
+			@FormParam("idOrd") Long idOrd, 
+			@FormParam("codeCis") String codeCis,
+			@FormParam("denomination") String denomination, 
+			@FormParam("posologie") String posologie,
+			@FormParam("quantite") Integer quantite) {
 
 		try {
 			Medicament medicament = new Medicament();
@@ -866,10 +955,12 @@ public class DossierMedicalWebService {
 
 	}
 
-	// Supprimer une allergie d'un dossier medical d'un patient
+	// Supprimer un medicament d'une ordonnance
 	@DELETE
+	@Secured({ Role.medecin }) // medecins ont le droit
 	@Path(value = "/ordonnance/medicament")
-	public Response supprimerMedicament(@QueryParam("codeCis") String codeCis)
+	public Response supprimerMedicament(@Context SecurityContext securityContext,
+			@FormParam("codeCis") String codeCis)
 
 	{
 
@@ -890,14 +981,19 @@ public class DossierMedicalWebService {
 
 	// Pas besoin de faire consulter, car ells sont déjà toutes visible sur le
 	// dossier medical
-	// Ajouter une maladie sur un dossier medical
+	// Ajouter un antécédent sur un dossier medical
 	// Ajouter un dossier medical à partir de l'interface medecin
 	// OK
 	@POST
+	@Secured({ Role.medecin, Role.patient }) // patients et medecins ont le
+												// droit
 	@Path(value = "/antecedent/")
-	public Response ajouterAntecedent(@QueryParam("idDos") Long idDos, @QueryParam("dateAnt") String dateAnt,
-			@QueryParam("descriptionAnt") String descriptionAnt, @QueryParam("commentaireAnt") String commentaireAnt,
-			@QueryParam("sujetAnt") String sujetAnt) {
+	public Response ajouterAntecedent(@Context SecurityContext securityContext,
+			@FormParam("idDos") Long idDos, 
+			@FormParam("dateAnt") String dateAnt,
+			@FormParam("descriptionAnt") String descriptionAnt, 
+			@FormParam("commentaireAnt") String commentaireAnt,
+			@FormParam("sujetAnt") String sujetAnt) {
 
 		Antecedent antecedent = new Antecedent();
 		DossierMedical dossierMedical = new DossierMedical();
@@ -927,9 +1023,12 @@ public class DossierMedicalWebService {
 	// Afficher l'antecedent d'un patient, à partir de son dossier
 	// ok
 	@GET
+	@Secured({ Role.medecin, Role.patient }) // patients et medecins ont le
+												// droit
 	@Path(value = "/antecedent")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Antecedent obtenirAntecedent(@QueryParam("idAnt") Long idAnt)
+	public Antecedent obtenirAntecedent(@Context SecurityContext securityContext,
+			@FormParam("idAnt") Long idAnt)
 
 	{
 
@@ -946,10 +1045,15 @@ public class DossierMedicalWebService {
 	// Modifier un Antecedent d'un dossier medical d'un patient
 	// ok
 	@PUT
+	@Secured({ Role.medecin }) // medecins ont le droit
 	@Path(value = "/antecedent")
-	public Response modifierAntecedent(@QueryParam("idDos") Long idDos, @QueryParam("idAnt") Long idAnt,
-			@QueryParam("dateAnt") String dateAnt, @QueryParam("descriptionAnt") String descriptionAnt,
-			@QueryParam("commentaireAnt") String commentaireAnt, @QueryParam("sujetAnt") String sujetAnt) {
+	public Response modifierAntecedent(@Context SecurityContext securityContext,
+			@FormParam("idDos") Long idDos, 
+			@FormParam("idAnt") Long idAnt,
+			@FormParam("dateAnt") String dateAnt, 
+			@FormParam("descriptionAnt") String descriptionAnt,
+			@FormParam("commentaireAnt") String commentaireAnt, 
+			@FormParam("sujetAnt") String sujetAnt) {
 
 		Antecedent antecedent = new Antecedent();
 		DossierMedical dossierMedical = new DossierMedical();
@@ -991,8 +1095,10 @@ public class DossierMedicalWebService {
 
 	// Supprimer une ordonnance d'un dossier medical d'un patient
 	@DELETE
+	@Secured({ Role.medecin }) // medecins ont le droit
 	@Path(value = "/antecedent")
-	public Response supprimerAntecedent(@QueryParam("idAnt") Long idAnt)
+	public Response supprimerAntecedent(@Context SecurityContext securityContext,
+			@FormParam("idAnt") Long idAnt)
 
 	{
 
@@ -1009,7 +1115,8 @@ public class DossierMedicalWebService {
 	}
 
 	///////////////////////////////////////////////////////////////////////////////
-	/////////////////////////// ANTECEDENT FIN
+	/////////////////////////// ANTECEDENT/////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////// 
 	///////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////
@@ -1024,15 +1131,17 @@ public class DossierMedicalWebService {
 	// Ajouter un dossier medical à partir de l'interface medecin
 	// OK
 	@POST
+	@Secured({ Role.medecin, Role.patient }) // patients et medecins ont le
+												// droit
 	@Path(value = "/vaccin/")
-	public Response ajouterVaccin(
-			@QueryParam("idDos") Long idDos, 
-			@QueryParam("nomVac") String nomVac,
-			@QueryParam("descriptionVac") String descriptionVac, 
-			@QueryParam("dateDernierVac") String dateDernierVac,
-			@QueryParam("dateProchainVac") String dateProchainVac,
-			@QueryParam("alertePatientVac") Boolean alertePatientVac,
-			@QueryParam("alerteMedecinVac") Boolean alerteMedecinVac
+	public Response ajouterVaccin(@Context SecurityContext securityContext,
+			@FormParam("idDos") Long idDos, 
+			@FormParam("nomVac") String nomVac,
+			@FormParam("descriptionVac") String descriptionVac,
+			@FormParam("dateDernierVac") String dateDernierVac,
+			@FormParam("dateProchainVac") String dateProchainVac,
+			@FormParam("alertePatientVac") Boolean alertePatientVac,
+			@FormParam("alerteMedecinVac") Boolean alerteMedecinVac
 
 	) {
 
@@ -1065,9 +1174,12 @@ public class DossierMedicalWebService {
 	// Afficher le vaccin d'un patient, à partir de son dossier
 	// ok
 	@GET
+	@Secured({ Role.medecin, Role.patient }) // patients et medecins ont le
+												// droit
 	@Path(value = "/vaccin")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Vaccin obtenirVaccin(@QueryParam("idVac") Long idVac)
+	public Vaccin obtenirVaccin(@Context SecurityContext securityContext,
+			@FormParam("idVac") Long idVac)
 
 	{
 
@@ -1084,12 +1196,17 @@ public class DossierMedicalWebService {
 	// Modifier un vaccin d'un dossier medical d'un patient
 	// ok
 	@PUT
+	@Secured({ Role.medecin }) // medecins ont le droit
 	@Path(value = "/vaccin")
-	public Response modifierVaccin(@QueryParam("idDos") Long idDos, @QueryParam("idVac") Long idVac,
-			@QueryParam("nomVac") String nomVac, @QueryParam("descriptionVac") String descriptionVac,
-			@QueryParam("dateDernierVac") String dateDernierVac, @QueryParam("dateProchainVac") String dateProchainVac,
-			@QueryParam("alertePatientVac") Boolean alertePatientVac,
-			@QueryParam("alerteMedecinVac") Boolean alerteMedecinVac) {
+	public Response modifierVaccin(@Context SecurityContext securityContext,
+			@FormParam("idDos") Long idDos,
+			@FormParam("idVac") Long idVac,
+			@FormParam("nomVac") String nomVac,
+			@FormParam("descriptionVac") String descriptionVac,
+			@FormParam("dateDernierVac") String dateDernierVac,
+			@FormParam("dateProchainVac") String dateProchainVac,
+			@FormParam("alertePatientVac") Boolean alertePatientVac,
+			@FormParam("alerteMedecinVac") Boolean alerteMedecinVac) {
 
 		Vaccin vaccin = new Vaccin();
 		DossierMedical dossierMedical = new DossierMedical();
@@ -1128,8 +1245,11 @@ public class DossierMedicalWebService {
 
 	// Supprimer un vaccin d'un dossier medical d'un patient
 	@DELETE
+	@Secured({ Role.medecin, Role.patient }) // patients et medecins ont le
+												// droit
 	@Path(value = "/vaccin")
-	public Response supprimerVaccin(@QueryParam("idVac") Long idVac)
+	public Response supprimerVaccin(@Context SecurityContext securityContext,
+			@FormParam("idVac") Long idVac)
 
 	{
 
@@ -1146,9 +1266,12 @@ public class DossierMedicalWebService {
 	}
 
 	///////////////////////////////////////////////////////////////////////////////
-	/////////////////////////// VACCIN FIN
+	/////////////////////////// VACCIN/////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////// 
 	///////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////
 
 }
+
+//// Il manque messages, rendez vous et remarques

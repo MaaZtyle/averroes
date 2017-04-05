@@ -22,7 +22,7 @@ public interface IDossierMedicalService{
 
 	void ajouterDossierMedical(DossierMedical dossier) throws DossierMedicalDejaExistantException;
 
-	DossierMedical consulterUnDossierMedical(Long idPat);
+	DossierMedical consulterUnDossierMedical(String eMailPat);
 
 	boolean existerParId(Long idPat);
 

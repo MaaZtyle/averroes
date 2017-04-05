@@ -33,13 +33,13 @@ public class DossierMedicalDao {
 	}
 //Consulter le dossier d'un patient, en lui passant l'id du patient
 
-	public DossierMedical consulter(Long idPat) {
+	public DossierMedical consulter(String eMailPat) {
 		
-		final String requeteJPQL = "SELECT b FROM DossierMedical b WHERE b.patient.idPat = :filtre1";
+		final String requeteJPQL = "SELECT b FROM DossierMedical b WHERE b.patient.emailPat = :filtre1";
 		
 		
 		final TypedQuery<DossierMedical> requeteType = em.createQuery(requeteJPQL, DossierMedical.class)
-			.setParameter("filtre1", idPat);
+			.setParameter("filtre1", eMailPat);
 				
 		
 		

@@ -73,7 +73,7 @@ public class Ordonnance implements Cloneable, Serializable {
 	}
 	
 
-	@Column(name = "DATE_ORD")
+	@Column(name = "DATE_ORD", nullable = false)
 	public String getDateOrd() {
 		return dateOrd;
 	}
@@ -82,7 +82,7 @@ public class Ordonnance implements Cloneable, Serializable {
 		this.dateOrd = dateOrd;
 	}
 	
-	@Column(name = "DATE_CREATION")
+	@Column(name = "DATE_CREATION", nullable = false)
 	public String getDateCreationOrd() {
 		return dateCreationOrd;
 	}

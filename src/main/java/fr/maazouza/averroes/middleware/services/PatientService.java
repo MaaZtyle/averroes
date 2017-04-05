@@ -13,6 +13,7 @@ import fr.maazouza.averroes.middleware.dao.PatientDao;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalDejaExistantException;
 import fr.maazouza.averroes.middleware.objetmetier.medecin.Medecin;
 import fr.maazouza.averroes.middleware.objetmetier.medecin.MedecinDejaExistantException;
+import fr.maazouza.averroes.middleware.objetmetier.medecin.NomOuMotDePasseException;
 import fr.maazouza.averroes.middleware.objetmetier.patient.Patient;
 import fr.maazouza.averroes.middleware.objetmetier.patient.PatientDejaExistantException;
 import fr.maazouza.averroes.middleware.objetmetier.patient.PatientInexistantException;
@@ -76,11 +77,36 @@ public class PatientService implements IPatientService{
 		if( result == null)
 			return false;
 			else return true;
-					
-			
+						
 			     	
 	}
 
+	// Rcherche mail d'un medecin
+			@Override
+			public boolean existerPareMail(String eMail) {
+				
+				//je cherche tous les medecins avec ce nom
+				List<Patient> listePatient = patientDao.obtenir();
+				
+				// ensuite je vérifie si le prénom est aussi le même
+				
+				Patient result = listePatient.stream()
+					     .filter(item -> eMail.equals(item.getEmailPat())) 
+					     .findAny()
+					     .orElse(null);
+				
+				 
+				
+				//si le nom et le prenom sont les memes, je retourne true
+				if( result == null)
+					return false;
+					else return true;
+							
+					
+					     	
+			}
+		
+	
 	/*@Override
 	public void ajouterPatient(Patient patient) throws PatientDejaExistantException {
 				
@@ -108,6 +134,33 @@ public class PatientService implements IPatientService{
 		
 	}
 
+	
+
+	// Obtenir un patient par nom et mot de passe
+		@Override
+		public String authentifierUnPatient(String nom, String motDePasse ) throws NomOuMotDePasseException{ 
+	    
+			//je cherche tous les medecins avec ce nom
+			List<Patient> listePatient = patientDao.obtenir();
+			
+			// ensuite je vérifie si le nom et mdp est aussi le même
+			
+			
+			Patient result = listePatient.stream()
+				     .filter(item -> item.getNomPat().equals(nom))
+				     .filter(item -> item.getMdpPat().equals(motDePasse))
+				     .findFirst()
+				     .orElse(null);
+			
+			 
+			
+			//si le nom et le mdp sont trouvé, je retourne true
+			if( result == null)
+				throw new NomOuMotDePasseException("Nom ou mot de passe incorrecte");
+						
+				else return result.getEmailPat();
+		}
+		
 	
 	@Override
 	public Medecin obtenirMedecinDunPatient(long idPat){

@@ -73,7 +73,7 @@ public class Antecedent implements Cloneable, Serializable {
 	}
 	
 	
-	@Column(name = "DATE_ANT")
+	@Column(name = "DATE_ANT", nullable = false)
 	public String getDateAnt() {
 		return dateAnt;
 	}
@@ -81,7 +81,7 @@ public class Antecedent implements Cloneable, Serializable {
 	public void setDateAnt(String dateAnt) {
 		this.dateAnt = dateAnt;}
 		
-	@Column(name = "DESCRIPTION_ANT")
+	@Column(name = "DESCRIPTION_ANT", nullable = false)
 	public String getDescriptionAnt() {
 		return descriptionAnt;
 	}
@@ -109,7 +109,7 @@ public class Antecedent implements Cloneable, Serializable {
 	}
 	
 	
-	@Column(name = "DATE_CREATION")
+	@Column(name = "DATE_CREATION", nullable = false)
 	public String getDateCreationAnt() {
 		return dateCreationAnt;
 	}

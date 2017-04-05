@@ -16,12 +16,14 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.jws.WebService;
+import javax.resource.spi.work.SecurityContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -49,9 +51,10 @@ public class PatientWebService {
 	
 	//Afficher la liste des patients
 		@GET
+		@Secured({Role.medecin})// que les medecins ont le droit
 		@Produces(MediaType.APPLICATION_JSON)
 		@Path(value = "/")
-		public List<Patient> obtenirPatients( 
+		public List<Patient> obtenirPatients( @Context SecurityContext securityContext
 				
 		) 
 		{

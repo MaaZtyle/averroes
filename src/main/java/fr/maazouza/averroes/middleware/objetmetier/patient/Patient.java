@@ -90,7 +90,7 @@ public class Patient implements Cloneable, Serializable  {
 		this.idPat = idPat;
 	}
 	
-	@Column(name = "NOM_PAT")
+	@Column(name = "NOM_PAT", nullable = false)
 	public String getNomPat() {
 		return nomPat;
 	}
@@ -99,7 +99,7 @@ public class Patient implements Cloneable, Serializable  {
 		this.nomPat = nomPat;
 	}
 
-	@Column(name = "PRENOM_PAT")
+	@Column(name = "PRENOM_PAT", nullable = false)
 	public String getPrenomPat() {
 		return prenomPat;
 	}
@@ -110,7 +110,7 @@ public class Patient implements Cloneable, Serializable  {
 
 	
 
-	@Column(name = "EMAIL_PAT")
+	@Column(name = "EMAIL_PAT", nullable = false)
 	public String getEmailPat() {
 		return emailPat;
 	}
@@ -119,7 +119,7 @@ public class Patient implements Cloneable, Serializable  {
 		this.emailPat = emailPat;
 	}
 
-	@Column(name = "DATECREATION_PAT")
+	@Column(name = "DATECREATION_PAT", nullable = false)
 	public String getDateCreationPat() {
 		return dateCreationPat;
 	}
@@ -131,7 +131,7 @@ public class Patient implements Cloneable, Serializable  {
 	
 
 	
-	@Column(name = "MDP_PAT")
+	@Column(name = "MDP_PAT", nullable = false)
 	public String getMdpPat() {
 		return mdpPat;
 	}
@@ -141,7 +141,7 @@ public class Patient implements Cloneable, Serializable  {
 	}
 
 	@Access(AccessType.FIELD)
-	@Column(name = "PROFIL_MEDECIN")
+	@Column(name = "PROFIL_MEDECIN", nullable = false)
 	public Boolean getProfilMedecin() {
 		return profilMedecin;
 	}

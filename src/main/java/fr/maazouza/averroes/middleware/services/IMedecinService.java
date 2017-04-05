@@ -7,6 +7,7 @@ import fr.maazouza.averroes.middleware.objetmetier.medecin.Medecin;
 import fr.maazouza.averroes.middleware.objetmetier.medecin.MedecinAvecPatientsException;
 import fr.maazouza.averroes.middleware.objetmetier.medecin.MedecinDejaExistantException;
 import fr.maazouza.averroes.middleware.objetmetier.medecin.MedecinInexistantException;
+import fr.maazouza.averroes.middleware.objetmetier.medecin.NomOuMotDePasseException;
 import fr.maazouza.averroes.middleware.objetmetier.patient.Patient;
 import fr.maazouza.averroes.middleware.objetmetier.patient.PatientDejaExistantException;
 import fr.maazouza.averroes.middleware.objetmetier.patient.PatientInexistantException;
@@ -27,9 +28,6 @@ public interface IMedecinService {
 
 
 	List<Medecin> obtenirMedecins();
-
-
-
 
 
 	void ajouterPatient(Patient patient) throws PatientDejaExistantException,PatientInexistantException;
@@ -65,6 +63,19 @@ public interface IMedecinService {
 
 
 	List<Patient> obtenirPatientsDunMedecin(Long idMed);
+
+
+
+	String authentifierUnMedecin(String nom, String prenom) throws NomOuMotDePasseException;
+
+
+
+	boolean existerPareMail(String eMail);
+
+
+
+
+	List<Patient> obtenirPatientsDunMedecinParEmail(String eMail);
 
 
 }

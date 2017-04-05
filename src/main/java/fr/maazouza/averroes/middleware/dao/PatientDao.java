@@ -102,13 +102,6 @@ public Medecin obtenirMedecinDunPatient(long idPat) {
 	
 	public void supprimer(Long idPat){
 		
-		/*final String requeteJPQL = "SELECT b FROM Patient b WHERE b.nomPat = :filtre or b.prenomPat =:filtre";
-		
-		
-		final TypedQuery<Patient> requeteType = em.createQuery(requeteJPQL, Patient.class)
-			.setParameter("filtre", idPat);
-		
-		List<Patient> elementList = requeteType.getResultList();*/
 		
 		em.remove(em.getReference(Patient.class, idPat));
 	}

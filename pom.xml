@@ -1,14 +1,15 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>fr.maazouza.averroes</groupId>
-  <artifactId>middleware</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>war</packaging>
-  <name>Middleware</name>
-  
-  
-  
-  <properties>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>fr.maazouza.averroes</groupId>
+	<artifactId>middleware</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<name>Middleware</name>
+
+
+
+	<properties>
 		<nomPackaging>AVERROES_MIDDLEWARE</nomPackaging>
 
 		<version.cloning>1.9.1</version.cloning>
@@ -17,11 +18,11 @@
 		<version.hibernate>5.2.2.Final</version.hibernate>
 		<version.java>1.8</version.java>
 		<version.javaee>7.0</version.javaee>
-		
-				
-  </properties>
-  
-  <dependencies>
+
+
+	</properties>
+
+	<dependencies>
 
 		<dependency>
 			<groupId>javax</groupId>
@@ -92,24 +93,31 @@
 			<artifactId>postgresql</artifactId>
 			<version>9.4.1211</version>
 		</dependency>
-		
-		
+
+
 		<dependency>
 			<groupId>dom4j</groupId>
 			<artifactId>dom4j</artifactId>
 			<version>1.6.1</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations -->
 		<dependency>
-		    <groupId>com.fasterxml.jackson.core</groupId>
-		    <artifactId>jackson-annotations</artifactId>
-		    <version>2.9.0.pr1</version>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>2.9.0.pr1</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt  gérer le cryptage -->
 		
-		
-		
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.2</version>
+		</dependency>
+
+
 
 	</dependencies>
 
@@ -117,8 +125,8 @@
 	<build>
 
 		<plugins>
-		
-		<!-- EJB -->
+
+			<!-- EJB -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-ejb-plugin</artifactId>
@@ -129,7 +137,7 @@
 				</configuration>
 			</plugin>
 
-			
+
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -162,9 +170,9 @@
 					</execution>
 				</executions>
 			</plugin>
-			
-			
-			
+
+
+
 
 		</plugins>
 
