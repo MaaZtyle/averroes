@@ -126,20 +126,7 @@ public class DossierMedicalWebService {
 
 	}
 
-	// Afficher un dossier medical par son mail patient
-	// http://localhost:8080/AVERROES_MIDDLEWARE/ws/dossiermedical/id
-	// OK
-	@GET
-	@Secured({ Role.medecin, Role.patient }) // patients et medecins ont le
-												// droit
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path(value = "/id")
-
-	public DossierMedical obtenirUnDossier(@QueryParam("eMailPat") String eMailPat) {
-
-		return dossierMedicalService.consulterUnDossierMedical(eMailPat);
-
-	}
+	
 
 	// Ajouter un dossier medical à partir de l'interface medecin
 	// http://localhost:8080/AVERROES_MIDDLEWARE/ws/dossiermedical/ajouter

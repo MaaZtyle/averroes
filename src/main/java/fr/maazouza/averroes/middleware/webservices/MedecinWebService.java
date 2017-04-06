@@ -230,7 +230,7 @@ public class MedecinWebService {
 			
 // Afficher la liste des patients  d'un medecin
 // sera le point d'entrée du medecin après s'être identifié, j'affiche la liste de ses patients
-// je vais récupérer l'id du medecin via l'adresse mail, puis afficher ses patients
+// je vais récupérer l'id du medecin, puis afficher ses patients
 //http://localhost:8080/AVERROES_MIDDLEWARE/ws/medecin/patients
 // OK
 				@GET
@@ -239,12 +239,12 @@ public class MedecinWebService {
 				@Path(value = "/patients")
 							
 				public List<Patient> obtenirPatientsDunMedecin(
-						@QueryParam("eMailMed") String eMailMed,
+						@QueryParam("idMed") Long idMed,
 						@Context SecurityContext securityContext)
 						
 				{
 										
-						return medecinService.obtenirPatientsDunMedecinParEmail(eMailMed);
+						return medecinService.obtenirPatientsDunMedecin(idMed);
 
 				}	
 				

@@ -153,13 +153,13 @@ public class DossierMedicalService implements IDossierMedicalService {
 
 	}
 
-	// Returner un Dossier Medical d'un seul patient
+	// Retourner un Dossier Medical d'un seul patient
 	@Override
-	public DossierMedical consulterUnDossierMedical(String eMailPat)
+	public DossierMedical consulterUnDossierMedical(Long idPat)
 
 	{
 
-		return dossierMedicalDao.consulter(eMailPat);
+		return dossierMedicalDao.consulter(idPat);
 
 	}
 

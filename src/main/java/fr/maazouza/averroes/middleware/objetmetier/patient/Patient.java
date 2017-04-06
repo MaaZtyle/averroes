@@ -163,6 +163,7 @@ public class Patient implements Cloneable, Serializable  {
 
 	
 	@OneToOne(mappedBy="patient",fetch = FetchType.LAZY) // reférence de la relation de la classe DossierMedicale
+	@JsonIgnore
 	public DossierMedical getDossierMedical() {
 		return dossierMedical;
 	}

@@ -27,11 +27,12 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-
+import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedical;
 import fr.maazouza.averroes.middleware.objetmetier.medecin.Medecin;
 import fr.maazouza.averroes.middleware.objetmetier.medicament.Medicament;
 import fr.maazouza.averroes.middleware.objetmetier.patient.Patient;
 import fr.maazouza.averroes.middleware.objetmetier.patient.PatientDejaExistantException;
+import fr.maazouza.averroes.middleware.services.IDossierMedicalService;
 import fr.maazouza.averroes.middleware.services.IPatientService;
 
 
@@ -46,6 +47,9 @@ public class PatientWebService {
 	
 	@EJB
 	IPatientService patientService;
+	
+	@EJB
+	IDossierMedicalService dossierMedicalService;
 	
 	
 	
@@ -64,6 +68,21 @@ public class PatientWebService {
 		}
 	
 		
+		
+		// Afficher un dossier medical par son id patient
+		// http://localhost:8080/AVERROES_MIDDLEWARE/ws/dossiermedical/id
+		// OK
+		@GET
+		@Secured({ Role.medecin, Role.patient }) // patients et medecins ont le
+													// droit
+		@Produces(MediaType.APPLICATION_JSON)
+		@Path(value = "/dossierMedical")
+
+		public DossierMedical obtenirUnDossier(@QueryParam("idPat") Long idPat) {
+
+			return dossierMedicalService.consulterUnDossierMedical(idPat);
+
+		}
 	
 	//Afficher un patient par le nom et prénom
 	/*@GET
