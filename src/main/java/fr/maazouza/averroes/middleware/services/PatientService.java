@@ -81,7 +81,7 @@ public class PatientService implements IPatientService{
 			     	
 	}
 
-	// Rcherche mail d'un medecin
+	// Rcherche mail d'un patient
 			@Override
 			public boolean existerPareMail(String eMail) {
 				
@@ -128,7 +128,7 @@ public class PatientService implements IPatientService{
 	public Patient obtenirUnPatient(Long idPat) throws PatientInexistantException{
     
 		if((existerId(idPat)==false ))
-			throw new PatientInexistantException("Le patient id: "+ idPat + " n'existe pas");
+			throw new PatientInexistantException("Le Patient"+ idPat + " existe pas");
 		 
 		   return patientDao.obtenirUnPatient(idPat);
 		

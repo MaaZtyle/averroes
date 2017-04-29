@@ -32,6 +32,7 @@ import fr.maazouza.averroes.middleware.objetmetier.medecin.Medecin;
 import fr.maazouza.averroes.middleware.objetmetier.medicament.Medicament;
 import fr.maazouza.averroes.middleware.objetmetier.patient.Patient;
 import fr.maazouza.averroes.middleware.objetmetier.patient.PatientDejaExistantException;
+import fr.maazouza.averroes.middleware.objetmetier.patient.PatientInexistantException;
 import fr.maazouza.averroes.middleware.services.IDossierMedicalService;
 import fr.maazouza.averroes.middleware.services.IPatientService;
 
@@ -51,7 +52,30 @@ public class PatientWebService {
 	@EJB
 	IDossierMedicalService dossierMedicalService;
 	
-	
+	// Afficher un medecin par Id
+	//http://localhost:8080/AVERROES_MIDDLEWARE/ws/medecin/id/
+	//OK
+		@GET
+		@Secured({Role.medecin,Role.patient})// que les medecins ont le droit
+		@Produces(MediaType.APPLICATION_JSON)
+		@Path(value = "/id")
+		public Patient obtenirUnPatient( @Context SecurityContext securityContext,
+				@QueryParam("idPat") Long idPat
+				
+		) 
+		{
+				
+				
+					try {
+						return patientService.obtenirUnPatient(idPat);
+					} catch (PatientInexistantException e) {
+						return null;
+					}
+				
+			
+				}
+		
+		
 	
 	//Afficher la liste des patients
 		@GET

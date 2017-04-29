@@ -14,11 +14,16 @@ import javax.ejb.EJB;
 import javax.jws.WebService;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import javax.resource.spi.work.SecurityContext;
+import javax.ws.rs.core.Context;
 
 import fr.maazouza.averroes.middleware.objetmetier.medecin.Medecin;
 import fr.maazouza.averroes.middleware.objetmetier.medecin.NomOuMotDePasseException;
@@ -35,7 +40,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
-import java.security.Key;  
+import java.security.Key;
+import java.security.Principal;  
 /**
  * @author Maazouza
  *
@@ -64,12 +70,18 @@ public class AuthentificationWebService {
 	// Pour récupérer son nom
 	private String nom;
 	
+	
+	
+	
 	// les claims du token
+	
+	
 	
 	Claims claims;
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	//@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	//@Consumes(MediaType.APPLICATION_JSON)
 	public Response authenticateUser(@FormParam("username") String username, @FormParam("password") String password
 			) {
 
@@ -85,9 +97,12 @@ public class AuthentificationWebService {
 			String token = issueToken(eMail,600000);
 			
 			// Return the token on the response
-			return Response.ok(token).build();
+			return Response.status(200)
+					.entity (token)
+					.build();
 
 		} catch (NomOuMotDePasseException e) {
+			String toto=null;
 
 			return Response.status(Response.Status.UNAUTHORIZED).entity(e.getMessage()).build();
 		}
@@ -223,5 +238,9 @@ public class AuthentificationWebService {
 	    return builder.compact();
 
 	}
+	
+	
+	
+	
 
 }

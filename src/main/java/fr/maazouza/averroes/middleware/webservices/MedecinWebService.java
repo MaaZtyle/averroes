@@ -1,5 +1,6 @@
 package fr.maazouza.averroes.middleware.webservices;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -40,6 +41,9 @@ public class MedecinWebService {
 	@EJB
 	IPatientService patientService;
 	
+	@Context
+	SecurityContext securityContext;
+	
 	
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -48,6 +52,8 @@ public class MedecinWebService {
 ///////////////////////////////////////////////////////////////////////////////////////
 	
 	
+	
+			
 // Afficher la liste des medecins 
 //http://localhost:8080/AVERROES_MIDDLEWARE/ws/medecin/
 // OK
@@ -67,14 +73,14 @@ public class MedecinWebService {
 		
 	
 // Afficher un medecin par Id
-//http://localhost:8080/AVERROES_MIDDLEWARE/ws/medecin/nometprenom/
+//http://localhost:8080/AVERROES_MIDDLEWARE/ws/medecin/id/
 //OK
 	@GET
-	@Secured({Role.medecin})// que les medecins ont le droit
+	@Secured({Role.medecin,Role.patient})// que les medecins ont le droit
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path(value = "/id")
 	public Medecin obtenirUnMedecin( @Context SecurityContext securityContext,
-			@FormParam("idMed") Long idMed
+			@QueryParam("idMed") Long idMed
 			
 	) 
 	{
@@ -124,7 +130,7 @@ public class MedecinWebService {
 							.build();
 				} catch (MedecinDejaExistantException e) {
 					
-					return Response.status(200)
+					return Response.status(404)
 							.entity(e.getMessage())
 							.build();
 					
