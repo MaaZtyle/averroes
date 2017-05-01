@@ -35,7 +35,7 @@ public class DossierMedicalDao {
 
 	public DossierMedical consulter(Long idPat) {
 		
-		final String requeteJPQL = "SELECT b FROM DossierMedical b WHERE b.patient.idpat = :filtre1";
+		final String requeteJPQL = "SELECT b FROM DossierMedical b WHERE b.patient.idPat = :filtre1";
 		
 		
 		final TypedQuery<DossierMedical> requeteType = em.createQuery(requeteJPQL, DossierMedical.class)

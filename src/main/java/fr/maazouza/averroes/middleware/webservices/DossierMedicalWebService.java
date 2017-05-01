@@ -127,6 +127,21 @@ public class DossierMedicalWebService {
 	}
 
 	
+	// Afficher un dossier medical d'un patient par son id
+	// http://localhost:8080/AVERROES_MIDDLEWARE/ws/dossiermedical/
+	// OK
+	@GET
+	@Secured({ Role.medecin }) // que les medecins ont le droit
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path(value = "/id")
+
+	public DossierMedical consulterUnDossierMedical(@Context SecurityContext securityContext,
+	@QueryParam("idPat") Long idPat){
+
+		return dossierMedicalService.consulterUnDossierMedical(idPat);
+
+	}
+	
 
 	// Ajouter un dossier medical à partir de l'interface medecin
 	// http://localhost:8080/AVERROES_MIDDLEWARE/ws/dossiermedical/ajouter
