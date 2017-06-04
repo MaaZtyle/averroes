@@ -1,12 +1,16 @@
 package fr.maazouza.averroes.middleware.dao;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
 
 import fr.maazouza.averroes.middleware.objetmetier.allergie.Allergie;
+import fr.maazouza.averroes.middleware.objetmetier.maladie.Maladie;
 
 
 /**
@@ -48,6 +52,18 @@ public class AllergieDao {
 	public void modifierAllergie(Allergie allergie) {
 		em.merge(allergie);
 		
+	}
+	
+	//Afficher la liste des allergies
+	public List<Allergie> obtenirAllergies(Long idDos) {
+		final String requeteJPQL = "SELECT b FROM Allergie b where dossierMedical.idDos = :filtre";
+		
+		
+		final TypedQuery<Allergie> requeteType = em.createQuery(requeteJPQL, Allergie.class)
+				.setParameter("filtre", idDos);
+			
+		
+		return requeteType.getResultList();
 	}
 
 }

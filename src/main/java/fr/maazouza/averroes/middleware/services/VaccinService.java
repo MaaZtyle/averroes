@@ -5,6 +5,7 @@ import javax.ejb.Stateless;
 
 import fr.maazouza.averroes.middleware.dao.VaccinDao;
 import fr.maazouza.averroes.middleware.objetmetier.vaccin.Vaccin;
+import fr.maazouza.averroes.middleware.objetmetier.vaccin.VaccinArchive;
 import fr.maazouza.averroes.middleware.objetmetier.vaccin.VaccinInexistantException;
 
 /**
@@ -34,13 +35,22 @@ public class VaccinService implements IVaccinService {
 	///////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////
 
-	// Ajouter une maladie à un Dossier medical d'un patient
+	// Ajouter un vaccin à un Dossier medical d'un patient
 	@Override
 	public void ajouterVaccin(Vaccin vaccin) {
 
 		vaccinDao.persister(vaccin);
 
 	}
+	
+	// Ajouter un vaccin à dans l'archive
+		@Override
+		public void ajouterVaccinArchive(VaccinArchive vaccin) {
+
+			vaccinDao.persisterArchive(vaccin);
+
+		}
+
 
 	// Consulter un vaccin à un Dossier medical d'un patient par Id
 	@Override

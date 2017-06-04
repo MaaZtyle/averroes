@@ -1,11 +1,14 @@
 package fr.maazouza.averroes.middleware.dao;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
-
+import fr.maazouza.averroes.middleware.objetmetier.antecedent.Antecedent;
 import fr.maazouza.averroes.middleware.objetmetier.ordonnance.Ordonnance;
 
 
@@ -49,5 +52,17 @@ public class OrdonnanceDao {
 		em.merge(ordonnance);
 		
 	}
+	
+	//Afficher la liste des ordonnances
+			public List<Ordonnance> obtenirOrdonnances(Long idDos) {
+				final String requeteJPQL = "SELECT b FROM Ordonnance b where dossierMedical.idDos = :filtre";
+				
+				
+				final TypedQuery<Ordonnance> requeteType = em.createQuery(requeteJPQL, Ordonnance.class)
+						.setParameter("filtre", idDos);
+					
+				
+				return requeteType.getResultList();
+			}
 
 }

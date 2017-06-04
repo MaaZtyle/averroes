@@ -4,6 +4,7 @@
 package fr.maazouza.averroes.middleware.services;
 
 import fr.maazouza.averroes.middleware.objetmetier.vaccin.Vaccin;
+import fr.maazouza.averroes.middleware.objetmetier.vaccin.VaccinArchive;
 import fr.maazouza.averroes.middleware.objetmetier.vaccin.VaccinInexistantException;
 
 /**
@@ -19,6 +20,10 @@ public interface IVaccinService {
 	void supprimerVaccin(Long idVac) throws VaccinInexistantException;
 
 	void modifierVaccin(Vaccin vaccin) throws VaccinInexistantException;
+
+	
+
+	void ajouterVaccinArchive(VaccinArchive vaccin);
 
 	
 

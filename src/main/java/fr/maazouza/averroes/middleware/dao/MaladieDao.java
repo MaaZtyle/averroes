@@ -1,8 +1,11 @@
 package fr.maazouza.averroes.middleware.dao;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
 
@@ -49,5 +52,18 @@ public class MaladieDao {
 		em.merge(maladie);
 		
 	}
+	
+	//Afficher la liste des maladies
+	public List<Maladie> obtenirMaladies(Long idDos) {
+		final String requeteJPQL = "SELECT b FROM Maladie b where dossierMedical.idDos = :filtre";
+		
+		
+		final TypedQuery<Maladie> requeteType = em.createQuery(requeteJPQL, Maladie.class)
+				.setParameter("filtre", idDos);
+			
+		
+		return requeteType.getResultList();
+	}
+	
 
 }

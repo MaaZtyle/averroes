@@ -1,13 +1,18 @@
 package fr.maazouza.averroes.middleware.dao;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
 
 import fr.maazouza.averroes.middleware.objetmetier.allergie.Allergie;
+import fr.maazouza.averroes.middleware.objetmetier.antecedent.Antecedent;
 import fr.maazouza.averroes.middleware.objetmetier.vaccin.Vaccin;
+import fr.maazouza.averroes.middleware.objetmetier.vaccin.VaccinArchive;
 
 
 /**
@@ -34,6 +39,15 @@ public class VaccinDao {
 		em.persist(vaccin);
 	}
 
+	
+	// Ajouter un Vaccin archive
+		public void persisterArchive(VaccinArchive vaccinArchive) {
+			
+			
+			em.persist(vaccinArchive);
+		}
+
+		
 // Consulter un Vaccin par son Id
 	public Vaccin obtenirVaccin(Long idVac) {
 			
@@ -50,5 +64,30 @@ public class VaccinDao {
 		em.merge(vaccin);
 		
 	}
+	
+	//Afficher la liste des vaccins
+			public List<Vaccin> obtenirVaccins(Long idDos) {
+				final String requeteJPQL = "SELECT b FROM Vaccin b where dossierMedical.idDos = :filtre";
+				
+				
+				final TypedQuery<Vaccin> requeteType = em.createQuery(requeteJPQL, Vaccin.class)
+						.setParameter("filtre", idDos);
+					
+				
+				return requeteType.getResultList();
+			}
+	
+	//Afficher la liste des vaccins Archivés
+			public List<VaccinArchive> obtenirVaccinsArchives(Long idDos) {
+				final String requeteJPQL = "SELECT b FROM VaccinArchive b where b.idDos = :filtre";
+				
+				
+				final TypedQuery<VaccinArchive> requeteType = em.createQuery(requeteJPQL, VaccinArchive.class)
+						.setParameter("filtre", idDos);
+					
+				
+				return requeteType.getResultList();
+			}
+			
 
 }

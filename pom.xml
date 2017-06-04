@@ -116,7 +116,14 @@
 			<artifactId>jjwt</artifactId>
 			<version>0.2</version>
 		</dependency>
-
+		
+		
+		<!-- jsonobject -->	
+<dependency>
+    <groupId>org.json</groupId>
+    <artifactId>json</artifactId>
+    <version>20090211</version>
+</dependency>
 
 
 	</dependencies>

@@ -1,6 +1,7 @@
 fr\maazouza\averroes\middleware\objetmetier\patient\PatientInexistantException.class
 fr\maazouza\averroes\middleware\services\DossierMedicalService.class
 fr\maazouza\averroes\middleware\objetmetier\dossierMedical\DossierMedicalInexistantException.class
+fr\maazouza\averroes\middleware\objetmetier\vaccin\VaccinArchive.class
 fr\maazouza\averroes\middleware\services\TokenService.class
 fr\maazouza\averroes\middleware\services\VaccinService.class
 fr\maazouza\averroes\middleware\objetmetier\vaccin\Vaccin.class

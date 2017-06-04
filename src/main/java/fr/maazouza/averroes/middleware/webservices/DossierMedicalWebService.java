@@ -11,8 +11,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.ejb.EJB;
+
 import javax.jws.WebService;
 import javax.resource.spi.work.SecurityContext;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -24,6 +26,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import fr.maazouza.averroes.middleware.dao.MaladieDao;
 import fr.maazouza.averroes.middleware.objetmetier.allergie.Allergie;
@@ -46,6 +51,7 @@ import fr.maazouza.averroes.middleware.objetmetier.ordonnance.OrdonnanceInexista
 import fr.maazouza.averroes.middleware.objetmetier.patient.Patient;
 import fr.maazouza.averroes.middleware.objetmetier.patient.PatientInexistantException;
 import fr.maazouza.averroes.middleware.objetmetier.vaccin.Vaccin;
+import fr.maazouza.averroes.middleware.objetmetier.vaccin.VaccinArchive;
 import fr.maazouza.averroes.middleware.objetmetier.vaccin.VaccinInexistantException;
 import fr.maazouza.averroes.middleware.services.IAllergieService;
 import fr.maazouza.averroes.middleware.services.IAntecedentService;
@@ -183,7 +189,7 @@ public class DossierMedicalWebService {
 		}
 
 		// je défini un format date de création
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		// j'initialise tous les champs
 		dossierMedical.setPatient(patient);// j'affecte le patient
 		dossierMedical.setNumSecu(numSecu);
@@ -259,7 +265,7 @@ public class DossierMedicalWebService {
 			dossierMedical = dossierMedicalService.obtenirUnDossierMedical(idDos);
 			patient = patientService.obtenirUnPatient(dossierMedical.getPatient().getIdPat());
 			// je défini un format date de création
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 			// j'initialise tous les champs
 			// dossierMedical.setIdDos(idDos);
 			dossierMedical.setPatient(patient);
@@ -354,32 +360,51 @@ public class DossierMedicalWebService {
 	/////////////////////////// MALADIES///////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////
 
-	// Pas besoin de faire consulter, car ells sont déjà toutes visible sur le
-	// dossier medical
+
+	
+	// Affichers la liste des maladies d'un dossier medical
+	
+	
+		// http://localhost:8080/AVERROES_MIDDLEWARE/ws/dossiermedical/maladie/
+		// OK
+		@GET
+		@Secured({ Role.medecin,Role.patient }) //medecins et patients
+		@Produces(MediaType.APPLICATION_JSON)
+		@Path(value = "/maladies/")
+
+		public List<Maladie> obtenirMaladies(@Context SecurityContext securityContext,
+		@QueryParam("idDos") Long idDos){
+
+			return dossierMedicalService.obtenirMaladies(idDos);
+
+		}
+
 	// Ajouter une maladie sur un dossier medical
-	// Ajouter un dossier medical à partir de l'interface medecin
+	
 	// OK
 	@POST
 	@Secured({ Role.medecin, Role.patient }) // patients et medecins ont le
-												// droit
+									// droit
 	@Path(value = "/maladie")
 	public Response ajouterMaladie(@Context SecurityContext securityContext,
-			@FormParam("idDos") Long idDos, 
-			@FormParam("designationMal") String designationMal,
-			@FormParam("descriptionMal") String descriptionMal, 
-			@FormParam("dateAppMal") String dateAppMal) {
+			JSONObject   inputJsonObj) throws JSONException {
+		
+		String idDos = inputJsonObj.getString("idDos");
+		String dateAppMal = inputJsonObj.getString("dateAppMal");
+		String descriptionMal = inputJsonObj.getString("descriptionMal");
+		String designationMal = inputJsonObj.getString("designationMal");
 
 		Maladie maladie = new Maladie();
-		DossierMedical dossierMedical = new DossierMedical();
+		DossierMedical dossierMedical = new DossierMedical(); 
 
 		try {
-			dossierMedical = dossierMedicalService.obtenirUnDossierMedical(idDos);
+			dossierMedical = dossierMedicalService.obtenirUnDossierMedical(Long.parseLong(idDos));
 		} catch (DossierMedicalInexistantException e) {
 			return Response.status(200).entity(e.getMessage()).build();
 		}
 
 		// je défini un format date
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		maladie.setDateCreationMal(LocalDateTime.now().format(formatter));
 		maladie.setDateAppMal(dateAppMal);
 		maladie.setDescriptionMal(descriptionMal);
@@ -422,20 +447,23 @@ public class DossierMedicalWebService {
 	@Secured({ Role.medecin }) // medecins ont le droit
 	@Path(value = "/maladie")
 	public Response modifierMaladie(@Context SecurityContext securityContext,
-			@FormParam("idMal") Long idMal, 
-			@FormParam("idDos") Long idDos,
-			@FormParam("designationMal") String designationMal, 
-			@FormParam("descriptionMal") String descriptionMal,
-			@FormParam("dateAppMal") String dateAppMal) {
+			
+			JSONObject   inputJsonObj) throws JSONException
+			 {
 
+				String idMal = inputJsonObj.getString("idMal");				
+				String dateAppMal = inputJsonObj.getString("dateAppMal");
+				String descriptionMal = inputJsonObj.getString("descriptionMal");
+				String designationMal = inputJsonObj.getString("designationMal");
+				
 		try {
 			Maladie maladie = new Maladie();
-			maladie = maladieService.obtenirMaladie(idMal);
+			maladie = maladieService.obtenirMaladie(Long.parseLong(idMal));
 
 			// je récupère le dossier du patient
-			DossierMedical dossierMedical;
+			//DossierMedical dossierMedical;
 
-			dossierMedical = dossierMedicalService.obtenirUnDossierMedical(idDos);
+			//dossierMedical = dossierMedicalService.obtenirUnDossierMedical(idDos);
 
 			// Je modifie tous les champs
 			// maladie.setDossierMedical(dossierMedical);
@@ -451,10 +479,7 @@ public class DossierMedicalWebService {
 
 		catch (MaladieInexistanteException e) {
 			return Response.status(200).entity(e.getMessage()).build();
-		} catch (DossierMedicalInexistantException e) {
-			return Response.status(200).entity(e.getMessage()).build();
-		}
-
+		} 
 	}
 
 	// Supprimer une maladie d'un dossier medical d'un patient
@@ -462,12 +487,14 @@ public class DossierMedicalWebService {
 	@Secured({ Role.medecin }) // medecins ont le droit
 	@Path(value = "/maladie")
 	public Response supprimerMaladie(@Context SecurityContext securityContext,
-			@FormParam("idMal") Long idMal)
+			@QueryParam("idMal") String idMal) throws JSONException
+			
 
 	{
 
+		//String idMal = inputJsonObj.getString("idMal");		
 		try {
-			maladieService.supprimerMaladie(idMal);
+			maladieService.supprimerMaladie(Long.parseLong(idMal));
 
 			return Response.status(200).entity("La maladie   " + idMal + " a été supprimée au dossier ").build();
 		}
@@ -490,6 +517,27 @@ public class DossierMedicalWebService {
 
 	// Pas besoin de faire consulter, car ells sont déjà toutes visible sur le
 	// dossier medical
+	
+	
+	// Affichers la liste des allergies d'un dossier medical
+	
+	
+			// http://localhost:8080/AVERROES_MIDDLEWARE/ws/dossiermedical/maladie/
+			// OK
+			@GET
+			@Secured({ Role.medecin,Role.patient }) //medecins et patients
+			@Produces(MediaType.APPLICATION_JSON)
+			@Path(value = "/allergies/")
+
+			public List<Allergie> obtenirAllergies(@Context SecurityContext securityContext,
+			@QueryParam("idDos") Long idDos){
+
+				return dossierMedicalService.obtenirAllergies(idDos);
+
+			}
+			
+			
+			
 	// Ajouter une allergie sur un dossier medical
 	// Ajouter un dossier medical à partir de l'interface medecin
 	// OK
@@ -498,23 +546,28 @@ public class DossierMedicalWebService {
 												// droit
 	@Path(value = "/allergie")
 	public Response ajouterAllergie(@Context SecurityContext securityContext,
-			@FormParam("idDos") Long idDos,
-			@FormParam("designationAll") String designationAll, 
-			@FormParam("descriptionAll") String descriptionAll,
-			@FormParam("dateAppAll") String dateAppAll, 
-			@FormParam("etatAll") Boolean etatAll) {
+			
+JSONObject   inputJsonObj) throws JSONException {
+		
+		String idDos = inputJsonObj.getString("idDos");
+		String dateAppAll = inputJsonObj.getString("dateAppAll");
+		String descriptionAll = inputJsonObj.getString("descriptionAll");
+		String designationAll = inputJsonObj.getString("designationAll");
+		boolean etatAll = inputJsonObj.getBoolean("etatAll");
+		
+		
 
 		Allergie allergie = new Allergie();
 		DossierMedical dossierMedical = new DossierMedical();
 
 		try {
-			dossierMedical = dossierMedicalService.obtenirUnDossierMedical(idDos);
+			dossierMedical = dossierMedicalService.obtenirUnDossierMedical(Long.parseLong(idDos));
 		} catch (DossierMedicalInexistantException e) {
 			return Response.status(200).entity(e.getMessage()).build();
 		}
 
 		// je défini un format date
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		allergie.setDateCreationAll(LocalDateTime.now().format(formatter));
 		allergie.setDateAppAll(dateAppAll);
 		allergie.setDescriptionAll(descriptionAll);
@@ -558,21 +611,22 @@ public class DossierMedicalWebService {
 	@Secured({ Role.medecin }) // medecins ont le droit
 	@Path(value = "/allergie")
 	public Response modifierAllergie(@Context SecurityContext securityContext,
-			@FormParam("idAll") Long idAll, 
-			@FormParam("idDos") Long idDos,
-			@FormParam("designationAll") String designationAll, 
-			@FormParam("descriptionAll") String descriptionAll,
-			@FormParam("dateAppAll") String dateAppAll, 
-			@FormParam("etatAll") Boolean etatAll) {
+			JSONObject   inputJsonObj) throws JSONException {
+		
+			String idAll = inputJsonObj.getString("idAll");
+	String dateAppAll = inputJsonObj.getString("dateAppAll");
+	String descriptionAll = inputJsonObj.getString("descriptionAll");
+	String designationAll = inputJsonObj.getString("designationAll");
+	boolean etatAll = inputJsonObj.getBoolean("etatAll");
 
 		try {
 			Allergie allergie = new Allergie();
-			allergie = allergieService.obtenirAllergie(idAll);
+			allergie = allergieService.obtenirAllergie(Long.parseLong(idAll));
 
 			// je récupère le dossier du patient
-			DossierMedical dossierMedical;
+			//DossierMedical dossierMedical;
 
-			dossierMedical = dossierMedicalService.obtenirUnDossierMedical(idDos);
+			//dossierMedical = dossierMedicalService.obtenirUnDossierMedical(idDos);
 
 			// Je modifie tous les champs
 			// maladie.setDossierMedical(dossierMedical);
@@ -589,8 +643,6 @@ public class DossierMedicalWebService {
 
 		catch (AllergieInexistanteException e) {
 			return Response.status(200).entity(e.getMessage()).build();
-		} catch (DossierMedicalInexistantException e) {
-			return Response.status(200).entity(e.getMessage()).build();
 		}
 
 	}
@@ -600,12 +652,12 @@ public class DossierMedicalWebService {
 	@Secured({ Role.medecin }) // medecins ont le droit
 	@Path(value = "/allergie")
 	public Response supprimerAllergie(@Context SecurityContext securityContext,
-			@FormParam("idAll") Long idAll)
+			@QueryParam("idAll") String idAll) throws JSONException
 
 	{
 
 		try {
-			allergieService.supprimerAllergie(idAll);
+			allergieService.supprimerAllergie(Long.parseLong(idAll));
 
 			return Response.status(200).entity("L'allergie   " + idAll + " a été supprimée au dossier ").build();
 		}
@@ -626,8 +678,25 @@ public class DossierMedicalWebService {
 	/////////////////////////// ORDONNANCE///////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////
 
-	// Pas besoin de faire consulter, car ells sont déjà toutes visible sur le
-	// dossier medical
+
+	// Affichers la liste des ordonnances d'un dossier medical
+	
+	
+	// http://localhost:8080/AVERROES_MIDDLEWARE/ws/dossiermedical/maladie/
+	// OK
+	@GET
+	@Secured({ Role.medecin,Role.patient }) //medecins et patients
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path(value = "/ordonnances/")
+
+	public List<Ordonnance> obtenirOrdonnances(@Context SecurityContext securityContext,
+	@QueryParam("idDos") Long idDos){
+
+		return dossierMedicalService.obtenirOrdonnances(idDos);
+
+	}
+	
+	
 	// Ajouter une maladie sur un dossier medical
 	// Ajouter un dossier medical à partir de l'interface medecin
 	// OK
@@ -643,7 +712,7 @@ public class DossierMedicalWebService {
 		DossierMedical dossierMedical = new DossierMedical();
 
 		// je défini un format date
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		ordonnance.setDateCreationOrd(LocalDateTime.now().format(formatter));
 		ordonnance.setDateOrd(dateOrd);
 
@@ -758,7 +827,7 @@ public class DossierMedicalWebService {
 	///////////////////////////////////////////////////////////////////////////////
 
 	// Appel du WS de base des medicaments
-	// Ajout d'un medicament sur une ordonnance
+	// Affichage de la liste de  medicament de la base du gouvernement
 	@GET
 	@Secured({ Role.medecin }) // medecins ont le droit
 	@Produces(MediaType.APPLICATION_JSON)
@@ -874,7 +943,7 @@ public class DossierMedicalWebService {
 		}
 
 		// je défini un format date
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		medicament.setDateCreationMed(LocalDateTime.now().format(formatter));
 		medicament.setCodeCIS(codeCis);
 		medicament.setDenomination(denomination);
@@ -981,8 +1050,24 @@ public class DossierMedicalWebService {
 	/////////////////////////// ANTECEDENT///////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////
 
-	// Pas besoin de faire consulter, car ells sont déjà toutes visible sur le
-	// dossier medical
+	// Affichers la liste des antecedents d'un dossier medical
+	
+	
+				// http://localhost:8080/AVERROES_MIDDLEWARE/ws/dossiermedical/maladie/
+				// OK
+				@GET
+				@Secured({ Role.medecin,Role.patient }) //medecins et patients
+				@Produces(MediaType.APPLICATION_JSON)
+				@Path(value = "/antecedents/")
+
+				public List<Antecedent> obtenirAntecedents(@Context SecurityContext securityContext,
+				@QueryParam("idDos") Long idDos){
+
+					return dossierMedicalService.obtenirAntecedents(idDos);
+
+				}
+				
+				
 	// Ajouter un antécédent sur un dossier medical
 	// Ajouter un dossier medical à partir de l'interface medecin
 	// OK
@@ -991,17 +1076,23 @@ public class DossierMedicalWebService {
 												// droit
 	@Path(value = "/antecedent/")
 	public Response ajouterAntecedent(@Context SecurityContext securityContext,
-			@FormParam("idDos") Long idDos, 
-			@FormParam("dateAnt") String dateAnt,
-			@FormParam("descriptionAnt") String descriptionAnt, 
-			@FormParam("commentaireAnt") String commentaireAnt,
-			@FormParam("sujetAnt") String sujetAnt) {
+			
 
+			
+JSONObject   inputJsonObj) throws JSONException {
+		
+		String idDos = inputJsonObj.getString("idDos");
+		String dateAnt = inputJsonObj.getString("dateAnt");
+		String descriptionAnt = inputJsonObj.getString("descriptionAnt");
+		String commentaireAnt = inputJsonObj.getString("commentaireAnt");
+		String sujetAnt = inputJsonObj.getString("sujetAnt");
+		
+		
 		Antecedent antecedent = new Antecedent();
 		DossierMedical dossierMedical = new DossierMedical();
 
 		// je défini un format date
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		antecedent.setDateCreationAnt(LocalDateTime.now().format(formatter));
 		antecedent.setDateAnt(dateAnt);
 		antecedent.setDescriptionAnt(descriptionAnt);
@@ -1009,7 +1100,7 @@ public class DossierMedicalWebService {
 		antecedent.setSujetAnt(sujetAnt);
 
 		try {
-			dossierMedical = dossierMedicalService.obtenirUnDossierMedical(idDos);
+			dossierMedical = dossierMedicalService.obtenirUnDossierMedical(Long.parseLong(idDos));
 		} catch (DossierMedicalInexistantException e) {
 			return Response.status(200).entity(e.getMessage()).build();
 		}
@@ -1050,28 +1141,30 @@ public class DossierMedicalWebService {
 	@Secured({ Role.medecin }) // medecins ont le droit
 	@Path(value = "/antecedent")
 	public Response modifierAntecedent(@Context SecurityContext securityContext,
-			@FormParam("idDos") Long idDos, 
-			@FormParam("idAnt") Long idAnt,
-			@FormParam("dateAnt") String dateAnt, 
-			@FormParam("descriptionAnt") String descriptionAnt,
-			@FormParam("commentaireAnt") String commentaireAnt, 
-			@FormParam("sujetAnt") String sujetAnt) {
+			
+			
+
+			
+JSONObject   inputJsonObj) throws JSONException {
+		
+		String idAnt = inputJsonObj.getString("idAnt");
+		String dateAnt = inputJsonObj.getString("dateAnt");
+		String descriptionAnt = inputJsonObj.getString("descriptionAnt");
+		String commentaireAnt = inputJsonObj.getString("commentaireAnt");
+		String sujetAnt = inputJsonObj.getString("sujetAnt");
 
 		Antecedent antecedent = new Antecedent();
 		DossierMedical dossierMedical = new DossierMedical();
 
-		if ((idAnt.equals(null)) || (idDos.equals(null)))
-			return Response.status(200).entity("il faut l'idDos et idOrd").build();
-
-		// marche pas
+	
 
 		try {
 
-			antecedent = antecedentService.obtenirAntecedent(idAnt);
+			antecedent = antecedentService.obtenirAntecedent(Long.parseLong(idAnt));
 
 			// je récupère le dossier du patient
 
-			dossierMedical = dossierMedicalService.obtenirUnDossierMedical(idDos);
+			//dossierMedical = dossierMedicalService.obtenirUnDossierMedical(idDos);
 
 			// Je modifie tous les champs
 			// maladie.setDossierMedical(dossierMedical);
@@ -1089,8 +1182,6 @@ public class DossierMedicalWebService {
 
 		catch (AntecedentInexistantException e) {
 			return Response.status(200).entity(e.getMessage()).build();
-		} catch (DossierMedicalInexistantException e) {
-			return Response.status(200).entity(e.getMessage()).build();
 		}
 
 	}
@@ -1100,12 +1191,12 @@ public class DossierMedicalWebService {
 	@Secured({ Role.medecin }) // medecins ont le droit
 	@Path(value = "/antecedent")
 	public Response supprimerAntecedent(@Context SecurityContext securityContext,
-			@FormParam("idAnt") Long idAnt)
+			@QueryParam("idAnt") String idAnt) throws JSONException
 
 	{
 
 		try {
-			antecedentService.supprimerAntecedent(idAnt);
+			antecedentService.supprimerAntecedent(Long.parseLong(idAnt));
 
 			return Response.status(200).entity("L'antecedent   " + idAnt + " a été supprimée au dossier ").build();
 		}
@@ -1127,9 +1218,40 @@ public class DossierMedicalWebService {
 	/////////////////////////// VACCIN///////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////
 
-	// Pas besoin de faire consulter, car ells sont déjà toutes visible sur le
-	// dossier medical
-	// Ajouter une maladie sur un dossier medical
+	// Affichers la liste des vaccins d'un dossier medical
+	
+	
+		// http://localhost:8080/AVERROES_MIDDLEWARE/ws/dossiermedical/vaccins/
+		// OK
+		@GET
+		@Secured({ Role.medecin,Role.patient }) //medecins et patients
+		@Produces(MediaType.APPLICATION_JSON)
+		@Path(value = "/vaccins/")
+
+		public List<Vaccin> obtenirVaccins(@Context SecurityContext securityContext,
+		@QueryParam("idDos") Long idDos){
+
+			return dossierMedicalService.obtenirVaccins(idDos);
+
+		}
+		
+		// http://localhost:8080/AVERROES_MIDDLEWARE/ws/dossiermedical/vaccins/archive/
+				// OK
+				@GET
+				@Secured({ Role.medecin,Role.patient }) //medecins et patients
+				@Produces(MediaType.APPLICATION_JSON)
+				@Path(value = "/vaccins/archives")
+
+				public List<VaccinArchive> obtenirVaccinsArchives(@Context SecurityContext securityContext,
+				@QueryParam("idDos") Long idDos){
+
+					return dossierMedicalService.obtenirVaccinsArchives(idDos);
+
+				}
+				
+		
+		
+	// Ajouter un vaccin sur un dossier medical
 	// Ajouter un dossier medical à partir de l'interface medecin
 	// OK
 	@POST
@@ -1137,21 +1259,26 @@ public class DossierMedicalWebService {
 												// droit
 	@Path(value = "/vaccin/")
 	public Response ajouterVaccin(@Context SecurityContext securityContext,
-			@FormParam("idDos") Long idDos, 
-			@FormParam("nomVac") String nomVac,
-			@FormParam("descriptionVac") String descriptionVac,
-			@FormParam("dateDernierVac") String dateDernierVac,
-			@FormParam("dateProchainVac") String dateProchainVac,
-			@FormParam("alertePatientVac") Boolean alertePatientVac,
-			@FormParam("alerteMedecinVac") Boolean alerteMedecinVac
+			
+			
+			JSONObject   inputJsonObj) throws JSONException {
+					
+					String idDos = inputJsonObj.getString("idDos");
+					String nomVac = inputJsonObj.getString("nomVac");
+					String descriptionVac = inputJsonObj.getString("descriptionVac");
+					String dateDernierVac = inputJsonObj.getString("dateDernierVac");
+					String dateProchainVac = inputJsonObj.getString("dateProchainVac");
+					boolean alertePatientVac = inputJsonObj.getBoolean("alertePatientVac");
+					boolean alerteMedecinVac = inputJsonObj.getBoolean("alerteMedecinVac");
+					
 
-	) {
+	{
 
 		Vaccin vaccin = new Vaccin();
 		DossierMedical dossierMedical = new DossierMedical();
 
 		// je défini un format date
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		vaccin.setDateCreationVac(LocalDateTime.now().format(formatter));
 		vaccin.setNomVac(nomVac);
 		vaccin.setDescriptionVac(descriptionVac);
@@ -1160,7 +1287,7 @@ public class DossierMedicalWebService {
 		vaccin.setAlertePatientVac(alertePatientVac);
 		vaccin.setAlerteMedecinVac(alerteMedecinVac);
 		try {
-			dossierMedical = dossierMedicalService.obtenirUnDossierMedical(idDos);
+			dossierMedical = dossierMedicalService.obtenirUnDossierMedical(Long.parseLong(idDos));
 		} catch (DossierMedicalInexistantException e) {
 			return Response.status(200).entity(e.getMessage()).build();
 		}
@@ -1172,6 +1299,61 @@ public class DossierMedicalWebService {
 		return Response.status(200).entity("vaccin a été ajouté au dossier ").build();
 
 	}
+	}
+	
+	
+	// Ajouter un vaccin dans l'archive
+		
+		// OK
+		@POST
+		@Secured({ Role.medecin, Role.patient }) // patients et medecins ont le
+													// droit
+		@Path(value = "/vaccin/archive")
+		public Response ajouterVaccinArchive(@Context SecurityContext securityContext,
+				
+				
+				JSONObject   inputJsonObj) throws JSONException {
+						
+						String idDos = inputJsonObj.getString("idDos");
+						String idVac = inputJsonObj.getString("idVac");
+						String nomVac = inputJsonObj.getString("nomVac");
+						String descriptionVac = inputJsonObj.getString("descriptionVac");
+						String dateDernierVac = inputJsonObj.getString("dateDernierVac");
+						String dateCreationVac = inputJsonObj.getString("dateCreationVac");
+						String dateProchainVac = inputJsonObj.getString("dateProchainVac");
+						boolean alertePatientVac = inputJsonObj.getBoolean("alertePatientVac");
+						boolean alerteMedecinVac = inputJsonObj.getBoolean("alerteMedecinVac");
+						
+
+		{
+
+			VaccinArchive vaccin = new VaccinArchive();
+			
+
+			// je défini un format date pour la date d'archivage
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+			vaccin.setIdVac(Long.parseLong(idVac));
+			vaccin.setIdDos((Long.parseLong(idDos)));
+			vaccin.setDateArchivage(LocalDateTime.now().format(formatter));
+			vaccin.setDateCreationVac(dateCreationVac); 
+			vaccin.setNomVac(nomVac);
+			vaccin.setDescriptionVac(descriptionVac);
+			vaccin.setDateDernierVac(dateDernierVac);
+			vaccin.setDateProchainVac(dateProchainVac);
+			vaccin.setAlertePatientVac(alertePatientVac);
+			vaccin.setAlerteMedecinVac(alerteMedecinVac);
+			
+
+			
+
+			vaccinService.ajouterVaccinArchive(vaccin);
+			return Response.status(200).entity("vaccin a été ajouté à l'archive ").build();
+
+		}
+		}
+	
+	
+	
 
 	// Afficher le vaccin d'un patient, à partir de son dossier
 	// ok
@@ -1201,29 +1383,33 @@ public class DossierMedicalWebService {
 	@Secured({ Role.medecin }) // medecins ont le droit
 	@Path(value = "/vaccin")
 	public Response modifierVaccin(@Context SecurityContext securityContext,
-			@FormParam("idDos") Long idDos,
-			@FormParam("idVac") Long idVac,
-			@FormParam("nomVac") String nomVac,
-			@FormParam("descriptionVac") String descriptionVac,
-			@FormParam("dateDernierVac") String dateDernierVac,
-			@FormParam("dateProchainVac") String dateProchainVac,
-			@FormParam("alertePatientVac") Boolean alertePatientVac,
-			@FormParam("alerteMedecinVac") Boolean alerteMedecinVac) {
+			
+			JSONObject   inputJsonObj) throws JSONException {
+		
+		String idVac = inputJsonObj.getString("idVac");
+		String nomVac = inputJsonObj.getString("nomVac");
+		String descriptionVac = inputJsonObj.getString("descriptionVac");
+		String dateDernierVac = inputJsonObj.getString("dateDernierVac");
+		String dateProchainVac = inputJsonObj.getString("dateProchainVac");
+		boolean alertePatientVac = inputJsonObj.getBoolean("alertePatientVac");
+		boolean alerteMedecinVac = inputJsonObj.getBoolean("alerteMedecinVac");
+	 {
 
 		Vaccin vaccin = new Vaccin();
 		DossierMedical dossierMedical = new DossierMedical();
 
 		try {
 
-			vaccin = vaccinService.obtenirVaccin(idVac);
+			vaccin = vaccinService.obtenirVaccin(Long.parseLong(idVac));
 
 			// je récupère le dossier du patient
 
-			dossierMedical = dossierMedicalService.obtenirUnDossierMedical(idDos);
+			//dossierMedical = dossierMedicalService.obtenirUnDossierMedical(Long.parseLong(idDos));
 
 			// Je modifie tous les champs
 			// maladie.setDossierMedical(dossierMedical);
 
+			
 			vaccin.setNomVac(nomVac);
 			vaccin.setDescriptionVac(descriptionVac);
 			vaccin.setDateDernierVac(dateDernierVac);
@@ -1239,19 +1425,17 @@ public class DossierMedicalWebService {
 
 		catch (VaccinInexistantException e) {
 			return Response.status(200).entity(e.getMessage()).build();
-		} catch (DossierMedicalInexistantException e) {
-			return Response.status(200).entity(e.getMessage()).build();
 		}
 
 	}
-
+	}
 	// Supprimer un vaccin d'un dossier medical d'un patient
 	@DELETE
 	@Secured({ Role.medecin, Role.patient }) // patients et medecins ont le
 												// droit
 	@Path(value = "/vaccin")
 	public Response supprimerVaccin(@Context SecurityContext securityContext,
-			@FormParam("idVac") Long idVac)
+			@QueryParam("idVac") Long idVac)
 
 	{
 

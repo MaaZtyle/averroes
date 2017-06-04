@@ -4,6 +4,7 @@ import java.util.List;
 
 import fr.maazouza.averroes.middleware.objetmetier.allergie.Allergie;
 import fr.maazouza.averroes.middleware.objetmetier.allergie.AllergieInexistanteException;
+import fr.maazouza.averroes.middleware.objetmetier.antecedent.Antecedent;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedical;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalAvecAllergieException;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalAvecMaladieException;
@@ -17,6 +18,8 @@ import fr.maazouza.averroes.middleware.objetmetier.ordonnance.Ordonnance;
 import fr.maazouza.averroes.middleware.objetmetier.ordonnance.OrdonnanceInexistanteException;
 import fr.maazouza.averroes.middleware.objetmetier.patient.Patient;
 import fr.maazouza.averroes.middleware.objetmetier.patient.PatientInexistantException;
+import fr.maazouza.averroes.middleware.objetmetier.vaccin.Vaccin;
+import fr.maazouza.averroes.middleware.objetmetier.vaccin.VaccinArchive;
 
 public interface IDossierMedicalService{
 
@@ -38,6 +41,18 @@ public interface IDossierMedicalService{
 	boolean exister(Patient patient);
 
 	boolean existerParIdDos(Long idDos);
+
+	List<Maladie> obtenirMaladies(Long idDos);
+
+	List<Allergie> obtenirAllergies(Long idDos);
+
+	List<Antecedent> obtenirAntecedents(Long idDos);
+
+	List<Ordonnance> obtenirOrdonnances(Long idDos);
+
+	List<Vaccin> obtenirVaccins(Long idDos);
+
+	List<VaccinArchive> obtenirVaccinsArchives(Long idDos);
 
 	
 	

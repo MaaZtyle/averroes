@@ -6,12 +6,15 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import fr.maazouza.averroes.middleware.dao.AllergieDao;
+import fr.maazouza.averroes.middleware.dao.AntecedentDao;
 import fr.maazouza.averroes.middleware.dao.DossierMedicalDao;
 import fr.maazouza.averroes.middleware.dao.MaladieDao;
 import fr.maazouza.averroes.middleware.dao.OrdonnanceDao;
 import fr.maazouza.averroes.middleware.dao.PatientDao;
+import fr.maazouza.averroes.middleware.dao.VaccinDao;
 import fr.maazouza.averroes.middleware.objetmetier.allergie.Allergie;
 import fr.maazouza.averroes.middleware.objetmetier.allergie.AllergieInexistanteException;
+import fr.maazouza.averroes.middleware.objetmetier.antecedent.Antecedent;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedical;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalAvecAllergieException;
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedicalAvecMaladieException;
@@ -28,6 +31,8 @@ import fr.maazouza.averroes.middleware.objetmetier.ordonnance.OrdonnanceInexista
 import fr.maazouza.averroes.middleware.objetmetier.patient.Patient;
 import fr.maazouza.averroes.middleware.objetmetier.patient.PatientDejaExistantException;
 import fr.maazouza.averroes.middleware.objetmetier.patient.PatientInexistantException;
+import fr.maazouza.averroes.middleware.objetmetier.vaccin.Vaccin;
+import fr.maazouza.averroes.middleware.objetmetier.vaccin.VaccinArchive;
 
 /**
  * 
@@ -50,6 +55,12 @@ public class DossierMedicalService implements IDossierMedicalService {
 
 	@EJB
 	private AllergieDao allergieDao;
+	
+	@EJB
+	private VaccinDao vaccinDao;
+	
+	@EJB
+	private AntecedentDao antecedentDao;
 
 	@EJB
 	private OrdonnanceDao ordonnanceDao;
@@ -217,6 +228,55 @@ public class DossierMedicalService implements IDossierMedicalService {
 			// si on a rien je supprime
 			dossierMedicalDao.supprimerUnDossierMedical(idDos);
 
+	}
+	
+	// obtenir la liste des maladies
+	
+	public List<Maladie> obtenirMaladies(Long idDos){
+		
+		return maladieDao.obtenirMaladies(idDos);
+	
+	}
+
+	//obtenir la listes des allergies
+	
+public List<Allergie> obtenirAllergies(Long idDos){
+		
+		return allergieDao.obtenirAllergies(idDos);
+	
+	}
+
+//obtenir la listes des antecedents
+
+public List<Antecedent> obtenirAntecedents(Long idDos){
+		
+		return antecedentDao.obtenirAntecedents(idDos);
+	
+	}
+
+
+//obtenir la listes des ordonnances
+
+public List<Ordonnance> obtenirOrdonnances(Long idDos){
+		
+		return ordonnanceDao.obtenirOrdonnances(idDos);
+	
+	}
+
+//obtenir la listes des vaccins
+
+public List<Vaccin> obtenirVaccins(Long idDos){
+		
+		return vaccinDao.obtenirVaccins(idDos);
+	
+	}
+
+//obtenir la listes des vaccins Archivés
+
+public List<VaccinArchive> obtenirVaccinsArchives(Long idDos){
+		
+		return vaccinDao.obtenirVaccinsArchives(idDos);
+	
 	}
 
 }

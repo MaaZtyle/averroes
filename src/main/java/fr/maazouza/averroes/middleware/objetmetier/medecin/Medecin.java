@@ -61,6 +61,7 @@ public class Medecin implements Cloneable, Serializable  {
 	/** Profil Medecin **/
 	private final Boolean profilMedecin=true;
 	
+
 	/** Patient */
 	private List<Patient> patients;
 	

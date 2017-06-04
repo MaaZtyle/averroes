@@ -9,6 +9,7 @@ import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
 import fr.maazouza.averroes.middleware.objetmetier.dossierMedical.DossierMedical;
+import fr.maazouza.averroes.middleware.objetmetier.maladie.Maladie;
 import fr.maazouza.averroes.middleware.objetmetier.medecin.Medecin;
 
 
@@ -87,6 +88,8 @@ public class DossierMedicalDao {
 			em.remove(em.getReference(DossierMedical.class, idDos));
 			
 		}
+		
+
 		
 
 }
