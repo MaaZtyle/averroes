@@ -5,7 +5,6 @@ import javax.ejb.Stateless;
 
 import fr.maazouza.averroes.middleware.dao.VaccinDao;
 import fr.maazouza.averroes.middleware.objetmetier.vaccin.Vaccin;
-import fr.maazouza.averroes.middleware.objetmetier.vaccin.VaccinArchive;
 import fr.maazouza.averroes.middleware.objetmetier.vaccin.VaccinInexistantException;
 
 /**
@@ -45,9 +44,9 @@ public class VaccinService implements IVaccinService {
 	
 	// Ajouter un vaccin à dans l'archive
 		@Override
-		public void ajouterVaccinArchive(VaccinArchive vaccin) {
+		public void archiverVaccin(Vaccin vaccin) {
 
-			vaccinDao.persisterArchive(vaccin);
+			vaccinDao.archiverVaccin(vaccin);
 
 		}
 

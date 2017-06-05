@@ -32,7 +32,6 @@ import fr.maazouza.averroes.middleware.objetmetier.patient.Patient;
 import fr.maazouza.averroes.middleware.objetmetier.patient.PatientDejaExistantException;
 import fr.maazouza.averroes.middleware.objetmetier.patient.PatientInexistantException;
 import fr.maazouza.averroes.middleware.objetmetier.vaccin.Vaccin;
-import fr.maazouza.averroes.middleware.objetmetier.vaccin.VaccinArchive;
 
 /**
  * 
@@ -273,7 +272,7 @@ public List<Vaccin> obtenirVaccins(Long idDos){
 
 //obtenir la listes des vaccins Archivés
 
-public List<VaccinArchive> obtenirVaccinsArchives(Long idDos){
+public List<Vaccin> obtenirVaccinsArchives(Long idDos){
 		
 		return vaccinDao.obtenirVaccinsArchives(idDos);
 	

@@ -19,7 +19,7 @@ import fr.maazouza.averroes.middleware.objetmetier.ordonnance.OrdonnanceInexista
 import fr.maazouza.averroes.middleware.objetmetier.patient.Patient;
 import fr.maazouza.averroes.middleware.objetmetier.patient.PatientInexistantException;
 import fr.maazouza.averroes.middleware.objetmetier.vaccin.Vaccin;
-import fr.maazouza.averroes.middleware.objetmetier.vaccin.VaccinArchive;
+
 
 public interface IDossierMedicalService{
 
@@ -52,7 +52,7 @@ public interface IDossierMedicalService{
 
 	List<Vaccin> obtenirVaccins(Long idDos);
 
-	List<VaccinArchive> obtenirVaccinsArchives(Long idDos);
+	List<Vaccin> obtenirVaccinsArchives(Long idDos);
 
 	
 	

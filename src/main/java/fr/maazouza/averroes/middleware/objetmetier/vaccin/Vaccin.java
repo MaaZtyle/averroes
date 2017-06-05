@@ -45,6 +45,9 @@ public class Vaccin implements Cloneable, Serializable {
 	/** Date création vaccin */
 	private String dateCreationVac;
 	
+	/** Date archivage vaccin */
+	private String dateArchivageVac;
+	
 	/** Allerte patient vaccin */
 	private Boolean alertePatientVac;
 	
@@ -122,6 +125,16 @@ public class Vaccin implements Cloneable, Serializable {
 		this.dateCreationVac = dateCreationVac;
 	}
 
+	
+	@Column(name = "DATE_ARCHIVAGE")
+	public String getDateArchivageVac() {
+		return dateArchivageVac;
+	}
+
+	public void setDateArchivageVac(String dateArchivageVac) {
+		this.dateArchivageVac = dateArchivageVac;
+	}
+	
 	@Column(name = "ALERTE_PATIENT_VAC")
 	public Boolean getAlertePatientVac() {
 		return alertePatientVac;

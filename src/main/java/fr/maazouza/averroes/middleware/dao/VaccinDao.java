@@ -12,7 +12,6 @@ import javax.transaction.Transactional;
 import fr.maazouza.averroes.middleware.objetmetier.allergie.Allergie;
 import fr.maazouza.averroes.middleware.objetmetier.antecedent.Antecedent;
 import fr.maazouza.averroes.middleware.objetmetier.vaccin.Vaccin;
-import fr.maazouza.averroes.middleware.objetmetier.vaccin.VaccinArchive;
 
 
 /**
@@ -40,11 +39,10 @@ public class VaccinDao {
 	}
 
 	
-	// Ajouter un Vaccin archive
-		public void persisterArchive(VaccinArchive vaccinArchive) {
+	// Archiver un Vaccin 
+		public void archiverVaccin(Vaccin vaccin) {
 			
-			
-			em.persist(vaccinArchive);
+			em.merge(vaccin);
 		}
 
 		
@@ -67,7 +65,7 @@ public class VaccinDao {
 	
 	//Afficher la liste des vaccins
 			public List<Vaccin> obtenirVaccins(Long idDos) {
-				final String requeteJPQL = "SELECT b FROM Vaccin b where dossierMedical.idDos = :filtre";
+				final String requeteJPQL = "SELECT b FROM Vaccin b where dossierMedical.idDos = :filtre and b.dateArchivageVac is NULL" ;
 				
 				
 				final TypedQuery<Vaccin> requeteType = em.createQuery(requeteJPQL, Vaccin.class)
@@ -78,11 +76,11 @@ public class VaccinDao {
 			}
 	
 	//Afficher la liste des vaccins Archivés
-			public List<VaccinArchive> obtenirVaccinsArchives(Long idDos) {
-				final String requeteJPQL = "SELECT b FROM VaccinArchive b where b.idDos = :filtre";
+			public List<Vaccin> obtenirVaccinsArchives(Long idDos) {
+				final String requeteJPQL = "SELECT b FROM Vaccin b where dossierMedical.idDos = :filtre and b.dateArchivageVac is NOT NULL" ;
 				
 				
-				final TypedQuery<VaccinArchive> requeteType = em.createQuery(requeteJPQL, VaccinArchive.class)
+				final TypedQuery<Vaccin> requeteType = em.createQuery(requeteJPQL, Vaccin.class)
 						.setParameter("filtre", idDos);
 					
 				

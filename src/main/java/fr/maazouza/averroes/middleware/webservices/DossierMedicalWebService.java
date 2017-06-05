@@ -51,7 +51,6 @@ import fr.maazouza.averroes.middleware.objetmetier.ordonnance.OrdonnanceInexista
 import fr.maazouza.averroes.middleware.objetmetier.patient.Patient;
 import fr.maazouza.averroes.middleware.objetmetier.patient.PatientInexistantException;
 import fr.maazouza.averroes.middleware.objetmetier.vaccin.Vaccin;
-import fr.maazouza.averroes.middleware.objetmetier.vaccin.VaccinArchive;
 import fr.maazouza.averroes.middleware.objetmetier.vaccin.VaccinInexistantException;
 import fr.maazouza.averroes.middleware.services.IAllergieService;
 import fr.maazouza.averroes.middleware.services.IAntecedentService;
@@ -1235,14 +1234,14 @@ JSONObject   inputJsonObj) throws JSONException {
 
 		}
 		
-		// http://localhost:8080/AVERROES_MIDDLEWARE/ws/dossiermedical/vaccins/archive/
+		// http://localhost:8080/AVERROES_MIDDLEWARE/ws/dossiermedical/vaccins/archives/
 				// OK
 				@GET
 				@Secured({ Role.medecin,Role.patient }) //medecins et patients
 				@Produces(MediaType.APPLICATION_JSON)
 				@Path(value = "/vaccins/archives")
 
-				public List<VaccinArchive> obtenirVaccinsArchives(@Context SecurityContext securityContext,
+				public List<Vaccin> obtenirVaccinsArchives(@Context SecurityContext securityContext,
 				@QueryParam("idDos") Long idDos){
 
 					return dossierMedicalService.obtenirVaccinsArchives(idDos);
@@ -1302,57 +1301,66 @@ JSONObject   inputJsonObj) throws JSONException {
 	}
 	
 	
-	// Ajouter un vaccin dans l'archive
+	// Archiver un vaccin
 		
 		// OK
-		@POST
+		@PUT
 		@Secured({ Role.medecin, Role.patient }) // patients et medecins ont le
 													// droit
 		@Path(value = "/vaccin/archive")
 		public Response ajouterVaccinArchive(@Context SecurityContext securityContext,
-				
-				
+			
 				JSONObject   inputJsonObj) throws JSONException {
-						
-						String idDos = inputJsonObj.getString("idDos");
-						String idVac = inputJsonObj.getString("idVac");
-						String nomVac = inputJsonObj.getString("nomVac");
-						String descriptionVac = inputJsonObj.getString("descriptionVac");
-						String dateDernierVac = inputJsonObj.getString("dateDernierVac");
-						String dateCreationVac = inputJsonObj.getString("dateCreationVac");
-						String dateProchainVac = inputJsonObj.getString("dateProchainVac");
-						boolean alertePatientVac = inputJsonObj.getBoolean("alertePatientVac");
-						boolean alerteMedecinVac = inputJsonObj.getBoolean("alerteMedecinVac");
-						
-
-		{
-
-			VaccinArchive vaccin = new VaccinArchive();
 			
+			String idVac = inputJsonObj.getString("idVac");
+			String nomVac = inputJsonObj.getString("nomVac");
+			String descriptionVac = inputJsonObj.getString("descriptionVac");
+			String dateDernierVac = inputJsonObj.getString("dateDernierVac");
+			String dateProchainVac = inputJsonObj.getString("dateProchainVac");
+			String dateArchivageVac = inputJsonObj.getString("dateArchivageVac");
+			boolean alertePatientVac = inputJsonObj.getBoolean("alertePatientVac");
+			boolean alerteMedecinVac = inputJsonObj.getBoolean("alerteMedecinVac");
+		 {
+			
+			 Vaccin vaccin = new Vaccin();
+			 try {
 
+					
+			 vaccin = vaccinService.obtenirVaccin(Long.parseLong(idVac));
+			 
+			
 			// je défini un format date pour la date d'archivage
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-			vaccin.setIdVac(Long.parseLong(idVac));
-			vaccin.setIdDos((Long.parseLong(idDos)));
-			vaccin.setDateArchivage(LocalDateTime.now().format(formatter));
-			vaccin.setDateCreationVac(dateCreationVac); 
-			vaccin.setNomVac(nomVac);
-			vaccin.setDescriptionVac(descriptionVac);
-			vaccin.setDateDernierVac(dateDernierVac);
-			vaccin.setDateProchainVac(dateProchainVac);
-			vaccin.setAlertePatientVac(alertePatientVac);
-			vaccin.setAlerteMedecinVac(alerteMedecinVac);
-			
+				//DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+				
+				String test = vaccin.getDateArchivageVac();
+			 //pour archiver et desarchiver un vaccin
+			 if((vaccin.getDateArchivageVac()) == null)
+				vaccin.setDateArchivageVac(dateArchivageVac);
+				else{
+					vaccin.setDateArchivageVac(null);
+				}
+			 
+				vaccin.setNomVac(nomVac);
+				vaccin.setDescriptionVac(descriptionVac);
+				vaccin.setDateDernierVac(dateDernierVac);
+				vaccin.setDateProchainVac(dateProchainVac);
+				vaccin.setAlertePatientVac(alertePatientVac);
+				vaccin.setAlerteMedecinVac(alerteMedecinVac);
+
 
 			
+			
+			vaccinService.archiverVaccin(vaccin);
+			return Response.status(200).entity("vaccin a été archiver ").build();
 
-			vaccinService.ajouterVaccinArchive(vaccin);
-			return Response.status(200).entity("vaccin a été ajouté à l'archive ").build();
-
-		}
-		}
+			}catch (VaccinInexistantException e) {
+				return Response.status(200).entity(e.getMessage()).build();
+			}
+		
 	
-	
+		}
+		 
+		}
 	
 
 	// Afficher le vaccin d'un patient, à partir de son dossier

@@ -12,7 +12,6 @@ D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middl
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\objetmetier\ordonnance\OrdonnanceInexistanteException.java
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\objetmetier\medecin\MedecinDejaExistantException.java
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\services\IVaccinService.java
-D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\objetmetier\vaccin\VaccinArchive.java
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\objetmetier\dossierMedical\DossierMedicalAvecRendezVousException.java
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\services\IMedicamentService.java
 D:\Developpements\Projets\Java\Averroes\src\main\java\fr\maazouza\averroes\middleware\objetmetier\vaccin\Vaccin.java
